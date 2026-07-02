@@ -1,0 +1,43 @@
+# Keil MDK build outputs
+**/MDK-ARM/Objects/
+**/MDK-ARM/Listings/
+**/MDK-ARM/*.uvguix.*
+**/MDK-ARM/*.uvgui.*
+**/MDK-ARM/*.uvoptx
+**/MDK-ARM/JLinkLog.txt
+**/MDK-ARM/JLinkSettings.ini
+
+# ARM/embedded build artifacts
+**/build/
+**/.cmake/
+**/.vs/
+*.axf
+*.elf
+*.hex
+*.bin
+*.exe
+*.map
+*.lst
+*.o
+*.obj
+*.d
+*.crf
+*.dep
+*.lnp
+*.sct
+*.htm
+
+# Local archives and temporary files
+*.zip
+*.7z
+*.rar
+*.log
+*.tmp
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+Desktop.ini
