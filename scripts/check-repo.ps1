@@ -455,6 +455,29 @@ function Test-ExampleManifest {
                 ($projectText -notmatch 'queue\.c')) {
                 Add-Failure "example '$name' enables counting semaphores but project does not reference queue.c"
             }
+
+            $ownedSourceFiles = @()
+            foreach ($sourceDirectory in @('Src', 'Inc')) {
+                $sourceRoot = Join-Path -Path $exampleRoot -ChildPath $sourceDirectory
+                if (Test-Path -LiteralPath $sourceRoot) {
+                    $ownedSourceFiles += Get-ChildItem -LiteralPath $sourceRoot -Recurse -File -Include '*.c', '*.h'
+                }
+            }
+
+            $usesStackHighWaterMark = $false
+            foreach ($sourceFile in $ownedSourceFiles) {
+                $sourceText = Get-RepoText -Path $sourceFile.FullName
+                if ($sourceText -match '\buxTaskGetStackHighWaterMark\b') {
+                    $usesStackHighWaterMark = $true
+                    break
+                }
+            }
+
+            # Watch 变量依赖 FreeRTOS INCLUDE 开关；缺配置会在维护新示例时变成编译期隐性错误。
+            if ($usesStackHighWaterMark -and
+                ($configText -notmatch '#define\s+INCLUDE_uxTaskGetStackHighWaterMark\s+1')) {
+                Add-Failure "example '$name' uses uxTaskGetStackHighWaterMark but FreeRTOSConfig.h does not enable INCLUDE_uxTaskGetStackHighWaterMark"
+            }
         }
     }
 }

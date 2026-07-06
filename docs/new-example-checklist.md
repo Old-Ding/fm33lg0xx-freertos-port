@@ -26,12 +26,14 @@
   - 软件定时器需要 `timers.c` 和 timer task 配置。
   - event group 需要 `event_groups.c`。
   - stream/message buffer 需要 `stream_buffer.c`。
+  - `uxTaskGetStackHighWaterMark()` 需要 `INCLUDE_uxTaskGetStackHighWaterMark = 1`。
 - ISR 中使用 FreeRTOS FromISR API 时，使用局部 `BaseType_t xHigherPriorityTaskWoken = pdFALSE`，并在末尾调用 `portYIELD_FROM_ISR(xHigherPriorityTaskWoken)`。
 - 不在 task 中调用会重配 SysTick 的厂商阻塞延时；任务节拍使用 `vTaskDelay()` 或同步对象等待。
 
 ## 4. 可观测性
 
 - 每个任务创建结果要能通过 Watch 变量观察。
+- 每个任务建议保留 stack high-water mark Watch 变量，用于在溢出前评估栈余量。
 - 关键运行路径至少保留一个递增计数，例如 task loop count、IRQ count、sample count。
 - fault code 要集中定义，能区分 malloc 失败、栈溢出、同步对象创建失败、任务创建失败和调度器异常返回。
 - UART printf 只能作为调试输出，不作为核心时序依赖。

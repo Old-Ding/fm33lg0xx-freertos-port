@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 仓库自检新增 `uxTaskGetStackHighWaterMark()` 与 `FreeRTOSConfig.h` INCLUDE 开关一致性检查，并补充新增示例 checklist。
 - 两个 FreeRTOS 示例新增任务 stack high-water mark Watch 变量，用于在栈溢出前观察任务栈余量。
 - `freertos_signal_adc_uart_mdk` 新增 ISR 侧信号量 give fail 计数，便于观察高频 GPIO 触发导致的事件合并或 ADC 采样事件溢出。
 - README 维护规则中的生成物列表与当前 `.gitignore` 和仓库自检策略对齐。

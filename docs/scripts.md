@@ -54,6 +54,7 @@
 - 每个示例的文档入口必须包含该示例自己的 README。
 - 每个示例工程必须引用根目录共享的 `FreeRTOS-Kernel-main`。
 - 启用计数信号量的示例工程必须引用 `queue.c`。
+- 示例自有源码使用 `uxTaskGetStackHighWaterMark()` 时，`FreeRTOSConfig.h` 必须启用 `INCLUDE_uxTaskGetStackHighWaterMark`。
 - 第三方许可证、FreeRTOS 文件、厂商 FL Driver 文件头和 CMSIS SPDX 标识必须保留；示例根目录从 `examples/examples.json` 推导。
 - `docs/validation-status.md` 必须在当前矩阵中逐示例记录 `examples/examples.json` 中的验证状态。
 - `CHANGELOG.md` 必须保留 `Unreleased` 区段和带日期的语义化版本记录。
