@@ -206,7 +206,10 @@ function Remove-KeilOutputs {
 }
 
 function Get-BuildSummary {
-    param([string]$ProjectPath)
+    param(
+        [string]$ProjectPath,
+        [datetime]$BuildStartedAt
+    )
 
     $projectDir = Split-Path -Parent $ProjectPath
     $log = Get-ChildItem -LiteralPath (Join-Path $projectDir 'Objects') -Filter '*.build_log.htm' -File -ErrorAction SilentlyContinue |
@@ -215,6 +218,10 @@ function Get-BuildSummary {
 
     if (-not $log) {
         throw "Build log not found for $ProjectPath"
+    }
+
+    if ($log.LastWriteTime -lt $BuildStartedAt) {
+        throw "Build log is stale for $ProjectPath`: $($log.FullName)"
     }
 
     $content = Get-Content -LiteralPath $log.FullName -Raw
@@ -266,13 +273,14 @@ Write-Host "Using UV4: $uv4"
 foreach ($project in $Projects) {
     Write-Host "Building $($project.Name) [$Mode]..."
     $argumentLine = "$buildSwitch `"$($project.Project)`" -t `"$($project.Target)`""
+    $buildStartedAt = Get-Date
     $process = Start-Process -FilePath $uv4 -ArgumentList $argumentLine -Wait -PassThru -WindowStyle Hidden
 
     if ($process.ExitCode -ne 0) {
         throw "Keil build failed for $($project.Name), exit code $($process.ExitCode)"
     }
 
-    $summary = Get-BuildSummary -ProjectPath $project.Project
+    $summary = Get-BuildSummary -ProjectPath $project.Project -BuildStartedAt $buildStartedAt
     Write-Host "$($project.Name): $($summary.Errors) error(s), $($summary.Warnings) warning(s), $($summary.ProgramSize)"
 
     if (($summary.Errors -ne 0) -or ($summary.Warnings -ne 0)) {
