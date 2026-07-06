@@ -14,8 +14,8 @@
 
 | 示例 | 说明 | Keil 工程 |
 | --- | --- | --- |
-| `gpio_blink_mdk` | 最小 FreeRTOS 移植验证，LED 闪烁任务接管原主循环职责。 | `gpio_blink_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx` |
-| `examples/freertos_signal_adc_uart_mdk` | 综合 demo：monitor task、GPIO 中断、二值/计数信号量、ADC task、UART printf。 | `examples/freertos_signal_adc_uart_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx` |
+| [`gpio_blink_mdk`](gpio_blink_mdk/README.md) | 最小 FreeRTOS 移植验证，LED 闪烁任务接管原主循环职责。 | `gpio_blink_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx` |
+| [`examples/freertos_signal_adc_uart_mdk`](examples/freertos_signal_adc_uart_mdk/README.md) | 综合 demo：monitor task、GPIO 中断、二值/计数信号量、ADC task、UART printf。 | `examples/freertos_signal_adc_uart_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx` |
 
 ## 目录结构
 

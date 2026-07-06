@@ -9,6 +9,7 @@
       "validationStatus": "build-verified",
       "documentation": [
         "README.md",
+        "gpio_blink_mdk/README.md",
         "docs/examples.md",
         "docs/hardware-validation.md",
         "docs/validation-status.md"
