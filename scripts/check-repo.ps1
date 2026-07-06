@@ -903,6 +903,10 @@ function Test-NewExampleChecklistDocument {
         -Description 'new example checklist must mention stack overflow task name watch variable'
 
     Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'fault code.*FreeRTOS\s+assert' `
+        -Description 'new example checklist must include FreeRTOS assert in fault code taxonomy'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
         -Pattern 'portYIELD_FROM_ISR' `
         -Description 'new example checklist must document ISR yield pattern'
 
@@ -923,6 +927,10 @@ function Test-ArchitectureDocument {
     Test-FileContains -RelativePath 'docs\architecture.md' `
         -Pattern 'queue\.c' `
         -Description 'architecture document must describe FreeRTOS source dependencies'
+
+    Test-FileContains -RelativePath 'docs\architecture.md' `
+        -Pattern 'fault code.*FreeRTOS\s+assert' `
+        -Description 'architecture document must include FreeRTOS assert in fault code taxonomy'
 
     Test-FileContains -RelativePath 'README.md' `
         -Pattern 'docs/architecture\.md' `
@@ -965,6 +973,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'configASSERT' `
         -Description 'script document must describe FreeRTOS assert checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'fault code.*FreeRTOS\s+assert' `
+        -Description 'script document must describe assert fault taxonomy checks'
 
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'g_freertosAssertLine' `

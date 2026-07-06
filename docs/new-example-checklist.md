@@ -41,7 +41,7 @@
 - 任务创建失败、同步对象创建失败和调度器异常返回时，要先记录 heap Watch 变量，再写入对应 fault code。
 - 栈溢出 hook 要把触发任务写入 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName`，便于故障现场定位。
 - 关键运行路径至少保留一个递增计数，例如 task loop count、IRQ count、sample count。
-- fault code 要集中定义，能区分 malloc 失败、栈溢出、同步对象创建失败、任务创建失败和调度器异常返回。
+- fault code 要集中定义，能区分 malloc 失败、栈溢出、同步对象创建失败、任务创建失败、调度器异常返回和 FreeRTOS assert 失败。
 - UART printf 只能作为调试输出，不作为核心时序依赖。
 
 ## 5. 清单和文档

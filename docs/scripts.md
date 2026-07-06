@@ -57,6 +57,7 @@
 - 每个示例的 `FreeRTOSConfig.h` 必须把 `vPortSVCHandler`、`xPortPendSVHandler`、`xPortSysTickHandler` 映射到启动文件中的 `SVC_Handler`、`PendSV_Handler`、`SysTick_Handler`。
 - 每个示例必须保留 `Inc/FreeRTOSConfig.h`，并启用/实现 `configUSE_MALLOC_FAILED_HOOK` 和 `configCHECK_FOR_STACK_OVERFLOW` 对应 hook。
 - 每个示例必须保留 `configASSERT`，宏使用 `do { ... } while( 0 )` 包装，通过 `g_freertosAssertFile` 和 `g_freertosAssertLine` 记录断言失败位置，并在停机前关中断。
+- `docs/architecture.md` 和 `docs/new-example-checklist.md` 的 fault code 分类必须包含 FreeRTOS assert 失败，避免新增示例只按 hook 实现而漏掉文档模型。
 - 每个示例必须在运行态监控路径和 malloc failed hook 中分别记录 `g_freertosHeapFreeBytes` 和 `g_freertosHeapMinimumEverFreeBytes`，用于运行中 heap 观察并保留失败现场。
 - 每个示例必须定义 `FREERTOS_FAULT_TASK_CREATE`，并在任务创建失败、同步对象创建失败和调度器异常返回时记录 heap 现场后写入 `g_freertosFaultCode`；使用调度器异常 fault code 的示例 README 必须说明 `g_freertosFaultCode == 3` 的排查方向。
 - 每个示例的栈溢出 hook 必须把 `xTask` 和 `pcTaskName` 记录到 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName`。
