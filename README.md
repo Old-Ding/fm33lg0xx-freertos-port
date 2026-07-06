@@ -28,6 +28,7 @@
 │   └── freertos_signal_adc_uart_mdk/     # FreeRTOS 综合基础 demo
 ├── docs/
 │   ├── examples.md                       # 示例硬件和验证说明
+│   ├── hardware-validation.md            # 板级硬件验收步骤
 │   └── porting-notes.md                  # FreeRTOS 移植说明
 ├── scripts/
 │   └── build-keil.ps1                    # Keil 批量构建验证脚本
@@ -68,6 +69,10 @@ Keil GUI 构建：
 .\scripts\build-keil.ps1 -ListExamples
 .\scripts\build-keil.ps1 -ExampleName freertos_signal_adc_uart_mdk -CleanAfterBuild
 ```
+
+## 硬件验收
+
+构建通过后，按 [硬件验收指南](docs/hardware-validation.md) 逐步确认下载运行、LED、GPIO 中断、ADC 采样、UART 输出和 Keil Watch 变量。
 
 PowerShell 手工构建示例：
 

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 新增 `docs/hardware-validation.md`，补充板级接线、运行验收、Watch 变量和故障定位步骤。
 - `scripts/build-keil.ps1` 支持 `-ListExamples` 和 `-ExampleName`，便于列出或单独构建示例。
 - 新增 `examples/examples.json`，让 Keil 构建脚本从示例清单读取工程列表。
 - 新增 `scripts/build-keil.ps1`，用于批量 rebuild Keil 示例、解析构建日志并可选清理生成物。

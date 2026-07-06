@@ -4,6 +4,8 @@
 
 `examples/examples.json` 是构建脚本使用的示例清单。新增示例时，应把 Keil 工程路径加入该文件，避免 demo 存在但没有进入统一构建验证。
 
+构建后的板级验收步骤见 [硬件验收指南](hardware-validation.md)。
+
 ## gpio_blink_mdk
 
 - 目标：验证 FreeRTOS 在 FM33LG02X / Cortex-M0 / Keil ARMCC5 下可以接管 SysTick 并运行任务。

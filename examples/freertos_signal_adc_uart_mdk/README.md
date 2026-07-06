@@ -41,6 +41,8 @@ PowerShell：
 - 每次 GPIO 触发也会唤醒 ADC task，UART 输出 ADC CH1 毫伏值。
 - Keil Watch 中 `g_monitorTaskLoopCount`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_adcSampleCount` 会随运行递增。
 
+更完整的接线、串口参数、Watch 变量和故障定位步骤见 [`docs/hardware-validation.md`](../../docs/hardware-validation.md)。
+
 ## 关键配置
 
 - `FreeRTOSConfig.h` 启用 `configUSE_COUNTING_SEMAPHORES`。
