@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 收紧 `examples/examples.json` 自检规则，校验 schema 版本、字段集合和路径格式。
 - 新增 `gpio_blink_mdk/README.md`，补齐最小 FreeRTOS 移植示例的独立说明。
 - 新增 `docs/validation-status.md`，记录当前示例验证级别，并让仓库自检确认验证矩阵覆盖示例清单。
 - 扩展示例清单元数据，并让仓库自检覆盖示例说明、验证状态和文档入口。

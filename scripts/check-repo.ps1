@@ -81,8 +81,19 @@ function Test-ExampleManifest {
         return
     }
 
+    if ([int]$manifest.schemaVersion -ne 1) {
+        Add-Failure 'examples/examples.json schemaVersion must be 1'
+    }
+
     $names = @{}
+    $allowedExampleFields = @('name', 'description', 'project', 'target', 'validationStatus', 'documentation')
     foreach ($entry in $manifest.examples) {
+        foreach ($field in $entry.PSObject.Properties.Name) {
+            if ($allowedExampleFields -notcontains $field) {
+                Add-Failure "example entry contains unsupported field: $field"
+            }
+        }
+
         if (-not $entry.name) {
             Add-Failure 'example entry is missing name'
             continue
@@ -113,7 +124,29 @@ function Test-ExampleManifest {
         if (-not $entry.documentation) {
             Add-Failure "example '$name' is missing documentation entries"
         } else {
+            $documents = @{}
             foreach ($documentRelative in @($entry.documentation)) {
+                if ([string]::IsNullOrWhiteSpace([string]$documentRelative)) {
+                    Add-Failure "example '$name' has empty documentation path"
+                    continue
+                }
+
+                if ([string]$documentRelative -match '\\') {
+                    Add-Failure "example '$name' documentation path must use forward slashes: $documentRelative"
+                }
+
+                if ([System.IO.Path]::IsPathRooted([string]$documentRelative) -or
+                    ([string]$documentRelative -match '(^|/)\.\.(/|$)')) {
+                    Add-Failure "example '$name' documentation path must stay repository-relative: $documentRelative"
+                    continue
+                }
+
+                if ($documents.ContainsKey([string]$documentRelative)) {
+                    Add-Failure "example '$name' has duplicate documentation path: $documentRelative"
+                } else {
+                    $documents[[string]$documentRelative] = $true
+                }
+
                 try {
                     $documentPath = Resolve-RepoPath -RelativePath ([string]$documentRelative)
                 } catch {
@@ -134,6 +167,15 @@ function Test-ExampleManifest {
         }
 
         $projectRelative = [string]$entry.project
+        if ($projectRelative -match '\\') {
+            Add-Failure "example '$name' project path must use forward slashes: $projectRelative"
+        }
+
+        if ([System.IO.Path]::IsPathRooted($projectRelative) -or
+            ($projectRelative -match '(^|/)\.\.(/|$)')) {
+            Add-Failure "example '$name' project path must stay repository-relative: $projectRelative"
+        }
+
         if ($projectRelative -notmatch '\.uvprojx$') {
             Add-Failure "example '$name' project must be a .uvprojx file: $projectRelative"
         }

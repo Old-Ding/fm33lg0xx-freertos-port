@@ -14,7 +14,7 @@
 2. 确认 `FreeRTOSConfig.h` 中的中断入口映射仍然和启动文件弱符号匹配。
 3. 确认新增任务没有使用会重配 SysTick 的厂商阻塞延时。
 4. 如果新增 FreeRTOS API，确认对应内核源文件已加入 Keil 工程。
-5. 如果新增示例，确认 `examples/examples.json` 已加入对应 Keil 工程、说明、验证状态和文档入口。
+5. 如果新增示例，确认 `examples/examples.json` 已加入对应 Keil 工程、说明、验证状态和文档入口，路径使用仓库相对路径和正斜杠。
 6. 运行 `.\scripts\check-repo.ps1`，确认示例清单、共享 FreeRTOS 引用、第三方来源文件和禁止跟踪文件都符合仓库规则。
 7. 开发阶段可用 `.\scripts\build-keil.ps1 -ExampleName <name> -CleanAfterBuild` 快速验证单个示例。
 8. 提交前运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有 Keil 示例都是 `0 Error(s), 0 Warning(s)`。

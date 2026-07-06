@@ -8,6 +8,17 @@
 
 当前示例验证级别见 [验证状态](validation-status.md)。
 
+## 示例清单规则
+
+`examples/examples.json` 使用 `schemaVersion: 1`。每个示例条目只维护这些字段：
+
+- `name`：示例名称，供构建脚本 `-ExampleName` 使用。
+- `description`：一句话说明示例目标。
+- `project`：Keil `.uvprojx` 工程路径，使用仓库相对路径和正斜杠。
+- `target`：Keil target 名称。
+- `validationStatus`：`build-verified`、`hardware-verified` 或 `experimental`。
+- `documentation`：README、验收文档和验证状态文档入口，使用仓库相对路径和正斜杠。
+
 ## gpio_blink_mdk
 
 - 目标：验证 FreeRTOS 在 FM33LG02X / Cortex-M0 / Keil ARMCC5 下可以接管 SysTick 并运行任务。
