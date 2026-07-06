@@ -136,6 +136,73 @@ function Test-ExampleManifest {
     }
 }
 
+function Test-FileContains {
+    param(
+        [string]$RelativePath,
+        [string]$Pattern,
+        [string]$Description
+    )
+
+    try {
+        $path = Resolve-RepoPath -RelativePath $RelativePath
+    } catch {
+        Add-Failure "$RelativePath is missing: $Description"
+        return
+    }
+
+    $content = Get-Content -LiteralPath $path -Raw
+    if ($content -notmatch $Pattern) {
+        Add-Failure "$RelativePath does not contain expected notice: $Description"
+    }
+}
+
+function Test-ThirdPartyProvenance {
+    Test-FileContains -RelativePath 'LICENSE' `
+        -Pattern 'Third-party code, vendor SDK files, CMSIS files, FreeRTOS Kernel files' `
+        -Description 'root license must keep third-party boundary statement'
+
+    Test-FileContains -RelativePath 'THIRD_PARTY_NOTICES.md' `
+        -Pattern 'FreeRTOS Kernel' `
+        -Description 'third-party notices must document FreeRTOS'
+
+    Test-FileContains -RelativePath 'FreeRTOS-Kernel-main\LICENSE.md' `
+        -Pattern 'MIT License' `
+        -Description 'FreeRTOS license file must be preserved'
+
+    $requiredFreeRtosFiles = @(
+        'FreeRTOS-Kernel-main\tasks.c',
+        'FreeRTOS-Kernel-main\list.c',
+        'FreeRTOS-Kernel-main\queue.c',
+        'FreeRTOS-Kernel-main\portable\RVDS\ARM_CM0\port.c',
+        'FreeRTOS-Kernel-main\portable\MemMang\heap_4.c'
+    )
+    foreach ($relativePath in $requiredFreeRtosFiles) {
+        try {
+            [void](Resolve-RepoPath -RelativePath $relativePath)
+        } catch {
+            Add-Failure "$relativePath is missing: shared FreeRTOS source used by examples"
+        }
+    }
+
+    $exampleRoots = @(
+        'gpio_blink_mdk',
+        'examples\freertos_signal_adc_uart_mdk'
+    )
+    foreach ($exampleRoot in $exampleRoots) {
+        Test-FileContains -RelativePath "$exampleRoot\Drivers\FM33LG0xx_FL_Driver\Inc\fm33lg0xx_fl.h" `
+            -Pattern 'SHANGHAI FUDAN MICROELECTRONICS GROUP CO\., LTD\.' `
+            -Description 'Fudan Micro FL Driver copyright header must be preserved'
+
+        Test-FileContains -RelativePath "$exampleRoot\Drivers\FM33LG0xx_FL_Driver\Inc\fm33lg0xx_fl.h" `
+            -Pattern 'Redistribution and use in source and binary forms' `
+            -Description 'Fudan Micro redistribution terms must be preserved'
+
+        Test-FileContains -RelativePath "$exampleRoot\Drivers\CMSIS\Device\FM\FM33xx\Include\core_cm0plus.h" `
+            -Pattern 'SPDX-License-Identifier:\s+Apache-2\.0' `
+            -Description 'CMSIS SPDX license identifier must be preserved'
+    }
+}
+
 Write-Host 'Checking tracked file hygiene...'
 $trackedFiles = Invoke-Git -Arguments @('ls-files')
 foreach ($file in $trackedFiles) {
@@ -149,6 +216,9 @@ foreach ($file in $ignoredTrackedFiles) {
 
 Write-Host 'Checking example manifest...'
 Test-ExampleManifest
+
+Write-Host 'Checking third-party provenance...'
+Test-ThirdPartyProvenance
 
 if ($Failures.Count -gt 0) {
     Write-Error "Repository check failed with $($Failures.Count) issue(s):"

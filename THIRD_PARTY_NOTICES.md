@@ -1,13 +1,20 @@
 # 第三方来源说明
 
-本文件记录当前仓库中非原创代码的来源。公开发布前，应再次核对每个来源的许可证文本和再分发条件。
+本文件记录当前仓库中非原创代码的来源和许可证边界。根目录 `LICENSE` 只覆盖本项目原创代码、文档和仓库元信息；已经带有第三方版权或许可证声明的文件继续遵循其原始声明。
+
+维护原则：
+
+- 保留第三方文件原始文件头、版权声明、免责声明和 SPDX 标识。
+- 只抽取当前示例必需的厂商 SDK/驱动文件，不提交本地完整 `例程/` 参考目录。
+- 发布前运行 `.\scripts\check-repo.ps1`，确认关键许可证文件和代表性来源文件头仍存在。
 
 ## FreeRTOS Kernel
 
 - 路径：`FreeRTOS-Kernel-main/`
 - 来源：FreeRTOS Kernel 源码包。
-- 许可证：见 `FreeRTOS-Kernel-main/LICENSE.md`。
+- 许可证：MIT License，见 `FreeRTOS-Kernel-main/LICENSE.md`。
 - 当前使用文件：`tasks.c`、`list.c`、`queue.c`、`portable/RVDS/ARM_CM0/port.c`、`portable/MemMang/heap_4.c`。
+- 维护要求：保留 `FreeRTOS-Kernel-main/LICENSE.md` 和 FreeRTOS 原始目录结构；示例工程通过相对路径引用根目录统一内核，不在每个 demo 中复制内核源码。
 
 ## Fudan Micro FM33LG0xx SDK / FL Driver
 
@@ -20,7 +27,8 @@
 
 - 路径：`gpio_blink_mdk/Drivers/CMSIS/`、`examples/freertos_signal_adc_uart_mdk/Drivers/CMSIS/`
 - 来源：CMSIS Cortex-M 设备支持文件。
-- 许可证：相关源文件头部包含 Arm 版权和 BSD 风格再分发条款。
+- 许可证：相关源文件头部包含 Arm 版权和 SPDX 标识，例如 `SPDX-License-Identifier: Apache-2.0`。
+- 维护要求：保留 CMSIS 原始文件头和 SPDX 标识，不把 CMSIS 文件归入本项目 MIT 许可证范围。
 
 ## Keil / FMSH Device Family Pack
 

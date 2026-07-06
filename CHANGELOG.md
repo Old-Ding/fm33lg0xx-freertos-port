@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 完善第三方来源说明，并让仓库自检覆盖关键许可证文件和来源文件头。
 - 新增 `docs/release-process.md`，固定版本号、tag、发布前门禁和硬件验收记录规则。
 - 新增 GitHub issue 和 PR 模板，规范 bug 复现、硬件验收、新示例请求和贡献自检信息。
 - 新增 GitHub Actions 仓库自检，验证示例清单、共享 FreeRTOS 引用和禁止提交的生成物。
