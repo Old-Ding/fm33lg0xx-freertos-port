@@ -47,6 +47,7 @@ volatile uint32_t g_gpioIrqCount = 0U;
 volatile uint32_t g_gpioTaskWakeCount = 0U;
 volatile uint32_t g_gpioSemaphoreGiveFailCount = 0U;
 volatile uint32_t g_adcSemaphoreGiveFailCount = 0U;
+volatile UBaseType_t g_gpioTaskStackHighWaterMark = 0U;
 
 /**
   * @brief  GPIO任务
@@ -62,6 +63,7 @@ void GPIOTask(void *pvParameters)
         if(xSemaphoreTake(g_gpioSemaphore, portMAX_DELAY) == pdPASS)
         {
             g_gpioTaskWakeCount++;
+            g_gpioTaskStackHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
         }
     }
 }

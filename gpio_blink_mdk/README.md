@@ -34,6 +34,7 @@ PowerShell：
 - PB4 LED 约 100 ms 半周期亮灭。
 - Keil Watch 中 `g_ledTaskCreateStatus == pdPASS`。
 - `g_ledTaskLoopCount` 持续递增。
+- `g_ledTaskStackHighWaterMark` 记录 LED task 剩余栈水位。
 - `g_freertosFaultCode == 0`。
 
 ## 关键配置

@@ -14,8 +14,8 @@
 
 | 示例 | 状态 | 构建证据 | 硬件状态 | 备注 |
 | --- | --- | --- | --- | --- |
-| `gpio_blink_mdk` | `build-verified` | `.\scripts\build-keil.ps1 -CleanAfterBuild` 通过，`0 Error(s), 0 Warning(s)` | 待记录板级验收结果 | 硬件通过后需要记录 PB4 LED、`g_ledTaskCreateStatus`、`g_ledTaskLoopCount`、`g_freertosFaultCode`。 |
-| `freertos_signal_adc_uart_mdk` | `build-verified` | `.\scripts\build-keil.ps1 -CleanAfterBuild` 通过，`0 Error(s), 0 Warning(s)` | 待记录板级验收结果 | 硬件通过后需要记录 PB4、PB12、ADC、UART 输出和关键 Watch 变量。 |
+| `gpio_blink_mdk` | `build-verified` | `.\scripts\build-keil.ps1 -CleanAfterBuild` 通过，`0 Error(s), 0 Warning(s)` | 待记录板级验收结果 | 硬件通过后需要记录 PB4 LED、`g_ledTaskCreateStatus`、`g_ledTaskLoopCount`、`g_ledTaskStackHighWaterMark`、`g_freertosFaultCode`。 |
+| `freertos_signal_adc_uart_mdk` | `build-verified` | `.\scripts\build-keil.ps1 -CleanAfterBuild` 通过，`0 Error(s), 0 Warning(s)` | 待记录板级验收结果 | 硬件通过后需要记录 PB4、PB12、ADC、UART 输出、任务栈水位和关键 Watch 变量。 |
 
 ## 状态升级规则
 

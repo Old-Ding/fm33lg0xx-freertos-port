@@ -100,6 +100,7 @@ PB12 falling edge
 
 - 任务创建结果，例如 `g_ledTaskCreateStatus`、`g_monitorTaskCreateStatus`、`g_gpioTaskCreateStatus`、`g_adcTaskCreateStatus`。
 - 运行计数，例如 `g_ledTaskLoopCount`、`g_monitorTaskLoopCount`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_adcSampleCount`。
+- 栈水位，例如 `g_ledTaskStackHighWaterMark`、`g_monitorTaskStackHighWaterMark`、`g_gpioTaskStackHighWaterMark`、`g_adcTaskStackHighWaterMark`。
 - 同步对象压力计数，例如 `g_gpioSemaphoreGiveFailCount`、`g_adcSemaphoreGiveFailCount`，用于观察 ISR 事件被合并或计数信号量已满。
 - 最近一次关键数据，例如 `g_adcSampleMv`。
 - 集中 fault code，例如 malloc 失败、栈溢出、同步对象创建失败、任务创建失败和调度器异常返回。

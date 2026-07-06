@@ -79,6 +79,7 @@ freertos_signal_adc_uart_mdk: 0 error(s), 0 warning(s)
 - [ ] PB4 LED 按约 100 ms 半周期亮灭
 - [ ] `g_ledTaskCreateStatus == pdPASS`
 - [ ] `g_ledTaskLoopCount` 持续递增
+- [ ] `g_ledTaskStackHighWaterMark > 0`
 - [ ] `g_freertosFaultCode == 0`
 
 Watch 变量：
@@ -86,12 +87,16 @@ Watch 变量：
 ```text
 g_ledTaskCreateStatus =
 g_ledTaskLoopCount =
+g_ledTaskStackHighWaterMark =
 g_freertosFaultCode =
 ```
 
 ## freertos_signal_adc_uart_mdk 现象
 
 - [ ] PB4 monitor LED 每 500 ms 翻转
+- [ ] `g_monitorTaskStackHighWaterMark > 0`
+- [ ] `g_gpioTaskStackHighWaterMark > 0`
+- [ ] `g_adcTaskStackHighWaterMark > 0`
 - [ ] PB12 下降沿触发后 `g_gpioIrqCount` 递增
 - [ ] GPIO task 唤醒后 `g_gpioTaskWakeCount` 递增
 - [ ] 单次触发验收时 `g_gpioSemaphoreGiveFailCount == 0`
@@ -115,6 +120,9 @@ g_monitorTaskCreateStatus =
 g_gpioTaskCreateStatus =
 g_adcTaskCreateStatus =
 g_monitorTaskLoopCount =
+g_monitorTaskStackHighWaterMark =
+g_gpioTaskStackHighWaterMark =
+g_adcTaskStackHighWaterMark =
 g_gpioIrqCount =
 g_gpioTaskWakeCount =
 g_gpioSemaphoreGiveFailCount =

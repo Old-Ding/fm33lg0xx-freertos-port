@@ -56,6 +56,7 @@
 volatile uint32_t g_freertosFaultCode = FREERTOS_FAULT_NONE;
 volatile uint32_t g_ledTaskLoopCount = 0U;
 volatile BaseType_t g_ledTaskCreateStatus = pdFALSE;
+volatile UBaseType_t g_ledTaskStackHighWaterMark = 0U;
 
 static void SVD_BusyDelayUsNoSysTick(uint32_t u32Delay_us);
 static void LedBlinkTask(void *pvParameters);
@@ -152,6 +153,7 @@ static void LedBlinkTask(void *pvParameters)
         vTaskDelay(LED_BLINK_INTERVAL_TICKS);
 
         g_ledTaskLoopCount++;
+        g_ledTaskStackHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
     }
 }
 

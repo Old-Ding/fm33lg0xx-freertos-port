@@ -38,6 +38,7 @@ assignees: ""
 ## 运行现象
 
 - [ ] PB4 LED 周期翻转
+- [ ] 相关任务 stack high-water mark 均大于 `0`
 - [ ] PB12 下降沿触发后 `g_gpioIrqCount` 递增
 - [ ] GPIO task 唤醒后 `g_gpioTaskWakeCount` 递增
 - [ ] 单次触发验收时 `g_gpioSemaphoreGiveFailCount == 0`

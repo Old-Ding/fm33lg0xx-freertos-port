@@ -119,7 +119,8 @@ __WEAK void SVD_DelayUs(uint32_t u32Delay_us)
 
 1. `g_ledTaskCreateStatus`：`pdPASS` 表示 LED 任务创建成功。
 2. `g_ledTaskLoopCount`：持续增加表示调度器、SysTick 和任务延时都在运行。
-3. `g_freertosFaultCode`：`0` 表示无 FreeRTOS 故障，`1` 表示 malloc 失败，`2` 表示任务栈溢出，`3` 表示调度器启动失败或异常返回。
+3. `g_ledTaskStackHighWaterMark`：记录 LED 任务剩余栈水位，用于在溢出前评估栈余量。
+4. `g_freertosFaultCode`：`0` 表示无 FreeRTOS 故障，`1` 表示 malloc 失败，`2` 表示任务栈溢出，`3` 表示调度器启动失败或异常返回。
 
 如果 LED 不闪，优先按以下顺序查：
 

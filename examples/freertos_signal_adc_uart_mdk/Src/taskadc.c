@@ -46,6 +46,7 @@ extern SemaphoreHandle_t g_adcSemaphore;
 
 volatile uint32_t g_adcSampleMv = 0U;
 volatile uint32_t g_adcSampleCount = 0U;
+volatile UBaseType_t g_adcTaskStackHighWaterMark = 0U;
 
 /**
   * @brief  ADC任务
@@ -65,6 +66,7 @@ void AdcTask(void *pvParameters)
             printf("ADC CH1: %lu mV, count=%lu\r\n",
                    (unsigned long)g_adcSampleMv,
                    (unsigned long)g_adcSampleCount);
+            g_adcTaskStackHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
         }
     }
 }

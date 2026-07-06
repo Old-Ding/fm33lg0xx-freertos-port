@@ -71,6 +71,7 @@ volatile uint32_t g_monitorTaskLoopCount = 0U;
 volatile BaseType_t g_monitorTaskCreateStatus = pdFALSE;
 volatile BaseType_t g_gpioTaskCreateStatus = pdFALSE;
 volatile BaseType_t g_adcTaskCreateStatus = pdFALSE;
+volatile UBaseType_t g_monitorTaskStackHighWaterMark = 0U;
 
 SemaphoreHandle_t g_gpioSemaphore = NULL;
 SemaphoreHandle_t g_adcSemaphore = NULL;
@@ -163,6 +164,7 @@ static void MonitorTask(void *pvParameters)
         PowerDownMonitroing();
         LED0_TOG();
         g_monitorTaskLoopCount++;
+        g_monitorTaskStackHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
         vTaskDelay(MONITOR_INTERVAL_TICKS);
     }
 }

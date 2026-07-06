@@ -55,6 +55,7 @@
 - `PB4` LED 按约 100 ms 半周期亮灭。
 - `g_ledTaskCreateStatus == pdPASS`。
 - `g_ledTaskLoopCount` 持续递增。
+- `g_ledTaskStackHighWaterMark` 大于 `0`，并记录实际值。
 - `g_freertosFaultCode == 0`。
 
 ## freertos_signal_adc_uart_mdk 验收
@@ -92,6 +93,9 @@ Watch 变量：
 | `g_gpioTaskCreateStatus` | `pdPASS` |
 | `g_adcTaskCreateStatus` | `pdPASS` |
 | `g_monitorTaskLoopCount` | 持续递增 |
+| `g_monitorTaskStackHighWaterMark` | 大于 `0`，并记录实际值 |
+| `g_gpioTaskStackHighWaterMark` | 大于 `0`，并记录实际值 |
+| `g_adcTaskStackHighWaterMark` | 大于 `0`，并记录实际值 |
 | `g_gpioIrqCount` | 每次 PB12 下降沿后递增 |
 | `g_gpioTaskWakeCount` | GPIO task 被信号量唤醒后递增 |
 | `g_gpioSemaphoreGiveFailCount` | 单次触发验收时保持 `0`，快速连触时递增表示 GPIO 事件被合并 |
@@ -108,6 +112,7 @@ Watch 变量：
 | LED 不闪 | 任务创建状态、`g_freertosFaultCode`、`SysTick_Handler` / `PendSV_Handler` / `SVC_Handler` 是否由 FreeRTOS port 接管 |
 | `g_freertosFaultCode == 1` | FreeRTOS heap 不足，检查 `configTOTAL_HEAP_SIZE` 和任务栈大小 |
 | `g_freertosFaultCode == 2` | 任务栈溢出，先看最近新增任务的 stack words |
+| 任务栈水位接近 `0` | 对应任务栈余量不足，先确认是否新增调用链或 UART 输出，再调整 stack words |
 | `g_freertosFaultCode == 3` | 调度器启动失败或异常返回，检查 FreeRTOS port 和中断向量映射 |
 | `g_freertosFaultCode == 4` | 信号量创建失败，检查 `queue.c` 是否加入工程以及 heap 是否足够 |
 | `g_freertosFaultCode == 5` | 任务创建失败，检查任务栈和任务数量 |
