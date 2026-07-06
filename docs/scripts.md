@@ -83,7 +83,7 @@
 - Keil 进程返回非 0 exit code。
 - 构建日志不存在，或无法解析 `Error(s)` / `Warning(s)` 汇总。
 - 任意示例出现 error 或 warning。
-- 清理目标不在仓库或对应 Keil 工程目录内。
+- 清理目标路径规范化后不在仓库或对应 Keil 工程目录内。
 
 清理范围限定在每个示例的 `MDK-ARM` 目录：
 

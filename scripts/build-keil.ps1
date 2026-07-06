@@ -13,13 +13,30 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = (Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).Path
 $ExampleManifestPath = Join-Path -Path $RepoRoot -ChildPath 'examples\examples.json'
 
+function Test-PathWithinDirectory {
+    param(
+        [string]$Path,
+        [string]$Directory
+    )
+
+    $comparison = [System.StringComparison]::OrdinalIgnoreCase
+    $normalizedDirectory = [System.IO.Path]::GetFullPath($Directory).TrimEnd('\', '/')
+    $normalizedPath = [System.IO.Path]::GetFullPath($Path).TrimEnd('\', '/')
+
+    if ($normalizedPath.Equals($normalizedDirectory, $comparison)) {
+        return $true
+    }
+
+    return $normalizedPath.StartsWith($normalizedDirectory + [System.IO.Path]::DirectorySeparatorChar, $comparison)
+}
+
 function Resolve-RepoPath {
     param([string]$RelativePath)
 
     $fullPath = Join-Path -Path $RepoRoot -ChildPath $RelativePath
     $resolvedPath = (Resolve-Path -LiteralPath $fullPath).Path
 
-    if (-not $resolvedPath.StartsWith($RepoRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+    if (-not (Test-PathWithinDirectory -Path $resolvedPath -Directory $RepoRoot)) {
         throw "Path escapes repository: $RelativePath"
     }
 
@@ -136,7 +153,7 @@ function Remove-KeilOutputs {
     $projectDir = Split-Path -Parent $ProjectPath
     $resolvedProjectDir = (Resolve-Path -LiteralPath $projectDir).Path
 
-    if (-not $resolvedProjectDir.StartsWith($RepoRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+    if (-not (Test-PathWithinDirectory -Path $resolvedProjectDir -Directory $RepoRoot)) {
         throw "Refuse to clean outside repository: $resolvedProjectDir"
     }
 
@@ -155,7 +172,7 @@ function Remove-KeilOutputs {
     foreach ($target in $targets) {
         if (Test-Path -LiteralPath $target) {
             $resolvedTarget = (Resolve-Path -LiteralPath $target).Path
-            if (-not $resolvedTarget.StartsWith($resolvedProjectDir, [System.StringComparison]::OrdinalIgnoreCase)) {
+            if (-not (Test-PathWithinDirectory -Path $resolvedTarget -Directory $resolvedProjectDir)) {
                 throw "Refuse to clean outside project MDK directory: $resolvedTarget"
             }
             Remove-ItemWithRetry -Path $resolvedTarget

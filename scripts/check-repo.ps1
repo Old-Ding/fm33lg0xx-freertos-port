@@ -22,13 +22,30 @@ function Invoke-Git {
     return @($output)
 }
 
+function Test-PathWithinDirectory {
+    param(
+        [string]$Path,
+        [string]$Directory
+    )
+
+    $comparison = [System.StringComparison]::OrdinalIgnoreCase
+    $normalizedDirectory = [System.IO.Path]::GetFullPath($Directory).TrimEnd('\', '/')
+    $normalizedPath = [System.IO.Path]::GetFullPath($Path).TrimEnd('\', '/')
+
+    if ($normalizedPath.Equals($normalizedDirectory, $comparison)) {
+        return $true
+    }
+
+    return $normalizedPath.StartsWith($normalizedDirectory + [System.IO.Path]::DirectorySeparatorChar, $comparison)
+}
+
 function Resolve-RepoPath {
     param([string]$RelativePath)
 
     $fullPath = Join-Path -Path $RepoRoot -ChildPath $RelativePath
     $resolvedPath = (Resolve-Path -LiteralPath $fullPath).Path
 
-    if (-not $resolvedPath.StartsWith($RepoRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+    if (-not (Test-PathWithinDirectory -Path $resolvedPath -Directory $RepoRoot)) {
         throw "Path escapes repository: $RelativePath"
     }
 
