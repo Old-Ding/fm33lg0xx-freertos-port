@@ -640,6 +640,32 @@ function Test-GitHubTemplates {
         -Description 'hardware validation template must link validation record template'
 }
 
+function Test-GitHubWorkflow {
+    Test-FileContains -RelativePath '.github\workflows\repo-check.yml' `
+        -Pattern 'runs-on:\s+windows-latest' `
+        -Description 'repository check workflow must run on Windows'
+
+    Test-FileContains -RelativePath '.github\workflows\repo-check.yml' `
+        -Pattern 'actions/checkout@v4' `
+        -Description 'repository check workflow must checkout sources'
+
+    Test-FileContains -RelativePath '.github\workflows\repo-check.yml' `
+        -Pattern 'fetch-depth:\s+0' `
+        -Description 'repository check workflow must fetch history for commit-range checks'
+
+    Test-FileContains -RelativePath '.github\workflows\repo-check.yml' `
+        -Pattern 'check-repo\.ps1' `
+        -Description 'repository check workflow must run check-repo.ps1'
+
+    Test-FileContains -RelativePath '.github\workflows\repo-check.yml' `
+        -Pattern 'git diff --check' `
+        -Description 'repository check workflow must check committed whitespace ranges'
+
+    Test-FileContains -RelativePath '.github\workflows\repo-check.yml' `
+        -Pattern 'git diff-tree --check' `
+        -Description 'repository check workflow must check root commit whitespace'
+}
+
 function Test-ValidationStatusDocument {
     $validationDocRelative = 'docs\validation-status.md'
 
@@ -746,6 +772,9 @@ Test-ChangelogDocument
 
 Write-Host 'Checking GitHub templates...'
 Test-GitHubTemplates
+
+Write-Host 'Checking GitHub workflow...'
+Test-GitHubWorkflow
 
 if ($Failures.Count -gt 0) {
     Write-Host "Repository check failed with $($Failures.Count) issue(s):"

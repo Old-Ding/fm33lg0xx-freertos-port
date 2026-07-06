@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 仓库自检新增 GitHub Actions 工作流检查，防止远端仓库自检和提交范围空白检查被误删。
 - 仓库自检新增 GitHub PR 和 issue 模板检查，防止协作入口丢失仓库检查、示例清单和硬件验收要求。
 - 仓库自检新增 `CHANGELOG.md` 结构检查，防止 `Unreleased` 和版本记录在发布维护中被误删。
 - `scripts/build-keil.ps1` 拒绝无效参数组合，并校验 Keil 构建日志必须来自本次构建，避免旧日志导致误判。
