@@ -44,6 +44,7 @@
   - 填写 `name`、`description`、`project`、`target`、`validationStatus`、`documentation`。
 - 新增或更新示例 README，至少包含数据流、硬件连接、构建方式、预期现象和关键配置。
 - 更新 `docs/examples.md`、`docs/hardware-validation.md`、`docs/validation-status.md`。
+- 加入 `examples/examples.json` 后，`scripts/check-repo.ps1` 会把该示例纳入第三方来源文件头检查。
 - 如果示例能力超出当前边界，同步更新 `docs/known-limitations.md`。
 
 ## 6. 验证

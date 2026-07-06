@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 仓库自检的第三方来源检查改为从 `examples/examples.json` 推导示例根目录，避免新增 demo 后漏检厂商和 CMSIS 文件头。
 - 新增 `docs/hardware-validation-record.md`，固定硬件验收结果的最小证据和状态升级规则。
 - 新增 `docs/architecture.md`，集中记录示例启动链路、ISR/task 职责边界、SysTick 归属和 FreeRTOS 源文件依赖。
 - 新增 `docs/scripts.md`，集中说明仓库维护脚本的职责、参数、失败条件和清理范围。

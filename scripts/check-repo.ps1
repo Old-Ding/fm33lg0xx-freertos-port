@@ -41,6 +41,47 @@ function Get-RepoText {
     return Get-Content -LiteralPath $Path -Raw -Encoding UTF8
 }
 
+function Get-ManifestExampleRoots {
+    $manifestPath = Resolve-RepoPath -RelativePath 'examples\examples.json'
+
+    try {
+        $manifest = Get-RepoText -Path $manifestPath | ConvertFrom-Json
+    } catch {
+        Add-Failure "examples/examples.json is not valid JSON: $($_.Exception.Message)"
+        return @()
+    }
+
+    $roots = [ordered]@{}
+    foreach ($entry in @($manifest.examples)) {
+        if (-not $entry.project) {
+            continue
+        }
+
+        $projectRelative = [string]$entry.project
+        if (($projectRelative -match '\\') -or
+            [System.IO.Path]::IsPathRooted($projectRelative) -or
+            ($projectRelative -match '(^|/)\.\.(/|$)')) {
+            continue
+        }
+
+        try {
+            $projectPath = Resolve-RepoPath -RelativePath $projectRelative
+        } catch {
+            continue
+        }
+
+        $projectDir = Split-Path -Parent $projectPath
+        $exampleRoot = Split-Path -Parent $projectDir
+        $exampleRootRelative = $exampleRoot.Substring($RepoRoot.Length).TrimStart('\', '/') -replace '\\', '/'
+
+        if ($exampleRootRelative -and (-not $roots.Contains($exampleRootRelative))) {
+            $roots[$exampleRootRelative] = $true
+        }
+    }
+
+    return @($roots.Keys)
+}
+
 function Test-BlockedTrackedFile {
     param([string]$Path)
 
@@ -306,10 +347,12 @@ function Test-ThirdPartyProvenance {
         }
     }
 
-    $exampleRoots = @(
-        'gpio_blink_mdk',
-        'examples\freertos_signal_adc_uart_mdk'
-    )
+    $exampleRoots = Get-ManifestExampleRoots
+    if ($exampleRoots.Count -eq 0) {
+        Add-Failure 'examples/examples.json does not expose any example roots for third-party provenance checks'
+        return
+    }
+
     foreach ($exampleRoot in $exampleRoots) {
         Test-FileContains -RelativePath "$exampleRoot\Drivers\FM33LG0xx_FL_Driver\Inc\fm33lg0xx_fl.h" `
             -Pattern 'SHANGHAI FUDAN MICROELECTRONICS GROUP CO\., LTD\.' `
