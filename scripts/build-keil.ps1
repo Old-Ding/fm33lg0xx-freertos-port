@@ -13,6 +13,32 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = (Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).Path
 $ExampleManifestPath = Join-Path -Path $RepoRoot -ChildPath 'examples\examples.json'
 
+function Assert-ParameterCombination {
+    param([hashtable]$BoundParameters)
+
+    $errors = @()
+
+    if ($BoundParameters.ContainsKey('ListExamples')) {
+        $conflicts = @('ExampleName', 'UV4Path', 'Mode', 'CleanOnly', 'CleanAfterBuild') |
+            Where-Object { $BoundParameters.ContainsKey($_) }
+        if ($conflicts.Count -gt 0) {
+            $errors += "-ListExamples cannot be combined with -$($conflicts -join ', -')."
+        }
+    }
+
+    if ($BoundParameters.ContainsKey('CleanOnly')) {
+        $conflicts = @('UV4Path', 'Mode', 'CleanAfterBuild') |
+            Where-Object { $BoundParameters.ContainsKey($_) }
+        if ($conflicts.Count -gt 0) {
+            $errors += "-CleanOnly cannot be combined with -$($conflicts -join ', -')."
+        }
+    }
+
+    if ($errors.Count -gt 0) {
+        throw "Invalid parameter combination:`r`n- $($errors -join "`r`n- ")"
+    }
+}
+
 function Test-PathWithinDirectory {
     param(
         [string]$Path,
@@ -207,6 +233,8 @@ function Get-BuildSummary {
         ProgramSize = if ($programSize.Success) { $programSize.Groups[1].Value.Trim() } else { '' }
     }
 }
+
+Assert-ParameterCombination -BoundParameters $PSBoundParameters
 
 $AllProjects = Get-ExampleProjects
 

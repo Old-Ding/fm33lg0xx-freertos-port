@@ -72,6 +72,11 @@
 | `-CleanOnly` | 只清理所选示例的 Keil 生成物，不执行构建。 |
 | `-CleanAfterBuild` | 构建通过后清理所选示例的 Keil 生成物。 |
 
+参数组合规则：
+
+- `-ListExamples` 只用于查看清单，不能和示例选择、构建、清理或 `UV4.exe` 路径参数组合。
+- `-CleanOnly` 可与 `-ExampleName` 组合以只清理指定示例；不能和构建模式、`UV4.exe` 路径或 `-CleanAfterBuild` 组合。
+
 `UV4.exe` 查找顺序：
 
 1. `-UV4Path` 参数。
