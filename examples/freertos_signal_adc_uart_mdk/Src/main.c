@@ -172,6 +172,8 @@ static void MonitorTask(void *pvParameters)
         LED0_TOG();
         g_monitorTaskLoopCount++;
         g_monitorTaskStackHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
+        g_freertosHeapFreeBytes = xPortGetFreeHeapSize();
+        g_freertosHeapMinimumEverFreeBytes = xPortGetMinimumEverFreeHeapSize();
         vTaskDelay(MONITOR_INTERVAL_TICKS);
     }
 }

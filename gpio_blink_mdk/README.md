@@ -35,6 +35,7 @@ PowerShell：
 - Keil Watch 中 `g_ledTaskCreateStatus == pdPASS`。
 - `g_ledTaskLoopCount` 持续递增。
 - `g_ledTaskStackHighWaterMark` 记录 LED task 剩余栈水位。
+- `g_freertosHeapFreeBytes`、`g_freertosHeapMinimumEverFreeBytes` 记录 heap 当前余量和最低水位。
 - `g_freertosFaultCode == 0`。
 - 如果 `g_freertosFaultCode == 1`，查看 `g_freertosHeapFreeBytes` 和 `g_freertosHeapMinimumEverFreeBytes` 判断 heap 余量。
 - 如果 `g_freertosFaultCode == 2`，查看 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName` 定位溢出任务。

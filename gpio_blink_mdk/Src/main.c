@@ -161,6 +161,8 @@ static void LedBlinkTask(void *pvParameters)
 
         g_ledTaskLoopCount++;
         g_ledTaskStackHighWaterMark = uxTaskGetStackHighWaterMark(NULL);
+        g_freertosHeapFreeBytes = xPortGetFreeHeapSize();
+        g_freertosHeapMinimumEverFreeBytes = xPortGetMinimumEverFreeHeapSize();
     }
 }
 

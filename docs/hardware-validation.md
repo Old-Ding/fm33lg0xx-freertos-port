@@ -56,6 +56,7 @@
 - `g_ledTaskCreateStatus == pdPASS`。
 - `g_ledTaskLoopCount` 持续递增。
 - `g_ledTaskStackHighWaterMark` 大于 `0`，并记录实际值。
+- `g_freertosHeapFreeBytes` 和 `g_freertosHeapMinimumEverFreeBytes` 大于 `0`，并记录实际值。
 - `g_freertosFaultCode == 0`。
 
 ## freertos_signal_adc_uart_mdk 验收
@@ -96,6 +97,8 @@ Watch 变量：
 | `g_monitorTaskStackHighWaterMark` | 大于 `0`，并记录实际值 |
 | `g_gpioTaskStackHighWaterMark` | 大于 `0`，并记录实际值 |
 | `g_adcTaskStackHighWaterMark` | 大于 `0`，并记录实际值 |
+| `g_freertosHeapFreeBytes` | 大于 `0`，并记录实际值 |
+| `g_freertosHeapMinimumEverFreeBytes` | 大于 `0`，并记录实际值 |
 | `g_gpioIrqCount` | 每次 PB12 下降沿后递增 |
 | `g_gpioTaskWakeCount` | GPIO task 被信号量唤醒后递增 |
 | `g_gpioSemaphoreGiveFailCount` | 单次触发验收时保持 `0`，快速连触时递增表示 GPIO 事件被合并 |

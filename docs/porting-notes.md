@@ -121,7 +121,7 @@ __WEAK void SVD_DelayUs(uint32_t u32Delay_us)
 2. `g_ledTaskLoopCount`：持续增加表示调度器、SysTick 和任务延时都在运行。
 3. `g_ledTaskStackHighWaterMark`：记录 LED 任务剩余栈水位，用于在溢出前评估栈余量。
 4. `g_freertosFaultCode`：`0` 表示无 FreeRTOS 故障，`1` 表示 malloc 失败，`2` 表示任务栈溢出，`3` 表示调度器启动失败或异常返回，`6` 表示 FreeRTOS assert 失败。
-5. `g_freertosHeapFreeBytes`、`g_freertosHeapMinimumEverFreeBytes`：`g_freertosFaultCode == 1` 时记录 heap 余量现场。
+5. `g_freertosHeapFreeBytes`、`g_freertosHeapMinimumEverFreeBytes`：运行中记录 heap 当前余量和最低水位，`g_freertosFaultCode == 1` 时保留 malloc 失败现场。
 6. `g_freertosAssertFile`、`g_freertosAssertLine`：`g_freertosFaultCode == 6` 时记录 assert 触发位置。
 
 如果 LED 不闪，优先按以下顺序查：

@@ -80,6 +80,8 @@ freertos_signal_adc_uart_mdk: 0 error(s), 0 warning(s)
 - [ ] `g_ledTaskCreateStatus == pdPASS`
 - [ ] `g_ledTaskLoopCount` 持续递增
 - [ ] `g_ledTaskStackHighWaterMark > 0`
+- [ ] `g_freertosHeapFreeBytes > 0`
+- [ ] `g_freertosHeapMinimumEverFreeBytes > 0`
 - [ ] `g_freertosFaultCode == 0`
 
 Watch 变量：
@@ -103,6 +105,8 @@ g_freertosAssertLine =
 - [ ] `g_monitorTaskStackHighWaterMark > 0`
 - [ ] `g_gpioTaskStackHighWaterMark > 0`
 - [ ] `g_adcTaskStackHighWaterMark > 0`
+- [ ] `g_freertosHeapFreeBytes > 0`
+- [ ] `g_freertosHeapMinimumEverFreeBytes > 0`
 - [ ] PB12 下降沿触发后 `g_gpioIrqCount` 递增
 - [ ] GPIO task 唤醒后 `g_gpioTaskWakeCount` 递增
 - [ ] 单次触发验收时 `g_gpioSemaphoreGiveFailCount == 0`

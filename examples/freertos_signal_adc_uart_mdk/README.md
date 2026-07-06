@@ -41,6 +41,7 @@ PowerShell：
 - 每次 GPIO 触发也会唤醒 ADC task，UART 输出 ADC CH1 毫伏值。
 - Keil Watch 中 `g_monitorTaskLoopCount`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_adcSampleCount` 会随运行递增。
 - `g_monitorTaskStackHighWaterMark`、`g_gpioTaskStackHighWaterMark`、`g_adcTaskStackHighWaterMark` 记录各任务剩余栈水位。
+- `g_freertosHeapFreeBytes`、`g_freertosHeapMinimumEverFreeBytes` 记录 heap 当前余量和最低水位。
 - 如果 PB12 触发过快，`g_gpioSemaphoreGiveFailCount` 或 `g_adcSemaphoreGiveFailCount` 递增表示对应信号量已满，事件被合并或丢弃。
 - 如果 `g_freertosFaultCode == 1`，查看 `g_freertosHeapFreeBytes` 和 `g_freertosHeapMinimumEverFreeBytes` 判断 heap 余量。
 - 如果 `g_freertosFaultCode == 2`，查看 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName` 定位溢出任务。
