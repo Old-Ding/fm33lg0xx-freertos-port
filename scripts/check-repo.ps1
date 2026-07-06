@@ -313,6 +313,10 @@ function Test-ExampleManifest {
             Add-Failure "example '$name' is missing description"
         }
 
+        if (-not $entry.target) {
+            Add-Failure "example '$name' is missing target"
+        }
+
         $allowedValidationStatus = @('build-verified', 'hardware-verified', 'experimental')
         if (-not $entry.validationStatus) {
             Add-Failure "example '$name' is missing validationStatus"
