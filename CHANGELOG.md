@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- `scripts/build-keil.ps1` 拒绝无效参数组合，并校验 Keil 构建日志必须来自本次构建，避免旧日志导致误判。
+- 仓库自检要求 `examples/examples.json` 中的工程和文档入口已被 Git 跟踪，Keil target 必须存在于对应 `.uvprojx`。
+- 仓库自检扩大 `.gitignore` 策略覆盖范围，覆盖更多嵌入式构建产物、归档和临时文件。
 - 仓库自检新增 `.gitattributes` 策略检查，防止文本换行和二进制属性规则被误删。
 - GitHub Actions 新增提交范围空白检查，补齐不依赖 Keil 的远端门禁。
 - 仓库自检新增 `.gitignore` 策略检查，防止厂商目录、Keil/JLink 生成物和归档忽略规则被误删。
