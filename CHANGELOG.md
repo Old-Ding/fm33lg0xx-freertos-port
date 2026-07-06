@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 新增 `docs/architecture.md`，集中记录示例启动链路、ISR/task 职责边界、SysTick 归属和 FreeRTOS 源文件依赖。
 - 新增 `docs/scripts.md`，集中说明仓库维护脚本的职责、参数、失败条件和清理范围。
 - 新增 `docs/new-example-checklist.md`，固定新增 FreeRTOS 示例的建模、工程、文档和验证步骤。
 - 修正仓库自检脚本的 UTF-8 文本读取和失败项输出，避免 Windows 默认编码影响中文文档检查。

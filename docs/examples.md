@@ -6,6 +6,8 @@
 
 构建后的板级验收步骤见 [硬件验收指南](hardware-validation.md)。
 
+调用链、ISR/task 职责边界和 SysTick 归属见 [架构说明](architecture.md)。
+
 当前示例验证级别见 [验证状态](validation-status.md)。
 
 ## 示例清单规则

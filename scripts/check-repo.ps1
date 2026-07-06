@@ -357,6 +357,28 @@ function Test-NewExampleChecklistDocument {
         -Description 'README must link new example checklist'
 }
 
+function Test-ArchitectureDocument {
+    Test-FileContains -RelativePath 'docs\architecture.md' `
+        -Pattern 'SysTick' `
+        -Description 'architecture document must describe SysTick ownership'
+
+    Test-FileContains -RelativePath 'docs\architecture.md' `
+        -Pattern 'portYIELD_FROM_ISR' `
+        -Description 'architecture document must describe ISR yield pattern'
+
+    Test-FileContains -RelativePath 'docs\architecture.md' `
+        -Pattern 'queue\.c' `
+        -Description 'architecture document must describe FreeRTOS source dependencies'
+
+    Test-FileContains -RelativePath 'README.md' `
+        -Pattern 'docs/architecture\.md' `
+        -Description 'README must link architecture document'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'docs/architecture\.md' `
+        -Description 'new example checklist must reference architecture document'
+}
+
 function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'build-keil\.ps1' `
@@ -427,6 +449,9 @@ Test-KnownLimitationsDocument
 
 Write-Host 'Checking new example checklist...'
 Test-NewExampleChecklistDocument
+
+Write-Host 'Checking architecture documentation...'
+Test-ArchitectureDocument
 
 Write-Host 'Checking script documentation...'
 Test-ScriptsDocument

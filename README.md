@@ -27,6 +27,7 @@
 │   ├── examples.json                     # 示例构建和文档元数据清单
 │   └── freertos_signal_adc_uart_mdk/     # FreeRTOS 综合基础 demo
 ├── docs/
+│   ├── architecture.md                   # 调用链和职责边界
 │   ├── examples.md                       # 示例硬件和验证说明
 │   ├── hardware-validation.md            # 板级硬件验收步骤
 │   ├── known-limitations.md              # 当前支持边界和已知限制
@@ -89,6 +90,8 @@ Keil GUI 构建：
 
 构建通过后，按 [硬件验收指南](docs/hardware-validation.md) 逐步确认下载运行、LED、GPIO 中断、ADC 采样、UART 输出和 Keil Watch 变量。
 
+示例调用链、ISR/task 职责边界和 SysTick 归属见 [架构说明](docs/architecture.md)。
+
 当前示例的验证级别见 [验证状态](docs/validation-status.md)。`build-verified` 只表示 Keil 构建通过，不等同于板级硬件已验证。
 
 当前支持边界和未覆盖能力见 [已知限制](docs/known-limitations.md)。
@@ -135,6 +138,7 @@ PowerShell 手工构建示例：
 - 调度器启动后，任务周期延时使用 `vTaskDelay()`；不要在任务里直接使用会重配 SysTick 的厂商 delay。
 - 新增 FreeRTOS API 时，同步检查 `FreeRTOSConfig.h` 和 Keil 工程中的内核源文件，例如信号量需要 `queue.c`。
 - 新增示例时同步更新 `examples/examples.json`，让构建脚本自动覆盖新示例。
+- 修改调用链、中断同步、SysTick 延时或任务职责时，同步更新 [架构说明](docs/architecture.md)。
 - 新增示例前按 [新增示例 Checklist](docs/new-example-checklist.md) 先确认数据流、职责边界、文档和验证项。
 - 本地检查和构建脚本的完整用法见 [维护脚本说明](docs/scripts.md)。
 - 开发阶段可用 `-ExampleName` 快速验证单个示例；提交前仍运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有示例是 `0 Error(s), 0 Warning(s)`。
