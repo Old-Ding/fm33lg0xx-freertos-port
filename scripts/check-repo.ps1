@@ -232,6 +232,32 @@ function Test-ThirdPartyProvenance {
     }
 }
 
+function Test-ValidationStatusDocument {
+    $validationDocRelative = 'docs\validation-status.md'
+
+    try {
+        $validationDocPath = Resolve-RepoPath -RelativePath $validationDocRelative
+    } catch {
+        Add-Failure "$validationDocRelative is missing"
+        return
+    }
+
+    $validationDocText = Get-Content -LiteralPath $validationDocPath -Raw
+    $manifestPath = Resolve-RepoPath -RelativePath 'examples\examples.json'
+    $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+
+    foreach ($entry in $manifest.examples) {
+        $name = [string]$entry.name
+        $status = [string]$entry.validationStatus
+        if ($validationDocText -notmatch [regex]::Escape($name)) {
+            Add-Failure "validation status document does not mention example '$name'"
+        }
+        if ($status -and ($validationDocText -notmatch [regex]::Escape($status))) {
+            Add-Failure "validation status document does not mention status '$status'"
+        }
+    }
+}
+
 Write-Host 'Checking tracked file hygiene...'
 $trackedFiles = Invoke-Git -Arguments @('ls-files')
 foreach ($file in $trackedFiles) {
@@ -248,6 +274,9 @@ Test-ExampleManifest
 
 Write-Host 'Checking third-party provenance...'
 Test-ThirdPartyProvenance
+
+Write-Host 'Checking validation status document...'
+Test-ValidationStatusDocument
 
 if ($Failures.Count -gt 0) {
     Write-Error "Repository check failed with $($Failures.Count) issue(s):"

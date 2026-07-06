@@ -6,6 +6,8 @@
 
 构建后的板级验收步骤见 [硬件验收指南](hardware-validation.md)。
 
+当前示例验证级别见 [验证状态](validation-status.md)。
+
 ## gpio_blink_mdk
 
 - 目标：验证 FreeRTOS 在 FM33LG02X / Cortex-M0 / Keil ARMCC5 下可以接管 SysTick 并运行任务。

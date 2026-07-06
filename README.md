@@ -30,7 +30,8 @@
 │   ├── examples.md                       # 示例硬件和验证说明
 │   ├── hardware-validation.md            # 板级硬件验收步骤
 │   ├── porting-notes.md                  # FreeRTOS 移植说明
-│   └── release-process.md                # 版本发布和验收流程
+│   ├── release-process.md                # 版本发布和验收流程
+│   └── validation-status.md              # 当前示例验证状态矩阵
 ├── scripts/
 │   ├── build-keil.ps1                    # Keil 批量构建验证脚本
 │   └── check-repo.ps1                    # 仓库结构和提交卫生自检脚本
@@ -82,6 +83,8 @@ Keil GUI 构建：
 ## 硬件验收
 
 构建通过后，按 [硬件验收指南](docs/hardware-validation.md) 逐步确认下载运行、LED、GPIO 中断、ADC 采样、UART 输出和 Keil Watch 变量。
+
+当前示例的验证级别见 [验证状态](docs/validation-status.md)。`build-verified` 只表示 Keil 构建通过，不等同于板级硬件已验证。
 
 PowerShell 手工构建示例：
 

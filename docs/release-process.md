@@ -28,6 +28,7 @@ git status --short --ignored
 - `git diff --check` 没有空白错误。
 - `git status --short --ignored` 只允许出现本地 ignored 的 `例程/` 等参考目录，不允许有未提交的源码、文档或生成物。
 - `git ls-tree --name-only -r HEAD` 中不得出现 `例程/`、`MDK-ARM/Objects/`、`MDK-ARM/Listings/`、`.uvoptx`、`.uvguix.*`、JLink 日志或构建产物。
+- `docs/validation-status.md` 必须反映每个示例的当前验证级别；未完成板级验收的示例只能标为 `build-verified` 或 `experimental`。
 
 ## 硬件验收
 
