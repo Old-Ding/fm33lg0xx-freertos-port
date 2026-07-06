@@ -500,8 +500,14 @@ function Test-ExampleManifest {
 
             if ($configText -notmatch '#define\s+configASSERT\s*\(') {
                 Add-Failure "example '$name' must define configASSERT"
-            } elseif ($configText -notmatch 'FreeRTOS_AssertFailed\s*\(\s*__FILE__\s*,\s*__LINE__\s*\)') {
-                Add-Failure "example '$name' configASSERT must call FreeRTOS_AssertFailed with __FILE__ and __LINE__"
+            } else {
+                if ($configText -notmatch 'FreeRTOS_AssertFailed\s*\(\s*__FILE__\s*,\s*__LINE__\s*\)') {
+                    Add-Failure "example '$name' configASSERT must call FreeRTOS_AssertFailed with __FILE__ and __LINE__"
+                }
+
+                if ($configText -notmatch '(?s)#define\s+configASSERT\s*\(\s*x\s*\).*?\bdo\b.*?while\s*\(\s*0\s*\)') {
+                    Add-Failure "example '$name' configASSERT must use a do/while(0) wrapper"
+                }
             }
 
             $requiredHandlerMappings = @(

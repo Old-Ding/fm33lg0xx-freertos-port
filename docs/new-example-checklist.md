@@ -28,7 +28,7 @@
   - event group 需要 `event_groups.c`。
   - stream/message buffer 需要 `stream_buffer.c`。
   - `uxTaskGetStackHighWaterMark()` 需要 `INCLUDE_uxTaskGetStackHighWaterMark = 1`。
-- 保留 `configASSERT`，并通过 `g_freertosAssertFile` 和 `g_freertosAssertLine` 记录断言失败位置，停机前先关中断，避免 FreeRTOS 参数错误变成静默停机。
+- 保留 `configASSERT`，宏使用 `do { ... } while( 0 )` 包装，并通过 `g_freertosAssertFile` 和 `g_freertosAssertLine` 记录断言失败位置，停机前先关中断，避免 FreeRTOS 参数错误变成静默停机。
 - 保持 `configUSE_MALLOC_FAILED_HOOK = 1` 和 `configCHECK_FOR_STACK_OVERFLOW = 2`，并在示例自有源码中实现对应 hook。
 - 周期监控任务和 malloc failed hook 要记录 `g_freertosHeapFreeBytes` 和 `g_freertosHeapMinimumEverFreeBytes`，便于运行中观察 heap 余量并保留失败现场。
 - ISR 中使用 FreeRTOS FromISR API 时，使用局部 `BaseType_t xHigherPriorityTaskWoken = pdFALSE`，并在末尾调用 `portYIELD_FROM_ISR(xHigherPriorityTaskWoken)`。

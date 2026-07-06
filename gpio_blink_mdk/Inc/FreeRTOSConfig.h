@@ -68,10 +68,13 @@
 
 void FreeRTOS_AssertFailed(const char *pcFile, uint32_t ulLine);
 
-#define configASSERT( x )                       \
-    if( ( x ) == 0 )                            \
-    {                                           \
-        FreeRTOS_AssertFailed(__FILE__, __LINE__); \
-    }
+#define configASSERT( x )                           \
+    do                                              \
+    {                                               \
+        if( ( x ) == 0 )                            \
+        {                                           \
+            FreeRTOS_AssertFailed(__FILE__, __LINE__); \
+        }                                           \
+    } while( 0 )
 
 #endif /* FREERTOS_CONFIG_H */
