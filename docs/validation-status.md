@@ -21,5 +21,5 @@
 
 - 从 `build-verified` 升级到 `hardware-verified` 前，先按 [硬件验收指南](hardware-validation.md) 完成对应示例的板级验证。
 - 硬件验收结果应按 [硬件验收记录模板](hardware-validation-record.md) 通过 GitHub hardware validation issue、release notes 或提交说明保留可追溯信息。
-- 更新 `examples/examples.json` 中的 `validationStatus` 时，必须同步更新本文矩阵。
+- 更新 `examples/examples.json` 中的 `validationStatus` 时，必须同步更新本文矩阵中对应示例的状态列。
 - 如果硬件条件变化导致结果不可复现，应降回 `build-verified` 或在 release notes 中标明限制。

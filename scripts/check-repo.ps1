@@ -480,11 +480,14 @@ function Test-ValidationStatusDocument {
     foreach ($entry in $manifest.examples) {
         $name = [string]$entry.name
         $status = [string]$entry.validationStatus
-        if ($validationDocText -notmatch [regex]::Escape($name)) {
-            Add-Failure "validation status document does not mention example '$name'"
+
+        if (-not $status) {
+            continue
         }
-        if ($status -and ($validationDocText -notmatch [regex]::Escape($status))) {
-            Add-Failure "validation status document does not mention status '$status'"
+
+        $matrixRowPattern = "(?m)^\|\s*``$([regex]::Escape($name))``\s*\|\s*``$([regex]::Escape($status))``\s*\|"
+        if ($validationDocText -notmatch $matrixRowPattern) {
+            Add-Failure "validation status document must contain matrix row for example '$name' with status '$status'"
         }
     }
 }
