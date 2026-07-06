@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- `freertos_signal_adc_uart_mdk` README 补齐 `g_freertosFaultCode == 0` 正常态说明，仓库自检同步要求示例 README 保留该观测基线。
 - 架构文档和新增示例 checklist 的 fault code 分类补齐 FreeRTOS assert 失败，仓库自检同步防止文档模型漏掉该故障类型。
 - 两个示例 README 和根 README 补齐 `g_freertosFaultCode == 3` 调度器故障说明，仓库自检同步防止示例 README 漏掉该排查入口。
 - `docs/examples.md` 补齐综合 demo 的 `g_freertosFaultCode` 观察变量，仓库自检同步防止示例索引漏掉 fault code。

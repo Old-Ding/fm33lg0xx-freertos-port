@@ -556,8 +556,13 @@ function Test-ExampleManifest {
             $recordsMallocHookMinimumHeap = $false
             $recordsRuntimeFreeHeap = $false
             $recordsRuntimeMinimumHeap = $false
+            $hasFaultCodeWatch = $false
             foreach ($sourceFile in $ownedSourceFiles) {
                 $sourceText = Get-RepoText -Path $sourceFile.FullName
+                if ($sourceText -match '\bg_freertosFaultCode\b') {
+                    $hasFaultCodeWatch = $true
+                }
+
                 if ($sourceText -match '\buxTaskGetStackHighWaterMark\b') {
                     $usesStackHighWaterMark = $true
                 }
@@ -690,6 +695,11 @@ function Test-ExampleManifest {
             $exampleReadmePath = Join-Path -Path $exampleRoot -ChildPath 'README.md'
             if (Test-Path -LiteralPath $exampleReadmePath) {
                 $exampleReadmeText = Get-RepoText -Path $exampleReadmePath
+                if ($hasFaultCodeWatch -and
+                    ($exampleReadmeText -notmatch 'g_freertosFaultCode\s*==\s*0')) {
+                    Add-Failure "example '$name' README must document g_freertosFaultCode == 0 normal state"
+                }
+
                 # 示例 README 是板级调试入口；source 写入 code 3 时，文档也要说明排查方向。
                 if ($recordsSchedulerHeap -and
                     ($exampleReadmeText -notmatch 'g_freertosFaultCode\s*==\s*3')) {
@@ -903,6 +913,10 @@ function Test-NewExampleChecklistDocument {
         -Description 'new example checklist must mention stack overflow task name watch variable'
 
     Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'g_freertosFaultCode == 0' `
+        -Description 'new example checklist must mention normal fault code state'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
         -Pattern 'fault code.*FreeRTOS\s+assert' `
         -Description 'new example checklist must include FreeRTOS assert in fault code taxonomy'
 
@@ -965,6 +979,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'g_freertosFaultCode == 3' `
         -Description 'script document must describe scheduler fault documentation checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'g_freertosFaultCode == 0' `
+        -Description 'script document must describe normal fault code README checks'
 
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'xPortSysTickHandler' `

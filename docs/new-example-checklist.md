@@ -38,6 +38,7 @@
 
 - 每个任务创建结果要能通过 Watch 变量观察。
 - 每个任务建议保留 stack high-water mark Watch 变量，用于在溢出前评估栈余量。
+- 示例 README 要写明 `g_freertosFaultCode == 0` 的正常态，避免只记录故障分支。
 - 任务创建失败、同步对象创建失败和调度器异常返回时，要先记录 heap Watch 变量，再写入对应 fault code。
 - 栈溢出 hook 要把触发任务写入 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName`，便于故障现场定位。
 - 关键运行路径至少保留一个递增计数，例如 task loop count、IRQ count、sample count。

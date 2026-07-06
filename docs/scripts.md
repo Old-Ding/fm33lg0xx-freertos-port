@@ -55,6 +55,7 @@
 - `docs/examples.md` 必须逐示例列出清单条目，并在观察变量中保留 `g_freertosFaultCode`，避免示例索引漏掉最小故障定位入口。
 - 每个示例工程必须引用根目录共享的 `FreeRTOS-Kernel-main`。
 - 每个示例的 `FreeRTOSConfig.h` 必须把 `vPortSVCHandler`、`xPortPendSVHandler`、`xPortSysTickHandler` 映射到启动文件中的 `SVC_Handler`、`PendSV_Handler`、`SysTick_Handler`。
+- 暴露 `g_freertosFaultCode` 的示例 README 必须写明 `g_freertosFaultCode == 0` 的正常态。
 - 每个示例必须保留 `Inc/FreeRTOSConfig.h`，并启用/实现 `configUSE_MALLOC_FAILED_HOOK` 和 `configCHECK_FOR_STACK_OVERFLOW` 对应 hook。
 - 每个示例必须保留 `configASSERT`，宏使用 `do { ... } while( 0 )` 包装，通过 `g_freertosAssertFile` 和 `g_freertosAssertLine` 记录断言失败位置，并在停机前关中断。
 - `docs/architecture.md` 和 `docs/new-example-checklist.md` 的 fault code 分类必须包含 FreeRTOS assert 失败，避免新增示例只按 hook 实现而漏掉文档模型。
