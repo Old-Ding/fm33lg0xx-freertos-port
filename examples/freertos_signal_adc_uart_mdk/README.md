@@ -40,6 +40,7 @@ PowerShell：
 - PB12 下降沿触发后，GPIO task 的触发计数递增。
 - 每次 GPIO 触发也会唤醒 ADC task，UART 输出 ADC CH1 毫伏值。
 - Keil Watch 中 `g_monitorTaskLoopCount`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_adcSampleCount` 会随运行递增。
+- 如果 PB12 触发过快，`g_gpioSemaphoreGiveFailCount` 或 `g_adcSemaphoreGiveFailCount` 递增表示对应信号量已满，事件被合并或丢弃。
 
 更完整的接线、串口参数、Watch 变量和故障定位步骤见 [`docs/hardware-validation.md`](../../docs/hardware-validation.md)。
 

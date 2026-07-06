@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- `freertos_signal_adc_uart_mdk` 新增 ISR 侧信号量 give fail 计数，便于观察高频 GPIO 触发导致的事件合并或 ADC 采样事件溢出。
 - README 维护规则中的生成物列表与当前 `.gitignore` 和仓库自检策略对齐。
 - 仓库自检新增 GitHub Actions 工作流检查，防止远端仓库自检和提交范围空白检查被误删。
 - 仓库自检新增 GitHub PR 和 issue 模板检查，防止协作入口丢失仓库检查、示例清单和硬件验收要求。

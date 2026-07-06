@@ -94,7 +94,9 @@ g_freertosFaultCode =
 - [ ] PB4 monitor LED 每 500 ms 翻转
 - [ ] PB12 下降沿触发后 `g_gpioIrqCount` 递增
 - [ ] GPIO task 唤醒后 `g_gpioTaskWakeCount` 递增
+- [ ] 单次触发验收时 `g_gpioSemaphoreGiveFailCount == 0`
 - [ ] ADC task 采样后 `g_adcSampleCount` 递增
+- [ ] 单次触发验收时 `g_adcSemaphoreGiveFailCount == 0`
 - [ ] `g_adcSampleMv` 与 PD1 输入电压一致或在可解释误差范围内
 - [ ] UART 输出启动日志和 ADC 采样值
 - [ ] `g_freertosFaultCode == 0`
@@ -115,8 +117,10 @@ g_adcTaskCreateStatus =
 g_monitorTaskLoopCount =
 g_gpioIrqCount =
 g_gpioTaskWakeCount =
+g_gpioSemaphoreGiveFailCount =
 g_adcSampleMv =
 g_adcSampleCount =
+g_adcSemaphoreGiveFailCount =
 g_freertosFaultCode =
 ```
 

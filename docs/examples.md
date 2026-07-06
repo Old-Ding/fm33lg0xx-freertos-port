@@ -37,7 +37,7 @@
 - 目标：在最小移植基线上演示任务间同步和 ISR 唤醒任务。
 - 核心行为：PB12 下降沿中断释放信号量，GPIO task 记录事件，ADC task 采样 `FL_ADC_EXTERNAL_CH1` 并通过 UART 输出采样值。
 - FreeRTOS 源文件：在最小集合基础上增加 `queue.c`。
-- 观察变量：`g_monitorTaskCreateStatus`、`g_gpioTaskCreateStatus`、`g_adcTaskCreateStatus`、`g_monitorTaskLoopCount`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_adcSampleMv`、`g_adcSampleCount`。
+- 观察变量：`g_monitorTaskCreateStatus`、`g_gpioTaskCreateStatus`、`g_adcTaskCreateStatus`、`g_monitorTaskLoopCount`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_gpioSemaphoreGiveFailCount`、`g_adcSemaphoreGiveFailCount`、`g_adcSampleMv`、`g_adcSampleCount`。
 
 ## 验证顺序
 

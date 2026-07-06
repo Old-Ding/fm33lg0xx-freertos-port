@@ -94,8 +94,10 @@ Watch 变量：
 | `g_monitorTaskLoopCount` | 持续递增 |
 | `g_gpioIrqCount` | 每次 PB12 下降沿后递增 |
 | `g_gpioTaskWakeCount` | GPIO task 被信号量唤醒后递增 |
+| `g_gpioSemaphoreGiveFailCount` | 单次触发验收时保持 `0`，快速连触时递增表示 GPIO 事件被合并 |
 | `g_adcSampleMv` | 反映 `PD1` 当前输入电压 |
 | `g_adcSampleCount` | ADC task 每次采样后递增 |
+| `g_adcSemaphoreGiveFailCount` | 单次触发验收时保持 `0`，快速连触时递增表示 ADC 采样事件超过队列容量 |
 | `g_freertosFaultCode` | 正常为 `0` |
 
 ## 故障定位
@@ -110,6 +112,7 @@ Watch 变量：
 | `g_freertosFaultCode == 4` | 信号量创建失败，检查 `queue.c` 是否加入工程以及 heap 是否足够 |
 | `g_freertosFaultCode == 5` | 任务创建失败，检查任务栈和任务数量 |
 | PB12 无触发 | PB12 是否有稳定默认高电平、是否形成下降沿、`EXTI LINE7` 是否映射到 `PB12` |
+| 信号量 give fail 计数递增 | PB12 触发频率过高，先降低触发频率，再看 GPIO/ADC task 是否能及时消费事件 |
 | ADC 数值不变 | `PD1` 输入电压、`FL_ADC_EXTERNAL_CH1`、目标板 `VDDA` 和地线连接 |
 | 串口无输出 | `PA2` TX 接线、串口参数 115200 8E1、串口工具是否选择正确端口 |
 

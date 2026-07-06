@@ -45,6 +45,8 @@ extern SemaphoreHandle_t g_adcSemaphore;
 
 volatile uint32_t g_gpioIrqCount = 0U;
 volatile uint32_t g_gpioTaskWakeCount = 0U;
+volatile uint32_t g_gpioSemaphoreGiveFailCount = 0U;
+volatile uint32_t g_adcSemaphoreGiveFailCount = 0U;
 
 /**
   * @brief  GPIO任务
@@ -75,8 +77,15 @@ void GPIO_IRQCallBack(void)
 
     g_gpioIrqCount++;
 
-    xSemaphoreGiveFromISR(g_gpioSemaphore, &xHigherPriorityTaskWoken);
-    xSemaphoreGiveFromISR(g_adcSemaphore, &xHigherPriorityTaskWoken);
+    if(pdPASS != xSemaphoreGiveFromISR(g_gpioSemaphore, &xHigherPriorityTaskWoken))
+    {
+        g_gpioSemaphoreGiveFailCount++;
+    }
+
+    if(pdPASS != xSemaphoreGiveFromISR(g_adcSemaphore, &xHigherPriorityTaskWoken))
+    {
+        g_adcSemaphoreGiveFailCount++;
+    }
 
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }

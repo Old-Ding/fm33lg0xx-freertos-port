@@ -55,6 +55,7 @@ PB12 falling edge
         -> g_gpioIrqCount++
         -> xSemaphoreGiveFromISR(g_gpioSemaphore, &xHigherPriorityTaskWoken)
         -> xSemaphoreGiveFromISR(g_adcSemaphore, &xHigherPriorityTaskWoken)
+        -> 信号量已满时递增 give-fail 计数
         -> portYIELD_FROM_ISR(xHigherPriorityTaskWoken)
   -> GPIOTask wakes and updates g_gpioTaskWakeCount
   -> AdcTask wakes, samples FL_ADC_EXTERNAL_CH1, updates g_adcSampleMv and prints UART
@@ -62,7 +63,7 @@ PB12 falling edge
 
 职责边界：
 
-- ISR 只处理实时事件：清标志、递增 IRQ 计数、释放同步对象、请求必要的任务切换。
+- ISR 只处理实时事件：清标志、递增 IRQ 计数、释放同步对象、记录信号量已满导致的事件合并、请求必要的任务切换。
 - GPIO task 只记录 GPIO 事件被任务层消费的次数。
 - ADC task 只在事件驱动下采样和输出调试信息。
 - UART printf 是观测手段，不是任务同步或时序依赖。
@@ -99,6 +100,7 @@ PB12 falling edge
 
 - 任务创建结果，例如 `g_ledTaskCreateStatus`、`g_monitorTaskCreateStatus`、`g_gpioTaskCreateStatus`、`g_adcTaskCreateStatus`。
 - 运行计数，例如 `g_ledTaskLoopCount`、`g_monitorTaskLoopCount`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_adcSampleCount`。
+- 同步对象压力计数，例如 `g_gpioSemaphoreGiveFailCount`、`g_adcSemaphoreGiveFailCount`，用于观察 ISR 事件被合并或计数信号量已满。
 - 最近一次关键数据，例如 `g_adcSampleMv`。
 - 集中 fault code，例如 malloc 失败、栈溢出、同步对象创建失败、任务创建失败和调度器异常返回。
 

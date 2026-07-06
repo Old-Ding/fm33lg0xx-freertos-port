@@ -131,6 +131,7 @@ PowerShell 手工构建示例：
 - `g_monitorTaskCreateStatus`、`g_gpioTaskCreateStatus`、`g_adcTaskCreateStatus`：任务创建结果。
 - `g_monitorTaskLoopCount`：monitor task 周期运行计数。
 - `g_gpioIrqCount`、`g_gpioTaskWakeCount`：GPIO ISR 触发和任务唤醒计数。
+- `g_gpioSemaphoreGiveFailCount`、`g_adcSemaphoreGiveFailCount`：PB12 触发过快时，观察 ISR 侧事件合并或计数信号量溢出。
 - `g_adcSampleMv`、`g_adcSampleCount`：ADC 最近一次采样电压和采样次数。
 - `g_freertosFaultCode`：`4` 表示同步对象创建失败，`5` 表示任务创建失败。
 

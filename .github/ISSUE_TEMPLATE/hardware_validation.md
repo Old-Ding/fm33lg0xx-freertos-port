@@ -40,7 +40,9 @@ assignees: ""
 - [ ] PB4 LED 周期翻转
 - [ ] PB12 下降沿触发后 `g_gpioIrqCount` 递增
 - [ ] GPIO task 唤醒后 `g_gpioTaskWakeCount` 递增
+- [ ] 单次触发验收时 `g_gpioSemaphoreGiveFailCount == 0`
 - [ ] ADC task 采样后 `g_adcSampleCount` 递增
+- [ ] 单次触发验收时 `g_adcSemaphoreGiveFailCount == 0`
 - [ ] UART 输出启动日志和 ADC 采样值
 - [ ] `g_freertosFaultCode == 0`
 
