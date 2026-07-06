@@ -62,6 +62,8 @@ volatile TaskHandle_t g_stackOverflowTaskHandle = NULL;
 char * volatile g_stackOverflowTaskName = NULL;
 const char * volatile g_freertosAssertFile = NULL;
 volatile uint32_t g_freertosAssertLine = 0U;
+volatile size_t g_freertosHeapFreeBytes = 0U;
+volatile size_t g_freertosHeapMinimumEverFreeBytes = 0U;
 
 static void SVD_BusyDelayUsNoSysTick(uint32_t u32Delay_us);
 static void LedBlinkTask(void *pvParameters);
@@ -164,6 +166,8 @@ static void LedBlinkTask(void *pvParameters)
 
 void vApplicationMallocFailedHook(void)
 {
+    g_freertosHeapFreeBytes = xPortGetFreeHeapSize();
+    g_freertosHeapMinimumEverFreeBytes = xPortGetMinimumEverFreeHeapSize();
     g_freertosFaultCode = FREERTOS_FAULT_MALLOC;
     taskDISABLE_INTERRUPTS();
 

@@ -500,6 +500,8 @@ function Test-ExampleManifest {
             $recordsAssertLine = $false
             $recordsAssertFaultCode = $false
             $assertHandlerDisablesInterrupts = $false
+            $recordsMallocFreeHeap = $false
+            $recordsMallocMinimumHeap = $false
             foreach ($sourceFile in $ownedSourceFiles) {
                 $sourceText = Get-RepoText -Path $sourceFile.FullName
                 if ($sourceText -match '\buxTaskGetStackHighWaterMark\b') {
@@ -541,6 +543,14 @@ function Test-ExampleManifest {
                 if ($sourceText -match '\b__disable_irq\s*\(\s*\)\s*;') {
                     $assertHandlerDisablesInterrupts = $true
                 }
+
+                if ($sourceText -match '\bg_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;') {
+                    $recordsMallocFreeHeap = $true
+                }
+
+                if ($sourceText -match '\bg_freertosHeapMinimumEverFreeBytes\s*=\s*xPortGetMinimumEverFreeHeapSize\s*\(\s*\)\s*;') {
+                    $recordsMallocMinimumHeap = $true
+                }
             }
 
             # Watch 变量依赖 FreeRTOS INCLUDE 开关；缺配置会在维护新示例时变成编译期隐性错误。
@@ -551,6 +561,14 @@ function Test-ExampleManifest {
 
             if (-not $hasMallocFailedHook) {
                 Add-Failure "example '$name' must implement vApplicationMallocFailedHook"
+            }
+
+            if (-not $recordsMallocFreeHeap) {
+                Add-Failure "example '$name' malloc failed hook must record xPortGetFreeHeapSize in g_freertosHeapFreeBytes"
+            }
+
+            if (-not $recordsMallocMinimumHeap) {
+                Add-Failure "example '$name' malloc failed hook must record xPortGetMinimumEverFreeHeapSize in g_freertosHeapMinimumEverFreeBytes"
             }
 
             if (-not $hasStackOverflowHook) {
@@ -687,6 +705,10 @@ function Test-NewExampleChecklistDocument {
         -Description 'new example checklist must mention malloc failed hook'
 
     Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'g_freertosHeapMinimumEverFreeBytes' `
+        -Description 'new example checklist must mention malloc failed heap watch variable'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
         -Pattern 'configCHECK_FOR_STACK_OVERFLOW' `
         -Description 'new example checklist must mention stack overflow hook'
 
@@ -753,6 +775,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'configUSE_MALLOC_FAILED_HOOK' `
         -Description 'script document must describe FreeRTOS hook checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'g_freertosHeapMinimumEverFreeBytes' `
+        -Description 'script document must describe malloc failed heap watch variable checks'
 
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'xPortSysTickHandler' `

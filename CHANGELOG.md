@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 两个 FreeRTOS 示例在 malloc failed hook 中记录 heap free/minimum-ever free Watch 变量，便于定位 heap 不足。
 - 两个 FreeRTOS 示例新增 assert file/line Watch 变量，`configASSERT` 失败时记录触发位置并设置 fault code。
 - 仓库自检新增 `configASSERT` 保留和断言失败关中断检查，防止 FreeRTOS 参数错误静默继续运行。
 - 仓库自检新增 FreeRTOS SVC、PendSV、SysTick 异常入口映射检查，防止新增示例漏接调度器中断。

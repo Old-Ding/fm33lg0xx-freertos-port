@@ -104,6 +104,7 @@ PB12 falling edge
 - 同步对象压力计数，例如 `g_gpioSemaphoreGiveFailCount`、`g_adcSemaphoreGiveFailCount`，用于观察 ISR 事件被合并或计数信号量已满。
 - 最近一次关键数据，例如 `g_adcSampleMv`。
 - 集中 fault code，例如 malloc 失败、栈溢出、同步对象创建失败、任务创建失败和调度器异常返回。
+- Malloc 失败现场，例如 `g_freertosHeapFreeBytes`、`g_freertosHeapMinimumEverFreeBytes`，用于判断 heap 余量和最低水位。
 - 栈溢出现场，例如 `g_stackOverflowTaskHandle`、`g_stackOverflowTaskName`，用于定位触发 hook 的任务。
 - Assert 现场，例如 `g_freertosAssertFile`、`g_freertosAssertLine`，用于定位 FreeRTOS 参数或状态错误。
 

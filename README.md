@@ -126,6 +126,7 @@ PowerShell 手工构建示例：
 - `g_ledTaskLoopCount`：持续增加表示调度器、SysTick 和 `vTaskDelay()` 正常工作。
 - `g_ledTaskStackHighWaterMark`：LED task 剩余栈水位，用于评估任务栈余量。
 - `g_freertosFaultCode`：`0` 为正常，`1` 为 malloc 失败，`2` 为任务栈溢出，`3` 为调度器启动失败或异常返回，`6` 为 FreeRTOS assert 失败。
+- `g_freertosHeapFreeBytes`、`g_freertosHeapMinimumEverFreeBytes`：`g_freertosFaultCode == 1` 时记录 heap 余量现场。
 - `g_stackOverflowTaskHandle`、`g_stackOverflowTaskName`：`g_freertosFaultCode == 2` 时记录溢出任务现场。
 - `g_freertosAssertFile`、`g_freertosAssertLine`：`g_freertosFaultCode == 6` 时记录 assert 触发位置。
 
@@ -138,6 +139,7 @@ PowerShell 手工构建示例：
 - `g_gpioSemaphoreGiveFailCount`、`g_adcSemaphoreGiveFailCount`：PB12 触发过快时，观察 ISR 侧事件合并或计数信号量溢出。
 - `g_adcSampleMv`、`g_adcSampleCount`：ADC 最近一次采样电压和采样次数。
 - `g_freertosFaultCode`：`4` 表示同步对象创建失败，`5` 表示任务创建失败，`6` 表示 FreeRTOS assert 失败。
+- `g_freertosHeapFreeBytes`、`g_freertosHeapMinimumEverFreeBytes`：`g_freertosFaultCode == 1` 时记录 heap 余量现场。
 - `g_stackOverflowTaskHandle`、`g_stackOverflowTaskName`：`g_freertosFaultCode == 2` 时记录溢出任务现场。
 - `g_freertosAssertFile`、`g_freertosAssertLine`：`g_freertosFaultCode == 6` 时记录 assert 触发位置。
 

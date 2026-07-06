@@ -36,6 +36,7 @@ PowerShell：
 - `g_ledTaskLoopCount` 持续递增。
 - `g_ledTaskStackHighWaterMark` 记录 LED task 剩余栈水位。
 - `g_freertosFaultCode == 0`。
+- 如果 `g_freertosFaultCode == 1`，查看 `g_freertosHeapFreeBytes` 和 `g_freertosHeapMinimumEverFreeBytes` 判断 heap 余量。
 - 如果 `g_freertosFaultCode == 2`，查看 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName` 定位溢出任务。
 - 如果 `g_freertosFaultCode == 6`，查看 `g_freertosAssertFile` 和 `g_freertosAssertLine` 定位 assert 触发位置。
 
