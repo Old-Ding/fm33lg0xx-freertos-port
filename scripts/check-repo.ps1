@@ -945,6 +945,14 @@ function Test-NewExampleChecklistDocument {
         -Description 'new example checklist must include FreeRTOS assert in fault code taxonomy'
 
     Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'USE_FULL_ASSERT' `
+        -Description 'new example checklist must mention vendor assert boundary'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'HardFault_Handler' `
+        -Description 'new example checklist must mention HardFault boundary'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
         -Pattern 'portYIELD_FROM_ISR' `
         -Description 'new example checklist must document ISR yield pattern'
 
@@ -1035,6 +1043,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'HardFault_Handler' `
         -Description 'script document must describe HardFault limitation checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'USE_FULL_ASSERT.*HardFault_Handler' `
+        -Description 'script document must describe new example boundary checklist checks'
 
     Test-FileContains -RelativePath 'README.md' `
         -Pattern 'docs/scripts\.md' `
