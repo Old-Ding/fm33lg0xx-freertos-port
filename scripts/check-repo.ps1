@@ -600,6 +600,24 @@ function Test-ScriptsDocument {
         -Description 'README must link script document'
 }
 
+function Test-ChangelogDocument {
+    Test-FileContains -RelativePath 'CHANGELOG.md' `
+        -Pattern '(?m)^## Unreleased\s*$' `
+        -Description 'changelog must keep an Unreleased section'
+
+    Test-FileContains -RelativePath 'CHANGELOG.md' `
+        -Pattern '(?m)^## \d+\.\d+\.\d+ - \d{4}-\d{2}-\d{2}\s*$' `
+        -Description 'changelog must keep dated semantic-version release sections'
+
+    Test-FileContains -RelativePath 'docs\release-process.md' `
+        -Pattern 'CHANGELOG\.md' `
+        -Description 'release process must describe changelog handling'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'CHANGELOG\.md' `
+        -Description 'script document must describe changelog structure checks'
+}
+
 function Test-ValidationStatusDocument {
     $validationDocRelative = 'docs\validation-status.md'
 
@@ -704,6 +722,9 @@ Test-ArchitectureDocument
 
 Write-Host 'Checking script documentation...'
 Test-ScriptsDocument
+
+Write-Host 'Checking changelog documentation...'
+Test-ChangelogDocument
 
 if ($Failures.Count -gt 0) {
     Write-Host "Repository check failed with $($Failures.Count) issue(s):"
