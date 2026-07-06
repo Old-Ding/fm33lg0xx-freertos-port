@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 仓库自检新增 `configASSERT` 保留和断言失败关中断检查，防止 FreeRTOS 参数错误静默继续运行。
 - 仓库自检新增 FreeRTOS SVC、PendSV、SysTick 异常入口映射检查，防止新增示例漏接调度器中断。
 - 两个 FreeRTOS 示例新增栈溢出任务 handle/name Watch 变量，并加入仓库自检，用于定位触发 stack overflow hook 的任务。
 - 仓库自检新增 FreeRTOS malloc failed hook 和 stack overflow hook 配置/实现一致性检查。

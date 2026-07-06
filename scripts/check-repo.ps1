@@ -459,6 +459,12 @@ function Test-ExampleManifest {
                 Add-Failure "example '$name' must enable configCHECK_FOR_STACK_OVERFLOW level 2"
             }
 
+            if ($configText -notmatch '#define\s+configASSERT\s*\(') {
+                Add-Failure "example '$name' must define configASSERT"
+            } elseif ($configText -notmatch '\b__disable_irq\s*\(\s*\)') {
+                Add-Failure "example '$name' configASSERT must disable interrupts before trapping"
+            }
+
             $requiredHandlerMappings = @(
                 @{ Pattern = '#define\s+vPortSVCHandler\s+SVC_Handler'; Name = 'vPortSVCHandler' },
                 @{ Pattern = '#define\s+xPortPendSVHandler\s+PendSV_Handler'; Name = 'xPortPendSVHandler' },
@@ -640,6 +646,10 @@ function Test-NewExampleChecklistDocument {
         -Description 'new example checklist must mention stack overflow hook'
 
     Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'configASSERT' `
+        -Description 'new example checklist must mention FreeRTOS assert configuration'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
         -Pattern 'xPortSysTickHandler' `
         -Description 'new example checklist must mention FreeRTOS exception handler mapping'
 
@@ -698,6 +708,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'xPortSysTickHandler' `
         -Description 'script document must describe FreeRTOS exception handler mapping checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'configASSERT' `
+        -Description 'script document must describe FreeRTOS assert checks'
 
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'g_stackOverflowTaskName' `
