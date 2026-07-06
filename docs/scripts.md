@@ -45,6 +45,7 @@
 `check-repo.ps1` 会检查：
 
 - 已跟踪文件不得包含本地厂商完整 `例程/` 目录、Keil/JLink 生成物、归档包和临时文件。
+- `.gitignore` 必须保留本地厂商完整 `例程/` 目录、Keil/JLink 生成物、归档包和临时文件的忽略规则。
 - 项目自有文档、脚本、清单和 GitHub 模板必须是 UTF-8 无 BOM，换行必须是 CRLF。
 - `examples/examples.json` 必须包含 `schemaVersion`、示例名称、说明、Keil 工程路径、验证状态和文档入口。
 - 每个示例的文档入口必须包含该示例自己的 README。

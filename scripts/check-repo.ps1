@@ -4,6 +4,7 @@ $ErrorActionPreference = 'Stop'
 
 $RepoRoot = (Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).Path
 $Failures = [System.Collections.Generic.List[string]]::new()
+$VendorExamplesDirectoryName = -join ([char]0x4F8B, [char]0x7A0B)
 
 function Add-Failure {
     param([string]$Message)
@@ -105,7 +106,7 @@ function Test-BlockedTrackedFile {
     $normalized = $Path -replace '\\', '/'
 
     $blockedPathPatterns = @(
-        @{ Pattern = '^例程/'; Reason = 'vendor reference examples must stay local' },
+        @{ Pattern = '^' + [regex]::Escape($VendorExamplesDirectoryName) + '/'; Reason = 'vendor reference examples must stay local' },
         @{ Pattern = '(^|/)MDK-ARM/Objects/'; Reason = 'Keil Objects output must not be tracked' },
         @{ Pattern = '(^|/)MDK-ARM/Listings/'; Reason = 'Keil Listings output must not be tracked' },
         @{ Pattern = '(^|/)MDK-ARM/[^/]+\.uvoptx$'; Reason = 'Keil user option file must not be tracked' },
@@ -122,6 +123,49 @@ function Test-BlockedTrackedFile {
 
     if ($normalized -match '\.(axf|elf|hex|bin|exe|map|lst|o|obj|d|crf|dep|lnp|sct|htm|zip|7z|rar|pack|log|tmp)$') {
         Add-Failure "${Path}: generated artifact or local archive must not be tracked"
+    }
+}
+
+function Test-GitignorePolicy {
+    $requiredPatterns = @(
+        "/$VendorExamplesDirectoryName/",
+        '**/MDK-ARM/Objects/',
+        '**/MDK-ARM/Listings/',
+        '**/MDK-ARM/*.uvguix.*',
+        '**/MDK-ARM/*.uvgui.*',
+        '**/MDK-ARM/*.uvoptx',
+        '**/MDK-ARM/JLinkLog.txt',
+        '**/MDK-ARM/JLinkSettings.ini',
+        '*.axf',
+        '*.hex',
+        '*.map',
+        '*.crf',
+        '*.o',
+        '*.d',
+        '*.pack',
+        '*.zip'
+    )
+
+    try {
+        $gitignorePath = Resolve-RepoPath -RelativePath '.gitignore'
+    } catch {
+        Add-Failure '.gitignore is missing'
+        return
+    }
+
+    $configuredPatterns = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    foreach ($line in (Get-Content -LiteralPath $gitignorePath -Encoding UTF8)) {
+        $trimmed = $line.Trim()
+        if (($trimmed.Length -eq 0) -or $trimmed.StartsWith('#')) {
+            continue
+        }
+        [void]$configuredPatterns.Add($trimmed)
+    }
+
+    foreach ($pattern in $requiredPatterns) {
+        if (-not $configuredPatterns.Contains($pattern)) {
+            Add-Failure ".gitignore must ignore $pattern"
+        }
     }
 }
 
@@ -532,6 +576,9 @@ foreach ($file in $trackedFiles) {
     Test-BlockedTrackedFile -Path $file
     Test-OwnedTextFileFormat -Path $file
 }
+
+Write-Host 'Checking .gitignore policy...'
+Test-GitignorePolicy
 
 $ignoredTrackedFiles = Invoke-Git -Arguments @('ls-files', '-ci', '--exclude-standard')
 foreach ($file in $ignoredTrackedFiles) {
