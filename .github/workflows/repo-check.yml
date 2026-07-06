@@ -14,7 +14,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Run repository checks
         shell: pwsh
         run: .\scripts\check-repo.ps1
+
+      - name: Check committed whitespace
+        shell: pwsh
+        run: |
+          $base = ''
+          if ($env:GITHUB_EVENT_NAME -eq 'pull_request') {
+              $base = '${{ github.event.pull_request.base.sha }}'
+          } else {
+              $base = '${{ github.event.before }}'
+          }
+
+          if ([string]::IsNullOrWhiteSpace($base) -or ($base -match '^0+$')) {
+              git diff-tree --check --no-commit-id --root -r HEAD
+          } else {
+              git diff --check "$base..HEAD"
+          }

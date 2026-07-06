@@ -6,7 +6,7 @@
 
 - `scripts/check-repo.ps1`：检查仓库结构、示例清单、文档入口、第三方来源声明和禁止提交的生成物；不依赖 Keil。
 - `scripts/build-keil.ps1`：调用 Keil `UV4.exe` 构建 `examples/examples.json` 中登记的示例，解析构建日志，并按参数清理 Keil 生成物。
-- GitHub Actions 只运行 `scripts/check-repo.ps1`；Keil 构建需要本机安装 MDK 和设备包，仍由本地脚本完成。
+- GitHub Actions 运行 `scripts/check-repo.ps1` 和提交范围空白检查；Keil 构建需要本机安装 MDK 和设备包，仍由本地脚本完成。
 
 ## 推荐命令
 

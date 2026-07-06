@@ -23,6 +23,8 @@ git status --short --ignored
 
 脚本参数、Keil 查找顺序、失败条件和清理范围见 [维护脚本](scripts.md)。
 
+GitHub Actions 会运行不依赖 Keil 的仓库自检和提交范围空白检查；Keil/ARMCC5 全量构建仍必须在本机发布门禁中完成。
+
 通过标准：
 
 - 仓库自检通过。
