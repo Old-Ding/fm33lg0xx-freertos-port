@@ -57,6 +57,7 @@
 - 第三方许可证、FreeRTOS 文件、厂商 FL Driver 文件头和 CMSIS SPDX 标识必须保留；示例根目录从 `examples/examples.json` 推导。
 - `docs/validation-status.md` 必须在当前矩阵中逐示例记录 `examples/examples.json` 中的验证状态。
 - `CHANGELOG.md` 必须保留 `Unreleased` 区段和带日期的语义化版本记录。
+- GitHub PR 和 issue 模板必须保留仓库检查、示例清单、故障证据和硬件验收入口。
 - `docs/known-limitations.md`、`docs/new-example-checklist.md` 和本文档必须保留关键维护信息。
 
 脚本失败时会列出所有失败项。修复后重新运行同一个命令，直到输出 `Repository checks passed.`。

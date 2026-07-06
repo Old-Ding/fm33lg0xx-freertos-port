@@ -618,6 +618,28 @@ function Test-ChangelogDocument {
         -Description 'script document must describe changelog structure checks'
 }
 
+function Test-GitHubTemplates {
+    Test-FileContains -RelativePath '.github\pull_request_template.md' `
+        -Pattern 'check-repo\.ps1' `
+        -Description 'pull request template must require repository checks'
+
+    Test-FileContains -RelativePath '.github\pull_request_template.md' `
+        -Pattern 'examples/examples\.json' `
+        -Description 'pull request template must cover example manifest updates'
+
+    Test-FileContains -RelativePath '.github\ISSUE_TEMPLATE\bug_report.md' `
+        -Pattern 'g_freertosFaultCode' `
+        -Description 'bug report template must request FreeRTOS fault evidence'
+
+    Test-FileContains -RelativePath '.github\ISSUE_TEMPLATE\example_request.md' `
+        -Pattern 'examples/examples\.json' `
+        -Description 'example request template must mention manifest updates'
+
+    Test-FileContains -RelativePath '.github\ISSUE_TEMPLATE\hardware_validation.md' `
+        -Pattern 'docs/hardware-validation-record\.md' `
+        -Description 'hardware validation template must link validation record template'
+}
+
 function Test-ValidationStatusDocument {
     $validationDocRelative = 'docs\validation-status.md'
 
@@ -675,10 +697,6 @@ function Test-HardwareValidationRecordDocument {
     Test-FileContains -RelativePath 'docs\validation-status.md' `
         -Pattern 'hardware-validation-record\.md' `
         -Description 'validation status document must link hardware validation record template'
-
-    Test-FileContains -RelativePath '.github\ISSUE_TEMPLATE\hardware_validation.md' `
-        -Pattern 'docs/hardware-validation-record\.md' `
-        -Description 'hardware validation issue template must link record template'
 }
 
 Write-Host 'Checking tracked file hygiene...'
@@ -725,6 +743,9 @@ Test-ScriptsDocument
 
 Write-Host 'Checking changelog documentation...'
 Test-ChangelogDocument
+
+Write-Host 'Checking GitHub templates...'
+Test-GitHubTemplates
 
 if ($Failures.Count -gt 0) {
     Write-Host "Repository check failed with $($Failures.Count) issue(s):"
