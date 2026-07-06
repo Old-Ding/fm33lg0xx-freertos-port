@@ -29,7 +29,8 @@
 ├── docs/
 │   ├── examples.md                       # 示例硬件和验证说明
 │   ├── hardware-validation.md            # 板级硬件验收步骤
-│   └── porting-notes.md                  # FreeRTOS 移植说明
+│   ├── porting-notes.md                  # FreeRTOS 移植说明
+│   └── release-process.md                # 版本发布和验收流程
 ├── scripts/
 │   ├── build-keil.ps1                    # Keil 批量构建验证脚本
 │   └── check-repo.ps1                    # 仓库结构和提交卫生自检脚本
@@ -125,4 +126,5 @@ PowerShell 手工构建示例：
 - 新增 FreeRTOS API 时，同步检查 `FreeRTOSConfig.h` 和 Keil 工程中的内核源文件，例如信号量需要 `queue.c`。
 - 新增示例时同步更新 `examples/examples.json`，让构建脚本自动覆盖新示例。
 - 开发阶段可用 `-ExampleName` 快速验证单个示例；提交前仍运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有示例是 `0 Error(s), 0 Warning(s)`。
+- 发布版本前按 [发布流程](docs/release-process.md) 更新 changelog、运行门禁并记录硬件验收状态。
 - 原创代码、文档和仓库元信息使用 MIT License；第三方代码保留原始许可证和文件头说明，来源见 `THIRD_PARTY_NOTICES.md`。
