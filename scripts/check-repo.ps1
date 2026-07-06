@@ -137,13 +137,26 @@ function Test-GitignorePolicy {
         '**/MDK-ARM/JLinkLog.txt',
         '**/MDK-ARM/JLinkSettings.ini',
         '*.axf',
+        '*.elf',
         '*.hex',
+        '*.bin',
+        '*.exe',
         '*.map',
+        '*.lst',
         '*.crf',
         '*.o',
+        '*.obj',
         '*.d',
+        '*.dep',
+        '*.lnp',
+        '*.sct',
+        '*.htm',
         '*.pack',
-        '*.zip'
+        '*.zip',
+        '*.7z',
+        '*.rar',
+        '*.log',
+        '*.tmp'
     )
 
     try {
