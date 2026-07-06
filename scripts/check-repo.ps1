@@ -59,6 +59,35 @@ function Get-RepoText {
     return Get-Content -LiteralPath $Path -Raw -Encoding UTF8
 }
 
+# Hook 检查必须限定在函数体内，避免被运行态监控路径里的同名赋值误判通过。
+function Get-CFunctionBodyText {
+    param(
+        [string]$SourceText,
+        [string]$FunctionName
+    )
+
+    $escapedFunctionName = [regex]::Escape($FunctionName)
+    $match = [regex]::Match($SourceText, "\b$escapedFunctionName\s*\([^;{}]*\)\s*\{")
+    if (-not $match.Success) {
+        return ''
+    }
+
+    $bodyStart = $match.Index + $match.Length - 1
+    $depth = 0
+    for ($index = $bodyStart; $index -lt $SourceText.Length; $index++) {
+        if ($SourceText[$index] -eq '{') {
+            $depth++
+        } elseif ($SourceText[$index] -eq '}') {
+            $depth--
+            if ($depth -eq 0) {
+                return $SourceText.Substring($bodyStart, $index - $bodyStart + 1)
+            }
+        }
+    }
+
+    return ''
+}
+
 function Test-GitTrackedPath {
     param(
         [string]$RelativePath,
@@ -500,8 +529,10 @@ function Test-ExampleManifest {
             $recordsAssertLine = $false
             $recordsAssertFaultCode = $false
             $assertHandlerDisablesInterrupts = $false
-            $recordsMallocFreeHeap = $false
-            $recordsMallocMinimumHeap = $false
+            $recordsMallocHookFreeHeap = $false
+            $recordsMallocHookMinimumHeap = $false
+            $recordsRuntimeFreeHeap = $false
+            $recordsRuntimeMinimumHeap = $false
             foreach ($sourceFile in $ownedSourceFiles) {
                 $sourceText = Get-RepoText -Path $sourceFile.FullName
                 if ($sourceText -match '\buxTaskGetStackHighWaterMark\b') {
@@ -544,12 +575,21 @@ function Test-ExampleManifest {
                     $assertHandlerDisablesInterrupts = $true
                 }
 
-                if ($sourceText -match '\bg_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;') {
-                    $recordsMallocFreeHeap = $true
+                $mallocFailedHookBody = Get-CFunctionBodyText -SourceText $sourceText -FunctionName 'vApplicationMallocFailedHook'
+                if ($mallocFailedHookBody -match '\bg_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;') {
+                    $recordsMallocHookFreeHeap = $true
                 }
 
-                if ($sourceText -match '\bg_freertosHeapMinimumEverFreeBytes\s*=\s*xPortGetMinimumEverFreeHeapSize\s*\(\s*\)\s*;') {
-                    $recordsMallocMinimumHeap = $true
+                if ($mallocFailedHookBody -match '\bg_freertosHeapMinimumEverFreeBytes\s*=\s*xPortGetMinimumEverFreeHeapSize\s*\(\s*\)\s*;') {
+                    $recordsMallocHookMinimumHeap = $true
+                }
+
+                if ($sourceText -match '\buxTaskGetStackHighWaterMark\s*\([^;]*\)\s*;\s*\r?\n\s*g_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;') {
+                    $recordsRuntimeFreeHeap = $true
+                }
+
+                if ($sourceText -match '\buxTaskGetStackHighWaterMark\s*\([^;]*\)\s*;\s*(?:\r?\n\s*g_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;)?\s*\r?\n\s*g_freertosHeapMinimumEverFreeBytes\s*=\s*xPortGetMinimumEverFreeHeapSize\s*\(\s*\)\s*;') {
+                    $recordsRuntimeMinimumHeap = $true
                 }
             }
 
@@ -563,12 +603,20 @@ function Test-ExampleManifest {
                 Add-Failure "example '$name' must implement vApplicationMallocFailedHook"
             }
 
-            if (-not $recordsMallocFreeHeap) {
+            if (-not $recordsMallocHookFreeHeap) {
                 Add-Failure "example '$name' malloc failed hook must record xPortGetFreeHeapSize in g_freertosHeapFreeBytes"
             }
 
-            if (-not $recordsMallocMinimumHeap) {
+            if (-not $recordsMallocHookMinimumHeap) {
                 Add-Failure "example '$name' malloc failed hook must record xPortGetMinimumEverFreeHeapSize in g_freertosHeapMinimumEverFreeBytes"
+            }
+
+            if (-not $recordsRuntimeFreeHeap) {
+                Add-Failure "example '$name' runtime monitor must record xPortGetFreeHeapSize in g_freertosHeapFreeBytes"
+            }
+
+            if (-not $recordsRuntimeMinimumHeap) {
+                Add-Failure "example '$name' runtime monitor must record xPortGetMinimumEverFreeHeapSize in g_freertosHeapMinimumEverFreeBytes"
             }
 
             if (-not $hasStackOverflowHook) {

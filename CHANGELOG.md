@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 仓库自检区分 heap Watch 的运行态刷新和 malloc failed hook 现场记录，避免新增示例只覆盖其中一层职责。
 - 两个 FreeRTOS 示例在正常运行周期中更新 heap free/minimum-ever free Watch 变量，便于提前观察 heap 余量。
 - 两个 FreeRTOS 示例在 malloc failed hook 中记录 heap free/minimum-ever free Watch 变量，便于定位 heap 不足。
 - 两个 FreeRTOS 示例新增 assert file/line Watch 变量，`configASSERT` 失败时记录触发位置并设置 fault code。
