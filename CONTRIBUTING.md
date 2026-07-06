@@ -14,7 +14,8 @@
 2. 确认 `FreeRTOSConfig.h` 中的中断入口映射仍然和启动文件弱符号匹配。
 3. 确认新增任务没有使用会重配 SysTick 的厂商阻塞延时。
 4. 如果新增 FreeRTOS API，确认对应内核源文件已加入 Keil 工程。
-5. 更新 `docs/porting-notes.md` 或 README 中受影响的构建/调试说明。
+5. 运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有 Keil 示例都是 `0 Error(s), 0 Warning(s)`。
+6. 更新 `docs/porting-notes.md` 或 README 中受影响的构建/调试说明。
 
 ## 代码风格
 

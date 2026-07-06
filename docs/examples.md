@@ -18,7 +18,8 @@
 
 ## 验证顺序
 
-1. 先构建 `gpio_blink_mdk`，确认基础移植未被破坏。
-2. 再构建 `examples/freertos_signal_adc_uart_mdk`，确认新增信号量依赖的 `queue.c` 已加入工程。
-3. 硬件运行时先看 PB4 LED 是否周期翻转，再触发 PB12 下降沿观察 UART 输出和 ADC 变量。
-4. 如果任务未运行，先看任务创建状态和 `g_freertosFaultCode`，再查 `SysTick_Handler`、`PendSV_Handler`、`SVC_Handler` 是否由 FreeRTOS port 接管。
+1. 先运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有示例都是 `0 Error(s), 0 Warning(s)`。
+2. 如果只做手工验证，先构建 `gpio_blink_mdk`，确认基础移植未被破坏。
+3. 再构建 `examples/freertos_signal_adc_uart_mdk`，确认新增信号量依赖的 `queue.c` 已加入工程。
+4. 硬件运行时先看 PB4 LED 是否周期翻转，再触发 PB12 下降沿观察 UART 输出和 ADC 变量。
+5. 如果任务未运行，先看任务创建状态和 `g_freertosFaultCode`，再查 `SysTick_Handler`、`PendSV_Handler`、`SVC_Handler` 是否由 FreeRTOS port 接管。

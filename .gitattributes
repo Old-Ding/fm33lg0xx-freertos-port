@@ -5,6 +5,7 @@
 *.s text eol=crlf
 *.ld text eol=crlf
 *.md text eol=crlf
+*.ps1 text eol=crlf
 *.txt text eol=crlf
 *.uvprojx text eol=crlf
 *.scvd text eol=crlf
