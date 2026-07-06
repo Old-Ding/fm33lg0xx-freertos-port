@@ -22,6 +22,7 @@
 | UART | `freertos_signal_adc_uart_mdk` 当前 UART 用作 printf 调试输出，配置为 TX only。 |
 | GPIO 中断 | PB12 输入未打开内部上下拉，硬件验收时需要外部或板载电路提供稳定默认电平。 |
 | ADC | ADC demo 使用轮询采样，不覆盖 DMA、连续扫描或多通道采样。 |
+| 厂商断言 | Keil 工程启用 `USE_FULL_ASSERT` 时，FL Driver 的 `assert_param` 会停在厂商宏中；这不属于 FreeRTOS `configASSERT`，不会写入 `g_freertosFaultCode` 或 `g_freertosAssertFile`。 |
 | 厂商示例 | 本仓库不提交本地完整 `例程/` 厂商示例集合，只抽取当前 demo 必需文件。 |
 
 ## 使用建议

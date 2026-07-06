@@ -870,6 +870,18 @@ function Test-KnownLimitationsDocument {
         -Pattern 'Keil/ARMCC5' `
         -Description 'known limitations must document local Keil build boundary'
 
+    Test-FileContains -RelativePath 'docs\known-limitations.md' `
+        -Pattern 'USE_FULL_ASSERT' `
+        -Description 'known limitations must document vendor assert boundary'
+
+    Test-FileContains -RelativePath 'docs\known-limitations.md' `
+        -Pattern 'assert_param' `
+        -Description 'known limitations must mention vendor assert_param behavior'
+
+    Test-FileContains -RelativePath 'docs\hardware-validation.md' `
+        -Pattern 'assert_param' `
+        -Description 'hardware validation guide must mention vendor assert_param triage'
+
     Test-FileContains -RelativePath 'README.md' `
         -Pattern 'docs/known-limitations\.md' `
         -Description 'README must link known limitations'
@@ -1003,6 +1015,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'g_stackOverflowTaskName' `
         -Description 'script document must describe stack overflow watch variable checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'assert_param' `
+        -Description 'script document must describe vendor assert limitation checks'
 
     Test-FileContains -RelativePath 'README.md' `
         -Pattern 'docs/scripts\.md' `
