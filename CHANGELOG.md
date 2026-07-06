@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 新增 GitHub issue 和 PR 模板，规范 bug 复现、硬件验收、新示例请求和贡献自检信息。
 - 新增 GitHub Actions 仓库自检，验证示例清单、共享 FreeRTOS 引用和禁止提交的生成物。
 - 新增 `docs/hardware-validation.md`，补充板级接线、运行验收、Watch 变量和故障定位步骤。
 - `scripts/build-keil.ps1` 支持 `-ListExamples` 和 `-ExampleName`，便于列出或单独构建示例。

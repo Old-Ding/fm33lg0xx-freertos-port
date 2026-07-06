@@ -31,7 +31,9 @@
 │   ├── hardware-validation.md            # 板级硬件验收步骤
 │   └── porting-notes.md                  # FreeRTOS 移植说明
 ├── scripts/
-│   └── build-keil.ps1                    # Keil 批量构建验证脚本
+│   ├── build-keil.ps1                    # Keil 批量构建验证脚本
+│   └── check-repo.ps1                    # 仓库结构和提交卫生自检脚本
+├── .github/                              # GitHub Actions、issue 和 PR 模板
 ├── LICENSE
 ├── CONTRIBUTING.md
 ├── CHANGELOG.md
