@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- README 维护规则中的生成物列表与当前 `.gitignore` 和仓库自检策略对齐。
 - 仓库自检新增 GitHub Actions 工作流检查，防止远端仓库自检和提交范围空白检查被误删。
 - 仓库自检新增 GitHub PR 和 issue 模板检查，防止协作入口丢失仓库检查、示例清单和硬件验收要求。
 - 仓库自检新增 `CHANGELOG.md` 结构检查，防止 `Unreleased` 和版本记录在发布维护中被误删。

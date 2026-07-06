@@ -136,7 +136,7 @@ PowerShell 手工构建示例：
 
 ## 维护规则
 
-- 不提交 `例程/`、`MDK-ARM/Objects`、`MDK-ARM/Listings`、`.uvoptx`、`.uvguix.*`、JLink 日志、`.axf/.hex/.map/.crf/.o/.d` 等本地或生成产物。
+- 不提交 `例程/`、`MDK-ARM/Objects`、`MDK-ARM/Listings`、`.uvoptx`、`.uvguix.*`、JLink 日志、`.axf/.elf/.hex/.bin/.map/.lst/.crf/.o/.obj/.d/.dep/.lnp/.sct/.htm`、归档包和临时日志等本地或生成产物。
 - 改 RTOS 移植逻辑前，先确认启动链路、中断入口、SysTick 归属和厂商延时函数调用点。
 - 调度器启动后，任务周期延时使用 `vTaskDelay()`；不要在任务里直接使用会重配 SysTick 的厂商 delay。
 - 新增 FreeRTOS API 时，同步检查 `FreeRTOSConfig.h` 和 Keil 工程中的内核源文件，例如信号量需要 `queue.c`。
