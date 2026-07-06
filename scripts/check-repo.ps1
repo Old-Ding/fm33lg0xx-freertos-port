@@ -339,6 +339,24 @@ function Test-KnownLimitationsDocument {
         -Description 'README must link known limitations'
 }
 
+function Test-NewExampleChecklistDocument {
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'examples/examples\.json' `
+        -Description 'new example checklist must require manifest updates'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'queue\.c' `
+        -Description 'new example checklist must mention FreeRTOS queue source dependency'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'portYIELD_FROM_ISR' `
+        -Description 'new example checklist must document ISR yield pattern'
+
+    Test-FileContains -RelativePath 'README.md' `
+        -Pattern 'docs/new-example-checklist\.md' `
+        -Description 'README must link new example checklist'
+}
+
 function Test-ValidationStatusDocument {
     $validationDocRelative = 'docs\validation-status.md'
 
@@ -388,6 +406,9 @@ Test-ValidationStatusDocument
 
 Write-Host 'Checking known limitations document...'
 Test-KnownLimitationsDocument
+
+Write-Host 'Checking new example checklist...'
+Test-NewExampleChecklistDocument
 
 if ($Failures.Count -gt 0) {
     Write-Host "Repository check failed with $($Failures.Count) issue(s):"
