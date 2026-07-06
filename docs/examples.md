@@ -2,6 +2,8 @@
 
 本文记录仓库当前维护的 FM33LG0xx FreeRTOS 示例。厂商完整示例目录只作为本地参考，不作为本仓库的开源内容提交。
 
+`examples/examples.json` 是构建脚本使用的示例清单。新增示例时，应把 Keil 工程路径加入该文件，避免 demo 存在但没有进入统一构建验证。
+
 ## gpio_blink_mdk
 
 - 目标：验证 FreeRTOS 在 FM33LG02X / Cortex-M0 / Keil ARMCC5 下可以接管 SysTick 并运行任务。
@@ -18,8 +20,9 @@
 
 ## 验证顺序
 
-1. 先运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有示例都是 `0 Error(s), 0 Warning(s)`。
-2. 如果只做手工验证，先构建 `gpio_blink_mdk`，确认基础移植未被破坏。
-3. 再构建 `examples/freertos_signal_adc_uart_mdk`，确认新增信号量依赖的 `queue.c` 已加入工程。
-4. 硬件运行时先看 PB4 LED 是否周期翻转，再触发 PB12 下降沿观察 UART 输出和 ADC 变量。
-5. 如果任务未运行，先看任务创建状态和 `g_freertosFaultCode`，再查 `SysTick_Handler`、`PendSV_Handler`、`SVC_Handler` 是否由 FreeRTOS port 接管。
+1. 先确认 `examples/examples.json` 已列出所有需要维护的 Keil 示例。
+2. 运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有示例都是 `0 Error(s), 0 Warning(s)`。
+3. 如果只做手工验证，先构建 `gpio_blink_mdk`，确认基础移植未被破坏。
+4. 再构建 `examples/freertos_signal_adc_uart_mdk`，确认新增信号量依赖的 `queue.c` 已加入工程。
+5. 硬件运行时先看 PB4 LED 是否周期翻转，再触发 PB12 下降沿观察 UART 输出和 ADC 变量。
+6. 如果任务未运行，先看任务创建状态和 `g_freertosFaultCode`，再查 `SysTick_Handler`、`PendSV_Handler`、`SVC_Handler` 是否由 FreeRTOS port 接管。

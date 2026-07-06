@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 新增 `examples/examples.json`，让 Keil 构建脚本从示例清单读取工程列表。
 - 新增 `scripts/build-keil.ps1`，用于批量 rebuild Keil 示例、解析构建日志并可选清理生成物。
 - 新增 `examples/freertos_signal_adc_uart_mdk`，演示 FreeRTOS 任务、信号量、GPIO ISR、ADC 和 UART。
 - 更新 README 和示例说明，明确仓库定位为 FM33LG0xx FreeRTOS port and examples。

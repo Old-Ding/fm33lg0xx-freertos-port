@@ -9,19 +9,47 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $RepoRoot = (Resolve-Path -LiteralPath (Split-Path -Parent $PSScriptRoot)).Path
+$ExampleManifestPath = Join-Path -Path $RepoRoot -ChildPath 'examples\examples.json'
 
-$Projects = @(
-    [pscustomobject]@{
-        Name = 'gpio_blink_mdk'
-        Project = Join-Path $RepoRoot 'gpio_blink_mdk\MDK-ARM\FM33LG0XX_Tester.uvprojx'
-        Target = 'Example'
-    },
-    [pscustomobject]@{
-        Name = 'freertos_signal_adc_uart_mdk'
-        Project = Join-Path $RepoRoot 'examples\freertos_signal_adc_uart_mdk\MDK-ARM\FM33LG0XX_Tester.uvprojx'
-        Target = 'Example'
+function Resolve-RepoPath {
+    param([string]$RelativePath)
+
+    $fullPath = Join-Path -Path $RepoRoot -ChildPath $RelativePath
+    $resolvedPath = (Resolve-Path -LiteralPath $fullPath).Path
+
+    if (-not $resolvedPath.StartsWith($RepoRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
+        throw "Path escapes repository: $RelativePath"
     }
-)
+
+    return $resolvedPath
+}
+
+function Get-ExampleProjects {
+    if (-not (Test-Path -LiteralPath $ExampleManifestPath)) {
+        throw "Example manifest not found: $ExampleManifestPath"
+    }
+
+    $manifest = Get-Content -LiteralPath $ExampleManifestPath -Raw | ConvertFrom-Json
+    if (-not $manifest.examples) {
+        throw "Example manifest has no examples: $ExampleManifestPath"
+    }
+
+    $projects = @()
+    foreach ($entry in $manifest.examples) {
+        if (-not $entry.name -or -not $entry.project) {
+            throw 'Each example manifest entry must define name and project.'
+        }
+
+        $target = if ($entry.target) { [string]$entry.target } else { 'Example' }
+        $projects += [pscustomobject]@{
+            Name = [string]$entry.name
+            Project = Resolve-RepoPath -RelativePath ([string]$entry.project)
+            Target = $target
+        }
+    }
+
+    return $projects
+}
 
 function Resolve-Uv4Path {
     param([string]$RequestedPath)
@@ -134,6 +162,8 @@ function Get-BuildSummary {
         ProgramSize = if ($programSize.Success) { $programSize.Groups[1].Value.Trim() } else { '' }
     }
 }
+
+$Projects = Get-ExampleProjects
 
 foreach ($project in $Projects) {
     if (-not (Test-Path -LiteralPath $project.Project)) {

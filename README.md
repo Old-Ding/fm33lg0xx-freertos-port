@@ -24,6 +24,7 @@
 ├── FreeRTOS-Kernel-main/                 # FreeRTOS Kernel 源码
 ├── gpio_blink_mdk/                       # 最小 GPIO 闪灯移植示例
 ├── examples/
+│   ├── examples.json                     # 构建脚本使用的示例清单
 │   └── freertos_signal_adc_uart_mdk/     # FreeRTOS 综合基础 demo
 ├── docs/
 │   ├── examples.md                       # 示例硬件和验证说明
@@ -58,6 +59,8 @@ Keil GUI 构建：
 ```
 
 如果 `UV4.exe` 已在 `PATH` 中，或已通过 `KEIL_UV4` 环境变量配置，也可以省略 `-UV4Path`。脚本会全量 rebuild 当前维护的示例，解析 Keil 日志，并在出现 warning 或 error 时失败。
+
+脚本从 `examples/examples.json` 读取示例工程清单。后续新增 demo 时，把 Keil 工程路径加入这个清单，提交前就能被统一构建验证覆盖。
 
 PowerShell 手工构建示例：
 
@@ -100,5 +103,6 @@ PowerShell 手工构建示例：
 - 改 RTOS 移植逻辑前，先确认启动链路、中断入口、SysTick 归属和厂商延时函数调用点。
 - 调度器启动后，任务周期延时使用 `vTaskDelay()`；不要在任务里直接使用会重配 SysTick 的厂商 delay。
 - 新增 FreeRTOS API 时，同步检查 `FreeRTOSConfig.h` 和 Keil 工程中的内核源文件，例如信号量需要 `queue.c`。
+- 新增示例时同步更新 `examples/examples.json`，让构建脚本自动覆盖新示例。
 - 提交前运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有示例仍是 `0 Error(s), 0 Warning(s)`。
 - 原创代码、文档和仓库元信息使用 MIT License；第三方代码保留原始许可证和文件头说明，来源见 `THIRD_PARTY_NOTICES.md`。

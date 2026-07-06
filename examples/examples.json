@@ -1,0 +1,14 @@
+{
+  "examples": [
+    {
+      "name": "gpio_blink_mdk",
+      "project": "gpio_blink_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx",
+      "target": "Example"
+    },
+    {
+      "name": "freertos_signal_adc_uart_mdk",
+      "project": "examples/freertos_signal_adc_uart_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx",
+      "target": "Example"
+    }
+  ]
+}
