@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 修正仓库自检脚本的 UTF-8 文本读取和失败项输出，避免 Windows 默认编码影响中文文档检查。
+- 新增 `docs/known-limitations.md`，集中说明当前芯片、工具链、CI、硬件验证和 demo 能力边界。
 - 仓库自检新增项目自有文本文件 UTF-8 无 BOM 和 CRLF 换行检查。
 - 收紧 `examples/examples.json` 自检规则，校验 schema 版本、字段集合和路径格式。
 - 新增 `gpio_blink_mdk/README.md`，补齐最小 FreeRTOS 移植示例的独立说明。

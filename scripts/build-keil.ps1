@@ -31,7 +31,7 @@ function Get-ExampleProjects {
         throw "Example manifest not found: $ExampleManifestPath"
     }
 
-    $manifest = Get-Content -LiteralPath $ExampleManifestPath -Raw | ConvertFrom-Json
+    $manifest = Get-Content -LiteralPath $ExampleManifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
     if (-not $manifest.examples) {
         throw "Example manifest has no examples: $ExampleManifestPath"
     }

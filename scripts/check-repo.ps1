@@ -35,6 +35,12 @@ function Resolve-RepoPath {
     return $resolvedPath
 }
 
+function Get-RepoText {
+    param([string]$Path)
+
+    return Get-Content -LiteralPath $Path -Raw -Encoding UTF8
+}
+
 function Test-BlockedTrackedFile {
     param([string]$Path)
 
@@ -115,7 +121,7 @@ function Test-ExampleManifest {
     }
 
     try {
-        $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+        $manifest = Get-RepoText -Path $manifestPath | ConvertFrom-Json
     } catch {
         Add-Failure "examples/examples.json is not valid JSON: $($_.Exception.Message)"
         return
@@ -199,7 +205,7 @@ function Test-ExampleManifest {
                     continue
                 }
 
-                $documentText = Get-Content -LiteralPath $documentPath -Raw
+                $documentText = Get-RepoText -Path $documentPath
                 if ($documentText -notmatch [regex]::Escape($name)) {
                     Add-Failure "example '$name' documentation does not mention example name: $documentRelative"
                 }
@@ -232,7 +238,7 @@ function Test-ExampleManifest {
             continue
         }
 
-        $projectText = Get-Content -LiteralPath $projectPath -Raw
+        $projectText = Get-RepoText -Path $projectPath
         if ($projectText -notmatch 'FreeRTOS-Kernel-main') {
             Add-Failure "example '$name' must reference the shared FreeRTOS-Kernel-main"
         }
@@ -242,7 +248,7 @@ function Test-ExampleManifest {
         $configPath = Join-Path -Path $exampleRoot -ChildPath 'Inc\FreeRTOSConfig.h'
 
         if (Test-Path -LiteralPath $configPath) {
-            $configText = Get-Content -LiteralPath $configPath -Raw
+            $configText = Get-RepoText -Path $configPath
             # 信号量依赖 queue.c；这里检查工程引用，避免新增 API 后只改配置不改 Keil 工程。
             if (($configText -match '#define\s+configUSE_COUNTING_SEMAPHORES\s+1') -and
                 ($projectText -notmatch 'queue\.c')) {
@@ -266,7 +272,7 @@ function Test-FileContains {
         return
     }
 
-    $content = Get-Content -LiteralPath $path -Raw
+    $content = Get-RepoText -Path $path
     if ($content -notmatch $Pattern) {
         Add-Failure "$RelativePath does not contain expected notice: $Description"
     }
@@ -319,6 +325,20 @@ function Test-ThirdPartyProvenance {
     }
 }
 
+function Test-KnownLimitationsDocument {
+    Test-FileContains -RelativePath 'docs\known-limitations.md' `
+        -Pattern 'build-verified' `
+        -Description 'known limitations must document current validation boundary'
+
+    Test-FileContains -RelativePath 'docs\known-limitations.md' `
+        -Pattern 'Keil/ARMCC5' `
+        -Description 'known limitations must document local Keil build boundary'
+
+    Test-FileContains -RelativePath 'README.md' `
+        -Pattern 'docs/known-limitations\.md' `
+        -Description 'README must link known limitations'
+}
+
 function Test-ValidationStatusDocument {
     $validationDocRelative = 'docs\validation-status.md'
 
@@ -329,9 +349,9 @@ function Test-ValidationStatusDocument {
         return
     }
 
-    $validationDocText = Get-Content -LiteralPath $validationDocPath -Raw
+    $validationDocText = Get-RepoText -Path $validationDocPath
     $manifestPath = Resolve-RepoPath -RelativePath 'examples\examples.json'
-    $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+    $manifest = Get-RepoText -Path $manifestPath | ConvertFrom-Json
 
     foreach ($entry in $manifest.examples) {
         $name = [string]$entry.name
@@ -366,10 +386,13 @@ Test-ThirdPartyProvenance
 Write-Host 'Checking validation status document...'
 Test-ValidationStatusDocument
 
+Write-Host 'Checking known limitations document...'
+Test-KnownLimitationsDocument
+
 if ($Failures.Count -gt 0) {
-    Write-Error "Repository check failed with $($Failures.Count) issue(s):"
+    Write-Host "Repository check failed with $($Failures.Count) issue(s):"
     foreach ($failure in $Failures) {
-        Write-Error " - $failure"
+        Write-Host " - $failure"
     }
     exit 1
 }
