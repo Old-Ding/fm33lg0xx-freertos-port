@@ -49,6 +49,7 @@
 - `.gitattributes` 必须保留项目文本 CRLF 和二进制产物属性规则。
 - 项目自有文档、脚本、清单和 GitHub 模板必须是 UTF-8 无 BOM，换行必须是 CRLF。
 - `examples/examples.json` 必须包含 `schemaVersion`、示例名称、说明、Keil 工程路径、Keil target、验证状态和文档入口。
+- `examples/examples.json` 中的 Keil 工程路径和文档入口必须指向已被 Git 跟踪的仓库文件。
 - 每个示例的文档入口必须包含该示例自己的 README。
 - 每个示例工程必须引用根目录共享的 `FreeRTOS-Kernel-main`。
 - 启用计数信号量的示例工程必须引用 `queue.c`。

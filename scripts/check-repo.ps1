@@ -59,6 +59,19 @@ function Get-RepoText {
     return Get-Content -LiteralPath $Path -Raw -Encoding UTF8
 }
 
+function Test-GitTrackedPath {
+    param(
+        [string]$RelativePath,
+        [string]$Description
+    )
+
+    $gitPath = $RelativePath -replace '\\', '/'
+    & git -C $RepoRoot -c core.quotePath=false ls-files --error-unmatch -- $gitPath > $null 2> $null
+    if ($LASTEXITCODE -ne 0) {
+        Add-Failure "$RelativePath is not tracked by git: $Description"
+    }
+}
+
 function Get-ManifestExampleRoots {
     $manifestPath = Resolve-RepoPath -RelativePath 'examples\examples.json'
 
@@ -370,6 +383,9 @@ function Test-ExampleManifest {
                     continue
                 }
 
+                Test-GitTrackedPath -RelativePath ([string]$documentRelative) `
+                    -Description "example '$name' documentation entry"
+
                 $documentText = Get-RepoText -Path $documentPath
                 if ($documentText -notmatch [regex]::Escape($name)) {
                     Add-Failure "example '$name' documentation does not mention example name: $documentRelative"
@@ -402,6 +418,9 @@ function Test-ExampleManifest {
             Add-Failure "example '$name' project path is invalid: $projectRelative"
             continue
         }
+
+        Test-GitTrackedPath -RelativePath $projectRelative `
+            -Description "example '$name' Keil project"
 
         $projectText = Get-RepoText -Path $projectPath
         if ($projectText -notmatch 'FreeRTOS-Kernel-main') {
