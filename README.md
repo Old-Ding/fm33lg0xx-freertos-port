@@ -24,7 +24,7 @@
 ├── FreeRTOS-Kernel-main/                 # FreeRTOS Kernel 源码
 ├── gpio_blink_mdk/                       # 最小 GPIO 闪灯移植示例
 ├── examples/
-│   ├── examples.json                     # 构建脚本使用的示例清单
+│   ├── examples.json                     # 示例构建和文档元数据清单
 │   └── freertos_signal_adc_uart_mdk/     # FreeRTOS 综合基础 demo
 ├── docs/
 │   ├── examples.md                       # 示例硬件和验证说明
@@ -64,7 +64,7 @@ Keil GUI 构建：
 
 如果 `UV4.exe` 已在 `PATH` 中，或已通过 `KEIL_UV4` 环境变量配置，也可以省略 `-UV4Path`。脚本会全量 rebuild 当前维护的示例，解析 Keil 日志，并在出现 warning 或 error 时失败。
 
-脚本从 `examples/examples.json` 读取示例工程清单。后续新增 demo 时，把 Keil 工程路径加入这个清单，提交前就能被统一构建验证覆盖。
+脚本从 `examples/examples.json` 读取示例工程清单。后续新增 demo 时，把 Keil 工程路径、说明、验证状态和文档入口加入这个清单，提交前就能被统一构建和仓库自检覆盖。
 
 仓库还提供不依赖 Keil 的结构自检，用于本地和 GitHub Actions 拦截厂商完整例程、Keil 生成物、坏掉的示例清单，并确认关键第三方许可证/来源文件仍在：
 

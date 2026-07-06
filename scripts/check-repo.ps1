@@ -99,6 +99,35 @@ function Test-ExampleManifest {
             Add-Failure "example name uses unsupported characters: $name"
         }
 
+        if (-not $entry.description) {
+            Add-Failure "example '$name' is missing description"
+        }
+
+        $allowedValidationStatus = @('build-verified', 'hardware-verified', 'experimental')
+        if (-not $entry.validationStatus) {
+            Add-Failure "example '$name' is missing validationStatus"
+        } elseif ($allowedValidationStatus -notcontains [string]$entry.validationStatus) {
+            Add-Failure "example '$name' validationStatus must be one of: $($allowedValidationStatus -join ', ')"
+        }
+
+        if (-not $entry.documentation) {
+            Add-Failure "example '$name' is missing documentation entries"
+        } else {
+            foreach ($documentRelative in @($entry.documentation)) {
+                try {
+                    $documentPath = Resolve-RepoPath -RelativePath ([string]$documentRelative)
+                } catch {
+                    Add-Failure "example '$name' documentation path is invalid: $documentRelative"
+                    continue
+                }
+
+                $documentText = Get-Content -LiteralPath $documentPath -Raw
+                if ($documentText -notmatch [regex]::Escape($name)) {
+                    Add-Failure "example '$name' documentation does not mention example name: $documentRelative"
+                }
+            }
+        }
+
         if (-not $entry.project) {
             Add-Failure "example '$name' is missing project"
             continue

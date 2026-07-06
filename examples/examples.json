@@ -1,14 +1,30 @@
 {
+  "schemaVersion": 1,
   "examples": [
     {
       "name": "gpio_blink_mdk",
+      "description": "Minimal FreeRTOS port validation with PB4 LED blink, IWDT feed and SVD debounce.",
       "project": "gpio_blink_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx",
-      "target": "Example"
+      "target": "Example",
+      "validationStatus": "build-verified",
+      "documentation": [
+        "README.md",
+        "docs/examples.md",
+        "docs/hardware-validation.md"
+      ]
     },
     {
       "name": "freertos_signal_adc_uart_mdk",
+      "description": "FreeRTOS task, semaphore, GPIO ISR, ADC and UART integrated demo.",
       "project": "examples/freertos_signal_adc_uart_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx",
-      "target": "Example"
+      "target": "Example",
+      "validationStatus": "build-verified",
+      "documentation": [
+        "README.md",
+        "docs/examples.md",
+        "docs/hardware-validation.md",
+        "examples/freertos_signal_adc_uart_mdk/README.md"
+      ]
     }
   ]
 }

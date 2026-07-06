@@ -2,7 +2,7 @@
 
 本文记录仓库当前维护的 FM33LG0xx FreeRTOS 示例。厂商完整示例目录只作为本地参考，不作为本仓库的开源内容提交。
 
-`examples/examples.json` 是构建脚本使用的示例清单。新增示例时，应把 Keil 工程路径加入该文件，避免 demo 存在但没有进入统一构建验证。
+`examples/examples.json` 是示例构建和文档元数据清单。新增示例时，应把 Keil 工程路径、说明、验证状态和文档入口加入该文件，避免 demo 存在但没有进入统一构建验证或文档维护。
 
 构建后的板级验收步骤见 [硬件验收指南](hardware-validation.md)。
 

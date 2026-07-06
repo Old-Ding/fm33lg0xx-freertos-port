@@ -45,9 +45,11 @@ function Get-ExampleProjects {
         $target = if ($entry.target) { [string]$entry.target } else { 'Example' }
         $projects += [pscustomobject]@{
             Name = [string]$entry.name
+            Description = if ($entry.description) { [string]$entry.description } else { '' }
             ProjectRelative = [string]$entry.project
             Project = Resolve-RepoPath -RelativePath ([string]$entry.project)
             Target = $target
+            ValidationStatus = if ($entry.validationStatus) { [string]$entry.validationStatus } else { '' }
         }
     }
 
@@ -192,7 +194,7 @@ function Get-BuildSummary {
 $AllProjects = Get-ExampleProjects
 
 if ($ListExamples) {
-    $AllProjects | Select-Object Name, Target, ProjectRelative | Format-Table -AutoSize
+    $AllProjects | Select-Object Name, Target, ValidationStatus, ProjectRelative, Description | Format-Table -AutoSize
     exit 0
 }
 
