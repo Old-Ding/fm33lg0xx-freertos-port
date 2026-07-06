@@ -61,6 +61,51 @@ function Test-BlockedTrackedFile {
     }
 }
 
+function Test-OwnedTextFileFormat {
+    param([string]$Path)
+
+    $normalized = $Path -replace '\\', '/'
+    $ownedTextPatterns = @(
+        '^(\.gitattributes|\.gitignore|README\.md|CONTRIBUTING\.md|CHANGELOG\.md|LICENSE|THIRD_PARTY_NOTICES\.md)$',
+        '^docs/.*\.md$',
+        '^scripts/.*\.ps1$',
+        '^examples/examples\.json$',
+        '^\.github/.*\.(md|yml|yaml)$',
+        '^gpio_blink_mdk/README\.md$',
+        '^examples/[^/]+/README\.md$'
+    )
+
+    $isOwnedText = $false
+    foreach ($pattern in $ownedTextPatterns) {
+        if ($normalized -match $pattern) {
+            $isOwnedText = $true
+            break
+        }
+    }
+
+    if (-not $isOwnedText) {
+        return
+    }
+
+    $filePath = Resolve-RepoPath -RelativePath $Path
+    $bytes = [System.IO.File]::ReadAllBytes($filePath)
+
+    if (($bytes.Length -ge 3) -and
+        ($bytes[0] -eq 0xEF) -and
+        ($bytes[1] -eq 0xBB) -and
+        ($bytes[2] -eq 0xBF)) {
+        Add-Failure "${Path}: project-owned text file must be UTF-8 without BOM"
+    }
+
+    for ($index = 0; $index -lt $bytes.Length; $index++) {
+        if (($bytes[$index] -eq 0x0A) -and
+            (($index -eq 0) -or ($bytes[$index - 1] -ne 0x0D))) {
+            Add-Failure "${Path}: project-owned text file must use CRLF line endings"
+            break
+        }
+    }
+}
+
 function Test-ExampleManifest {
     $manifestPath = Join-Path -Path $RepoRoot -ChildPath 'examples\examples.json'
 
@@ -304,6 +349,7 @@ Write-Host 'Checking tracked file hygiene...'
 $trackedFiles = Invoke-Git -Arguments @('ls-files')
 foreach ($file in $trackedFiles) {
     Test-BlockedTrackedFile -Path $file
+    Test-OwnedTextFileFormat -Path $file
 }
 
 $ignoredTrackedFiles = Invoke-Git -Arguments @('ls-files', '-ci', '--exclude-standard')

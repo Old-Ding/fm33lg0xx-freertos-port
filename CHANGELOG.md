@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 仓库自检新增项目自有文本文件 UTF-8 无 BOM 和 CRLF 换行检查。
 - 收紧 `examples/examples.json` 自检规则，校验 schema 版本、字段集合和路径格式。
 - 新增 `gpio_blink_mdk/README.md`，补齐最小 FreeRTOS 移植示例的独立说明。
 - 新增 `docs/validation-status.md`，记录当前示例验证级别，并让仓库自检确认验证矩阵覆盖示例清单。
