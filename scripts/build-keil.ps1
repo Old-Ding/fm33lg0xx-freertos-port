@@ -81,17 +81,16 @@ function Get-ExampleProjects {
 
     $projects = @()
     foreach ($entry in $manifest.examples) {
-        if (-not $entry.name -or -not $entry.project) {
-            throw 'Each example manifest entry must define name and project.'
+        if (-not $entry.name -or -not $entry.project -or -not $entry.target) {
+            throw 'Each example manifest entry must define name, project and target.'
         }
 
-        $target = if ($entry.target) { [string]$entry.target } else { 'Example' }
         $projects += [pscustomobject]@{
             Name = [string]$entry.name
             Description = if ($entry.description) { [string]$entry.description } else { '' }
             ProjectRelative = [string]$entry.project
             Project = Resolve-RepoPath -RelativePath ([string]$entry.project)
-            Target = $target
+            Target = [string]$entry.target
             ValidationStatus = if ($entry.validationStatus) { [string]$entry.validationStatus } else { '' }
         }
     }

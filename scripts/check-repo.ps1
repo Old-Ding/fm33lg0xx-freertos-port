@@ -339,7 +339,8 @@ function Test-ExampleManifest {
             Add-Failure "example '$name' is missing description"
         }
 
-        if (-not $entry.target) {
+        $target = [string]$entry.target
+        if (-not $target) {
             Add-Failure "example '$name' is missing target"
         }
 
@@ -425,6 +426,16 @@ function Test-ExampleManifest {
         $projectText = Get-RepoText -Path $projectPath
         if ($projectText -notmatch 'FreeRTOS-Kernel-main') {
             Add-Failure "example '$name' must reference the shared FreeRTOS-Kernel-main"
+        }
+
+        try {
+            $projectXml = [xml]$projectText
+            $targetNames = @($projectXml.Project.Targets.Target | ForEach-Object { [string]$_.TargetName })
+            if ($target -and ($targetNames -notcontains $target)) {
+                Add-Failure "example '$name' target '$target' is not defined in Keil project: $projectRelative"
+            }
+        } catch {
+            Add-Failure "example '$name' Keil project is not valid XML: $projectRelative"
         }
 
         $projectDir = Split-Path -Parent $projectPath
