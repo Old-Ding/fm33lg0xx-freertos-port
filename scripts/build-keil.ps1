@@ -1,7 +1,9 @@
 param(
     [string]$UV4Path,
+    [string[]]$ExampleName,
     [ValidateSet('Build', 'Rebuild')]
     [string]$Mode = 'Rebuild',
+    [switch]$ListExamples,
     [switch]$CleanOnly,
     [switch]$CleanAfterBuild
 )
@@ -43,12 +45,36 @@ function Get-ExampleProjects {
         $target = if ($entry.target) { [string]$entry.target } else { 'Example' }
         $projects += [pscustomobject]@{
             Name = [string]$entry.name
+            ProjectRelative = [string]$entry.project
             Project = Resolve-RepoPath -RelativePath ([string]$entry.project)
             Target = $target
         }
     }
 
     return $projects
+}
+
+function Select-ExampleProjects {
+    param(
+        [array]$Projects,
+        [string[]]$Names
+    )
+
+    if (-not $Names -or ($Names.Count -eq 0)) {
+        return $Projects
+    }
+
+    $selected = @()
+    foreach ($name in $Names) {
+        $match = @($Projects | Where-Object { $_.Name -ieq $name })
+        if ($match.Count -eq 0) {
+            $available = ($Projects | ForEach-Object { $_.Name }) -join ', '
+            throw "Unknown example '$name'. Available examples: $available"
+        }
+        $selected += $match[0]
+    }
+
+    return $selected
 }
 
 function Resolve-Uv4Path {
@@ -163,7 +189,14 @@ function Get-BuildSummary {
     }
 }
 
-$Projects = Get-ExampleProjects
+$AllProjects = Get-ExampleProjects
+
+if ($ListExamples) {
+    $AllProjects | Select-Object Name, Target, ProjectRelative | Format-Table -AutoSize
+    exit 0
+}
+
+$Projects = Select-ExampleProjects -Projects $AllProjects -Names $ExampleName
 
 foreach ($project in $Projects) {
     if (-not (Test-Path -LiteralPath $project.Project)) {

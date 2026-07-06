@@ -62,6 +62,13 @@ Keil GUI 构建：
 
 脚本从 `examples/examples.json` 读取示例工程清单。后续新增 demo 时，把 Keil 工程路径加入这个清单，提交前就能被统一构建验证覆盖。
 
+开发单个示例时可以只构建指定项：
+
+```powershell
+.\scripts\build-keil.ps1 -ListExamples
+.\scripts\build-keil.ps1 -ExampleName freertos_signal_adc_uart_mdk -CleanAfterBuild
+```
+
 PowerShell 手工构建示例：
 
 ```powershell
@@ -104,5 +111,5 @@ PowerShell 手工构建示例：
 - 调度器启动后，任务周期延时使用 `vTaskDelay()`；不要在任务里直接使用会重配 SysTick 的厂商 delay。
 - 新增 FreeRTOS API 时，同步检查 `FreeRTOSConfig.h` 和 Keil 工程中的内核源文件，例如信号量需要 `queue.c`。
 - 新增示例时同步更新 `examples/examples.json`，让构建脚本自动覆盖新示例。
-- 提交前运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有示例仍是 `0 Error(s), 0 Warning(s)`。
+- 开发阶段可用 `-ExampleName` 快速验证单个示例；提交前仍运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有示例是 `0 Error(s), 0 Warning(s)`。
 - 原创代码、文档和仓库元信息使用 MIT License；第三方代码保留原始许可证和文件头说明，来源见 `THIRD_PARTY_NOTICES.md`。

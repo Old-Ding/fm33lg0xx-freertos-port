@@ -15,8 +15,9 @@
 3. 确认新增任务没有使用会重配 SysTick 的厂商阻塞延时。
 4. 如果新增 FreeRTOS API，确认对应内核源文件已加入 Keil 工程。
 5. 如果新增示例，确认 `examples/examples.json` 已加入对应 Keil 工程。
-6. 运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有 Keil 示例都是 `0 Error(s), 0 Warning(s)`。
-7. 更新 `docs/porting-notes.md` 或 README 中受影响的构建/调试说明。
+6. 开发阶段可用 `.\scripts\build-keil.ps1 -ExampleName <name> -CleanAfterBuild` 快速验证单个示例。
+7. 提交前运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有 Keil 示例都是 `0 Error(s), 0 Warning(s)`。
+8. 更新 `docs/porting-notes.md` 或 README 中受影响的构建/调试说明。
 
 ## 代码风格
 
