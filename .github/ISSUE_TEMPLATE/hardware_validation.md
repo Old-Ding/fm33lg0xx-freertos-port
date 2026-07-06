@@ -8,12 +8,16 @@ assignees: ""
 
 ## 验收对象
 
+- 日期：
+- 验收人：
 - 芯片/板卡：
 - Git commit：
 - 示例工程：
 - Keil MDK 版本：
+- ARMCC 版本：
 - DFP 设备包版本：
 - 调试器：
+- 参考模板：`docs/hardware-validation-record.md`
 
 ## 构建结果
 
@@ -23,12 +27,13 @@ assignees: ""
 
 ## 接线
 
-| 功能 | 实际连接 | 备注 |
-| --- | --- | --- |
-| LED0 / PB4 | | |
-| GPIO interrupt / PB12 | | |
-| ADC input / PD1 | | |
-| UART0 / PA2 | | |
+| 功能 | 实际连接 | 电平/参数 | 备注 |
+| --- | --- | --- | --- |
+| LED0 / PB4 | | | |
+| GPIO interrupt / PB12 | | 默认高电平，下降沿触发 | |
+| ADC input / PD1 | | mV | |
+| UART0 / PA2 TX | | 115200 8E1 | |
+| GND | | | |
 
 ## 运行现象
 
@@ -55,5 +60,6 @@ assignees: ""
 
 - [ ] 通过
 - [ ] 未通过
+- [ ] 构建已验证，硬件待验证
 
 补充说明：

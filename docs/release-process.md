@@ -31,6 +31,7 @@ git status --short --ignored
 - `git status --short --ignored` 只允许出现本地 ignored 的 `例程/` 等参考目录，不允许有未提交的源码、文档或生成物。
 - `git ls-tree --name-only -r HEAD` 中不得出现 `例程/`、`MDK-ARM/Objects/`、`MDK-ARM/Listings/`、`.uvoptx`、`.uvguix.*`、JLink 日志或构建产物。
 - `docs/validation-status.md` 必须反映每个示例的当前验证级别；未完成板级验收的示例只能标为 `build-verified` 或 `experimental`。
+- 如果声明 `hardware-verified`，必须能追溯到符合 [硬件验收记录模板](hardware-validation-record.md) 的记录。
 - `docs/known-limitations.md` 必须反映当前未覆盖的芯片、工具链、CI、硬件验证和 demo 能力边界。
 
 ## 硬件验收
@@ -41,6 +42,8 @@ git status --short --ignored
 - `freertos_signal_adc_uart_mdk`：PB4 monitor 正常，PB12 下降沿能唤醒 GPIO task 和 ADC task，UART 输出 ADC 采样值，`g_freertosFaultCode == 0`。
 
 如果发布时某个示例只完成构建验证、尚未完成板级硬件验证，必须在 release notes 中明确标注为“构建已验证，硬件待验证”，不能写成已验证。
+
+硬件验收通过时，把 [硬件验收记录模板](hardware-validation-record.md) 中的关键信息放进 GitHub Release，或链接到对应 hardware validation issue。
 
 ## 发布步骤
 

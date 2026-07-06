@@ -2,6 +2,8 @@
 
 本文用于把 Keil 构建通过后的板级验证步骤固定下来。验收顺序按真实运行链路展开：先确认工程可构建，再确认调度器运行，最后确认 GPIO ISR 通过 FreeRTOS 信号量唤醒 ADC task 并输出 UART 日志。
 
+验收结果按 [硬件验收记录模板](hardware-validation-record.md) 记录。没有记录 Git commit、构建结果、接线、UART 输出和 Watch 变量前，不要把示例状态升级为 `hardware-verified`。
+
 ## 前置条件
 
 - Windows 11。
@@ -117,3 +119,4 @@ Watch 变量：
 2. 运行 `git diff --check`。
 3. 运行 `git status --short --ignored`，确认只有 `/例程/` 等本地参考目录处于 ignored 状态。
 4. 确认没有提交 `Objects/`、`Listings/`、`.uvoptx`、`.uvguix.*`、`.axf`、`.hex`、`.map`、`.crf`、`.o`、`.d` 等生成物。
+5. 如果要声明硬件已验证，按 [硬件验收记录模板](hardware-validation-record.md) 补齐可追溯证据。

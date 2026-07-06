@@ -12,6 +12,7 @@
         "docs/architecture.md",
         "gpio_blink_mdk/README.md",
         "docs/examples.md",
+        "docs/hardware-validation-record.md",
         "docs/hardware-validation.md",
         "docs/validation-status.md"
       ]
@@ -26,6 +27,7 @@
         "README.md",
         "docs/architecture.md",
         "docs/examples.md",
+        "docs/hardware-validation-record.md",
         "docs/hardware-validation.md",
         "docs/validation-status.md",
         "examples/freertos_signal_adc_uart_mdk/README.md"

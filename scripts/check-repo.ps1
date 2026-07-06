@@ -423,6 +423,40 @@ function Test-ValidationStatusDocument {
     }
 }
 
+function Test-HardwareValidationRecordDocument {
+    Test-FileContains -RelativePath 'docs\hardware-validation-record.md' `
+        -Pattern 'hardware-verified' `
+        -Description 'hardware validation record must describe validation status upgrade rule'
+
+    Test-FileContains -RelativePath 'docs\hardware-validation-record.md' `
+        -Pattern 'gpio_blink_mdk' `
+        -Description 'hardware validation record must cover gpio blink example'
+
+    Test-FileContains -RelativePath 'docs\hardware-validation-record.md' `
+        -Pattern 'freertos_signal_adc_uart_mdk' `
+        -Description 'hardware validation record must cover integrated demo'
+
+    Test-FileContains -RelativePath 'docs\hardware-validation-record.md' `
+        -Pattern 'g_freertosFaultCode' `
+        -Description 'hardware validation record must require fault code evidence'
+
+    Test-FileContains -RelativePath 'README.md' `
+        -Pattern 'docs/hardware-validation-record\.md' `
+        -Description 'README must link hardware validation record template'
+
+    Test-FileContains -RelativePath 'docs\hardware-validation.md' `
+        -Pattern 'hardware-validation-record\.md' `
+        -Description 'hardware validation guide must link record template'
+
+    Test-FileContains -RelativePath 'docs\validation-status.md' `
+        -Pattern 'hardware-validation-record\.md' `
+        -Description 'validation status document must link hardware validation record template'
+
+    Test-FileContains -RelativePath '.github\ISSUE_TEMPLATE\hardware_validation.md' `
+        -Pattern 'docs/hardware-validation-record\.md' `
+        -Description 'hardware validation issue template must link record template'
+}
+
 Write-Host 'Checking tracked file hygiene...'
 $trackedFiles = Invoke-Git -Arguments @('ls-files')
 foreach ($file in $trackedFiles) {
@@ -443,6 +477,9 @@ Test-ThirdPartyProvenance
 
 Write-Host 'Checking validation status document...'
 Test-ValidationStatusDocument
+
+Write-Host 'Checking hardware validation record template...'
+Test-HardwareValidationRecordDocument
 
 Write-Host 'Checking known limitations document...'
 Test-KnownLimitationsDocument

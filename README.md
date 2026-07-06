@@ -29,6 +29,7 @@
 ├── docs/
 │   ├── architecture.md                   # 调用链和职责边界
 │   ├── examples.md                       # 示例硬件和验证说明
+│   ├── hardware-validation-record.md     # 硬件验收结果记录模板
 │   ├── hardware-validation.md            # 板级硬件验收步骤
 │   ├── known-limitations.md              # 当前支持边界和已知限制
 │   ├── new-example-checklist.md          # 新增示例流程检查表
@@ -89,6 +90,8 @@ Keil GUI 构建：
 ## 硬件验收
 
 构建通过后，按 [硬件验收指南](docs/hardware-validation.md) 逐步确认下载运行、LED、GPIO 中断、ADC 采样、UART 输出和 Keil Watch 变量。
+
+板级结果按 [硬件验收记录模板](docs/hardware-validation-record.md) 保留证据后，才能把示例状态升级为 `hardware-verified`。
 
 示例调用链、ISR/task 职责边界和 SysTick 归属见 [架构说明](docs/architecture.md)。
 

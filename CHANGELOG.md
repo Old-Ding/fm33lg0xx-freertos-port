@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 新增 `docs/hardware-validation-record.md`，固定硬件验收结果的最小证据和状态升级规则。
 - 新增 `docs/architecture.md`，集中记录示例启动链路、ISR/task 职责边界、SysTick 归属和 FreeRTOS 源文件依赖。
 - 新增 `docs/scripts.md`，集中说明仓库维护脚本的职责、参数、失败条件和清理范围。
 - 新增 `docs/new-example-checklist.md`，固定新增 FreeRTOS 示例的建模、工程、文档和验证步骤。
