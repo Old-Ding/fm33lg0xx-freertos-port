@@ -461,8 +461,8 @@ function Test-ExampleManifest {
 
             if ($configText -notmatch '#define\s+configASSERT\s*\(') {
                 Add-Failure "example '$name' must define configASSERT"
-            } elseif ($configText -notmatch '\b__disable_irq\s*\(\s*\)') {
-                Add-Failure "example '$name' configASSERT must disable interrupts before trapping"
+            } elseif ($configText -notmatch 'FreeRTOS_AssertFailed\s*\(\s*__FILE__\s*,\s*__LINE__\s*\)') {
+                Add-Failure "example '$name' configASSERT must call FreeRTOS_AssertFailed with __FILE__ and __LINE__"
             }
 
             $requiredHandlerMappings = @(
@@ -495,6 +495,11 @@ function Test-ExampleManifest {
             $hasStackOverflowHook = $false
             $recordsStackOverflowTaskHandle = $false
             $recordsStackOverflowTaskName = $false
+            $hasAssertFailedHandler = $false
+            $recordsAssertFile = $false
+            $recordsAssertLine = $false
+            $recordsAssertFaultCode = $false
+            $assertHandlerDisablesInterrupts = $false
             foreach ($sourceFile in $ownedSourceFiles) {
                 $sourceText = Get-RepoText -Path $sourceFile.FullName
                 if ($sourceText -match '\buxTaskGetStackHighWaterMark\b') {
@@ -515,6 +520,26 @@ function Test-ExampleManifest {
 
                 if ($sourceText -match '\bg_stackOverflowTaskName\s*=\s*pcTaskName\s*;') {
                     $recordsStackOverflowTaskName = $true
+                }
+
+                if ($sourceText -match '\bFreeRTOS_AssertFailed\s*\([^)]*\)\s*\{') {
+                    $hasAssertFailedHandler = $true
+                }
+
+                if ($sourceText -match '\bg_freertosAssertFile\s*=\s*pcFile\s*;') {
+                    $recordsAssertFile = $true
+                }
+
+                if ($sourceText -match '\bg_freertosAssertLine\s*=\s*ulLine\s*;') {
+                    $recordsAssertLine = $true
+                }
+
+                if ($sourceText -match '\bg_freertosFaultCode\s*=\s*FREERTOS_FAULT_ASSERT\s*;') {
+                    $recordsAssertFaultCode = $true
+                }
+
+                if ($sourceText -match '\b__disable_irq\s*\(\s*\)\s*;') {
+                    $assertHandlerDisablesInterrupts = $true
                 }
             }
 
@@ -538,6 +563,26 @@ function Test-ExampleManifest {
 
             if (-not $recordsStackOverflowTaskName) {
                 Add-Failure "example '$name' stack overflow hook must record pcTaskName in g_stackOverflowTaskName"
+            }
+
+            if (-not $hasAssertFailedHandler) {
+                Add-Failure "example '$name' must implement FreeRTOS_AssertFailed"
+            }
+
+            if (-not $recordsAssertFile) {
+                Add-Failure "example '$name' FreeRTOS_AssertFailed must record pcFile in g_freertosAssertFile"
+            }
+
+            if (-not $recordsAssertLine) {
+                Add-Failure "example '$name' FreeRTOS_AssertFailed must record ulLine in g_freertosAssertLine"
+            }
+
+            if (-not $recordsAssertFaultCode) {
+                Add-Failure "example '$name' FreeRTOS_AssertFailed must set g_freertosFaultCode to FREERTOS_FAULT_ASSERT"
+            }
+
+            if (-not $assertHandlerDisablesInterrupts) {
+                Add-Failure "example '$name' FreeRTOS_AssertFailed must disable interrupts before trapping"
             }
         } else {
             Add-Failure "example '$name' is missing Inc/FreeRTOSConfig.h"
@@ -650,6 +695,10 @@ function Test-NewExampleChecklistDocument {
         -Description 'new example checklist must mention FreeRTOS assert configuration'
 
     Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'g_freertosAssertLine' `
+        -Description 'new example checklist must mention FreeRTOS assert line watch variable'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
         -Pattern 'xPortSysTickHandler' `
         -Description 'new example checklist must mention FreeRTOS exception handler mapping'
 
@@ -712,6 +761,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'configASSERT' `
         -Description 'script document must describe FreeRTOS assert checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'g_freertosAssertLine' `
+        -Description 'script document must describe FreeRTOS assert watch variable checks'
 
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'g_stackOverflowTaskName' `

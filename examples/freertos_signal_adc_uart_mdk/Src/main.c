@@ -65,6 +65,7 @@
 #define FREERTOS_FAULT_SCHEDULER       3U
 #define FREERTOS_FAULT_SYNC_OBJECT     4U
 #define FREERTOS_FAULT_TASK_CREATE     5U
+#define FREERTOS_FAULT_ASSERT          6U
 
 volatile uint32_t g_freertosFaultCode = FREERTOS_FAULT_NONE;
 volatile uint32_t g_monitorTaskLoopCount = 0U;
@@ -74,6 +75,8 @@ volatile BaseType_t g_adcTaskCreateStatus = pdFALSE;
 volatile UBaseType_t g_monitorTaskStackHighWaterMark = 0U;
 volatile TaskHandle_t g_stackOverflowTaskHandle = NULL;
 char * volatile g_stackOverflowTaskName = NULL;
+const char * volatile g_freertosAssertFile = NULL;
+volatile uint32_t g_freertosAssertLine = 0U;
 
 SemaphoreHandle_t g_gpioSemaphore = NULL;
 SemaphoreHandle_t g_adcSemaphore = NULL;
@@ -236,6 +239,18 @@ void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
     g_stackOverflowTaskName = pcTaskName;
     g_freertosFaultCode = FREERTOS_FAULT_STACK;
     taskDISABLE_INTERRUPTS();
+
+    while(1)
+    {
+    }
+}
+
+void FreeRTOS_AssertFailed(const char *pcFile, uint32_t ulLine)
+{
+    g_freertosAssertFile = pcFile;
+    g_freertosAssertLine = ulLine;
+    g_freertosFaultCode = FREERTOS_FAULT_ASSERT;
+    __disable_irq();
 
     while(1)
     {

@@ -52,6 +52,7 @@
 #define FREERTOS_FAULT_MALLOC      1U
 #define FREERTOS_FAULT_STACK       2U
 #define FREERTOS_FAULT_SCHEDULER   3U
+#define FREERTOS_FAULT_ASSERT      6U
 
 volatile uint32_t g_freertosFaultCode = FREERTOS_FAULT_NONE;
 volatile uint32_t g_ledTaskLoopCount = 0U;
@@ -59,6 +60,8 @@ volatile BaseType_t g_ledTaskCreateStatus = pdFALSE;
 volatile UBaseType_t g_ledTaskStackHighWaterMark = 0U;
 volatile TaskHandle_t g_stackOverflowTaskHandle = NULL;
 char * volatile g_stackOverflowTaskName = NULL;
+const char * volatile g_freertosAssertFile = NULL;
+volatile uint32_t g_freertosAssertLine = 0U;
 
 static void SVD_BusyDelayUsNoSysTick(uint32_t u32Delay_us);
 static void LedBlinkTask(void *pvParameters);
@@ -175,6 +178,18 @@ void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
     g_stackOverflowTaskName = pcTaskName;
     g_freertosFaultCode = FREERTOS_FAULT_STACK;
     taskDISABLE_INTERRUPTS();
+
+    while(1)
+    {
+    }
+}
+
+void FreeRTOS_AssertFailed(const char *pcFile, uint32_t ulLine)
+{
+    g_freertosAssertFile = pcFile;
+    g_freertosAssertLine = ulLine;
+    g_freertosFaultCode = FREERTOS_FAULT_ASSERT;
+    __disable_irq();
 
     while(1)
     {

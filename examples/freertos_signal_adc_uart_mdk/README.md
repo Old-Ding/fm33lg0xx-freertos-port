@@ -43,6 +43,7 @@ PowerShell：
 - `g_monitorTaskStackHighWaterMark`、`g_gpioTaskStackHighWaterMark`、`g_adcTaskStackHighWaterMark` 记录各任务剩余栈水位。
 - 如果 PB12 触发过快，`g_gpioSemaphoreGiveFailCount` 或 `g_adcSemaphoreGiveFailCount` 递增表示对应信号量已满，事件被合并或丢弃。
 - 如果 `g_freertosFaultCode == 2`，查看 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName` 定位溢出任务。
+- 如果 `g_freertosFaultCode == 6`，查看 `g_freertosAssertFile` 和 `g_freertosAssertLine` 定位 assert 触发位置。
 
 更完整的接线、串口参数、Watch 变量和故障定位步骤见 [`docs/hardware-validation.md`](../../docs/hardware-validation.md)。
 

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 两个 FreeRTOS 示例新增 assert file/line Watch 变量，`configASSERT` 失败时记录触发位置并设置 fault code。
 - 仓库自检新增 `configASSERT` 保留和断言失败关中断检查，防止 FreeRTOS 参数错误静默继续运行。
 - 仓库自检新增 FreeRTOS SVC、PendSV、SysTick 异常入口映射检查，防止新增示例漏接调度器中断。
 - 两个 FreeRTOS 示例新增栈溢出任务 handle/name Watch 变量，并加入仓库自检，用于定位触发 stack overflow hook 的任务。

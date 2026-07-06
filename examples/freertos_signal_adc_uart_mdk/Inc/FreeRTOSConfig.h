@@ -66,13 +66,12 @@
 #define xPortPendSVHandler                      PendSV_Handler
 #define xPortSysTickHandler                     SysTick_Handler
 
+void FreeRTOS_AssertFailed(const char *pcFile, uint32_t ulLine);
+
 #define configASSERT( x )                       \
     if( ( x ) == 0 )                            \
     {                                           \
-        __disable_irq();                        \
-        for( ; ; )                              \
-        {                                       \
-        }                                       \
+        FreeRTOS_AssertFailed(__FILE__, __LINE__); \
     }
 
 #endif /* FREERTOS_CONFIG_H */

@@ -42,7 +42,7 @@ assignees: ""
 
 ## Watch 变量
 
-请按实际示例填写关键变量，例如 `g_freertosFaultCode`、任务创建状态、stack high-water mark、stack overflow task name、loop count、IRQ count、ADC count。
+请按实际示例填写关键变量，例如 `g_freertosFaultCode`、任务创建状态、stack high-water mark、stack overflow task name、assert file/line、loop count、IRQ count、ADC count。
 
 ```text
 
