@@ -744,6 +744,54 @@ function Test-FileContains {
     }
 }
 
+function Test-ExamplesDocument {
+    $examplesDocRelative = 'docs\examples.md'
+
+    try {
+        $examplesDocPath = Resolve-RepoPath -RelativePath $examplesDocRelative
+    } catch {
+        Add-Failure "$examplesDocRelative is missing"
+        return
+    }
+
+    try {
+        $manifestPath = Resolve-RepoPath -RelativePath 'examples\examples.json'
+        $manifest = Get-RepoText -Path $manifestPath | ConvertFrom-Json
+    } catch {
+        Add-Failure 'examples document check requires a valid examples/examples.json'
+        return
+    }
+
+    $examplesDocText = Get-RepoText -Path $examplesDocPath
+    foreach ($entry in $manifest.examples) {
+        $name = [string]$entry.name
+        if ([string]::IsNullOrWhiteSpace($name)) {
+            continue
+        }
+
+        $headingPattern = "(?m)^##\s+$([regex]::Escape($name))\s*$"
+        $headingMatch = [regex]::Match($examplesDocText, $headingPattern)
+        if (-not $headingMatch.Success) {
+            Add-Failure "examples document must contain section for example '$name'"
+            continue
+        }
+
+        $sectionStart = $headingMatch.Index
+        $sectionTailStart = $headingMatch.Index + $headingMatch.Length
+        $sectionTail = $examplesDocText.Substring($sectionTailStart)
+        $nextHeadingMatch = [regex]::Match($sectionTail, '(?m)^##\s+')
+        if ($nextHeadingMatch.Success) {
+            $sectionText = $examplesDocText.Substring($sectionStart, $headingMatch.Length + $nextHeadingMatch.Index)
+        } else {
+            $sectionText = $examplesDocText.Substring($sectionStart)
+        }
+
+        if ($sectionText -notmatch '\bg_freertosFaultCode\b') {
+            Add-Failure "examples document section for '$name' must list g_freertosFaultCode as a Watch variable"
+        }
+    }
+}
+
 function Test-ThirdPartyProvenance {
     Test-FileContains -RelativePath 'LICENSE' `
         -Pattern 'Third-party code, vendor SDK files, CMSIS files, FreeRTOS Kernel files' `
@@ -1062,6 +1110,9 @@ foreach ($file in $ignoredTrackedFiles) {
 
 Write-Host 'Checking example manifest...'
 Test-ExampleManifest
+
+Write-Host 'Checking example documentation...'
+Test-ExamplesDocument
 
 Write-Host 'Checking third-party provenance...'
 Test-ThirdPartyProvenance

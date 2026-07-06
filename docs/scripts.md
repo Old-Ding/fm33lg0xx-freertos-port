@@ -52,6 +52,7 @@
 - `examples/examples.json` 中的 Keil 工程路径和文档入口必须指向已被 Git 跟踪的仓库文件。
 - `examples/examples.json` 中的 Keil target 必须存在于对应 `.uvprojx` 工程。
 - 每个示例的文档入口必须包含该示例自己的 README。
+- `docs/examples.md` 必须逐示例列出清单条目，并在观察变量中保留 `g_freertosFaultCode`，避免示例索引漏掉最小故障定位入口。
 - 每个示例工程必须引用根目录共享的 `FreeRTOS-Kernel-main`。
 - 每个示例的 `FreeRTOSConfig.h` 必须把 `vPortSVCHandler`、`xPortPendSVHandler`、`xPortSysTickHandler` 映射到启动文件中的 `SVC_Handler`、`PendSV_Handler`、`SysTick_Handler`。
 - 每个示例必须保留 `Inc/FreeRTOSConfig.h`，并启用/实现 `configUSE_MALLOC_FAILED_HOOK` 和 `configCHECK_FOR_STACK_OVERFLOW` 对应 hook。
