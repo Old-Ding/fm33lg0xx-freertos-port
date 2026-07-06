@@ -450,6 +450,15 @@ function Test-ExampleManifest {
 
         if (Test-Path -LiteralPath $configPath) {
             $configText = Get-RepoText -Path $configPath
+
+            if ($configText -notmatch '#define\s+configUSE_MALLOC_FAILED_HOOK\s+1') {
+                Add-Failure "example '$name' must enable configUSE_MALLOC_FAILED_HOOK"
+            }
+
+            if ($configText -notmatch '#define\s+configCHECK_FOR_STACK_OVERFLOW\s+2') {
+                Add-Failure "example '$name' must enable configCHECK_FOR_STACK_OVERFLOW level 2"
+            }
+
             # 信号量依赖 queue.c；这里检查工程引用，避免新增 API 后只改配置不改 Keil 工程。
             if (($configText -match '#define\s+configUSE_COUNTING_SEMAPHORES\s+1') -and
                 ($projectText -notmatch 'queue\.c')) {
@@ -465,11 +474,20 @@ function Test-ExampleManifest {
             }
 
             $usesStackHighWaterMark = $false
+            $hasMallocFailedHook = $false
+            $hasStackOverflowHook = $false
             foreach ($sourceFile in $ownedSourceFiles) {
                 $sourceText = Get-RepoText -Path $sourceFile.FullName
                 if ($sourceText -match '\buxTaskGetStackHighWaterMark\b') {
                     $usesStackHighWaterMark = $true
-                    break
+                }
+
+                if ($sourceText -match '\bvApplicationMallocFailedHook\s*\([^)]*\)\s*\{') {
+                    $hasMallocFailedHook = $true
+                }
+
+                if ($sourceText -match '\bvApplicationStackOverflowHook\s*\([^)]*\)\s*\{') {
+                    $hasStackOverflowHook = $true
                 }
             }
 
@@ -478,6 +496,16 @@ function Test-ExampleManifest {
                 ($configText -notmatch '#define\s+INCLUDE_uxTaskGetStackHighWaterMark\s+1')) {
                 Add-Failure "example '$name' uses uxTaskGetStackHighWaterMark but FreeRTOSConfig.h does not enable INCLUDE_uxTaskGetStackHighWaterMark"
             }
+
+            if (-not $hasMallocFailedHook) {
+                Add-Failure "example '$name' must implement vApplicationMallocFailedHook"
+            }
+
+            if (-not $hasStackOverflowHook) {
+                Add-Failure "example '$name' must implement vApplicationStackOverflowHook"
+            }
+        } else {
+            Add-Failure "example '$name' is missing Inc/FreeRTOSConfig.h"
         }
     }
 }
@@ -575,6 +603,14 @@ function Test-NewExampleChecklistDocument {
         -Description 'new example checklist must mention FreeRTOS queue source dependency'
 
     Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'configUSE_MALLOC_FAILED_HOOK' `
+        -Description 'new example checklist must mention malloc failed hook'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'configCHECK_FOR_STACK_OVERFLOW' `
+        -Description 'new example checklist must mention stack overflow hook'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
         -Pattern 'portYIELD_FROM_ISR' `
         -Description 'new example checklist must document ISR yield pattern'
 
@@ -617,6 +653,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern '-CleanAfterBuild' `
         -Description 'script document must describe generated-output cleanup flow'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'configUSE_MALLOC_FAILED_HOOK' `
+        -Description 'script document must describe FreeRTOS hook checks'
 
     Test-FileContains -RelativePath 'README.md' `
         -Pattern 'docs/scripts\.md' `
