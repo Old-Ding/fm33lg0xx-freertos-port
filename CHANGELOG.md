@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 仓库自检新增 `.gitattributes` 策略检查，防止文本换行和二进制属性规则被误删。
 - GitHub Actions 新增提交范围空白检查，补齐不依赖 Keil 的远端门禁。
 - 仓库自检新增 `.gitignore` 策略检查，防止厂商目录、Keil/JLink 生成物和归档忽略规则被误删。
 - 收紧验证状态自检，要求 `docs/validation-status.md` 当前矩阵逐示例匹配 `examples/examples.json` 中的 `validationStatus`。

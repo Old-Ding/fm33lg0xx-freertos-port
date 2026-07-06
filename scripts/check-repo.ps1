@@ -169,6 +169,52 @@ function Test-GitignorePolicy {
     }
 }
 
+function Test-GitattributesPolicy {
+    $requiredAttributes = @(
+        '* text=auto eol=crlf',
+        '*.c text eol=crlf',
+        '*.h text eol=crlf',
+        '*.s text eol=crlf',
+        '*.ld text eol=crlf',
+        '*.json text eol=crlf',
+        '*.yml text eol=crlf',
+        '*.yaml text eol=crlf',
+        '*.md text eol=crlf',
+        '*.ps1 text eol=crlf',
+        '*.txt text eol=crlf',
+        '*.uvprojx text eol=crlf',
+        '*.scvd text eol=crlf',
+        '*.zip binary',
+        '*.pack binary',
+        '*.axf binary',
+        '*.elf binary',
+        '*.hex text eol=crlf',
+        '*.bin binary'
+    )
+
+    try {
+        $gitattributesPath = Resolve-RepoPath -RelativePath '.gitattributes'
+    } catch {
+        Add-Failure '.gitattributes is missing'
+        return
+    }
+
+    $configuredAttributes = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+    foreach ($line in (Get-Content -LiteralPath $gitattributesPath -Encoding UTF8)) {
+        $trimmed = $line.Trim()
+        if (($trimmed.Length -eq 0) -or $trimmed.StartsWith('#')) {
+            continue
+        }
+        [void]$configuredAttributes.Add($trimmed)
+    }
+
+    foreach ($attribute in $requiredAttributes) {
+        if (-not $configuredAttributes.Contains($attribute)) {
+            Add-Failure ".gitattributes must contain $attribute"
+        }
+    }
+}
+
 function Test-OwnedTextFileFormat {
     param([string]$Path)
 
@@ -579,6 +625,9 @@ foreach ($file in $trackedFiles) {
 
 Write-Host 'Checking .gitignore policy...'
 Test-GitignorePolicy
+
+Write-Host 'Checking .gitattributes policy...'
+Test-GitattributesPolicy
 
 $ignoredTrackedFiles = Invoke-Git -Arguments @('ls-files', '-ci', '--exclude-standard')
 foreach ($file in $ignoredTrackedFiles) {
