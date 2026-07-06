@@ -52,6 +52,7 @@
 #define FREERTOS_FAULT_MALLOC      1U
 #define FREERTOS_FAULT_STACK       2U
 #define FREERTOS_FAULT_SCHEDULER   3U
+#define FREERTOS_FAULT_TASK_CREATE 5U
 #define FREERTOS_FAULT_ASSERT      6U
 
 volatile uint32_t g_freertosFaultCode = FREERTOS_FAULT_NONE;
@@ -236,9 +237,16 @@ int main(void)
     if(pdPASS == g_ledTaskCreateStatus)
     {
         vTaskStartScheduler();
+        g_freertosHeapFreeBytes = xPortGetFreeHeapSize();
+        g_freertosHeapMinimumEverFreeBytes = xPortGetMinimumEverFreeHeapSize();
+        g_freertosFaultCode = FREERTOS_FAULT_SCHEDULER;
     }
-
-    g_freertosFaultCode = FREERTOS_FAULT_SCHEDULER;
+    else
+    {
+        g_freertosHeapFreeBytes = xPortGetFreeHeapSize();
+        g_freertosHeapMinimumEverFreeBytes = xPortGetMinimumEverFreeHeapSize();
+        g_freertosFaultCode = FREERTOS_FAULT_TASK_CREATE;
+    }
 
     while(1)
     {

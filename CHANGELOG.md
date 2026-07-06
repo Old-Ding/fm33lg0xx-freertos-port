@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- `gpio_blink_mdk` 区分任务创建失败和调度器启动失败，仓库自检同步要求示例保留任务创建失败 fault code。
 - 仓库自检补充严格 UTF-8 解码检查，避免项目自有文本仅通过 BOM/CRLF 检查但实际编码损坏。
 - 仓库自检把示例自有 `Src/Inc` C/H 文件纳入 UTF-8 无 BOM 和 CRLF 检查，避免新增代码出现编码或换行漂移。
 - 仓库自检区分 heap Watch 的运行态刷新和 malloc failed hook 现场记录，避免新增示例只覆盖其中一层职责。

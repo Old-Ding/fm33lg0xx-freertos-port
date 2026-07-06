@@ -125,7 +125,7 @@ PowerShell 手工构建示例：
 - `g_ledTaskCreateStatus`：`pdPASS` 表示 LED 任务创建成功。
 - `g_ledTaskLoopCount`：持续增加表示调度器、SysTick 和 `vTaskDelay()` 正常工作。
 - `g_ledTaskStackHighWaterMark`：LED task 剩余栈水位，用于评估任务栈余量。
-- `g_freertosFaultCode`：`0` 为正常，`1` 为 malloc 失败，`2` 为任务栈溢出，`3` 为调度器启动失败或异常返回，`6` 为 FreeRTOS assert 失败。
+- `g_freertosFaultCode`：`0` 为正常，`1` 为 malloc 失败，`2` 为任务栈溢出，`3` 为调度器启动失败或异常返回，`5` 为任务创建失败，`6` 为 FreeRTOS assert 失败。
 - `g_freertosHeapFreeBytes`、`g_freertosHeapMinimumEverFreeBytes`：运行中更新 heap 当前余量和最低水位，`g_freertosFaultCode == 1` 时保留 malloc 失败现场。
 - `g_stackOverflowTaskHandle`、`g_stackOverflowTaskName`：`g_freertosFaultCode == 2` 时记录溢出任务现场。
 - `g_freertosAssertFile`、`g_freertosAssertLine`：`g_freertosFaultCode == 6` 时记录 assert 触发位置。

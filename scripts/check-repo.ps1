@@ -539,6 +539,8 @@ function Test-ExampleManifest {
             $recordsAssertLine = $false
             $recordsAssertFaultCode = $false
             $assertHandlerDisablesInterrupts = $false
+            $hasTaskCreateFaultCodeDefinition = $false
+            $recordsTaskCreateFaultCode = $false
             $recordsMallocHookFreeHeap = $false
             $recordsMallocHookMinimumHeap = $false
             $recordsRuntimeFreeHeap = $false
@@ -585,6 +587,14 @@ function Test-ExampleManifest {
                     $assertHandlerDisablesInterrupts = $true
                 }
 
+                if ($sourceText -match '#define\s+FREERTOS_FAULT_TASK_CREATE\s+\d+U?') {
+                    $hasTaskCreateFaultCodeDefinition = $true
+                }
+
+                if ($sourceText -match '\bg_freertosFaultCode\s*=\s*FREERTOS_FAULT_TASK_CREATE\s*;') {
+                    $recordsTaskCreateFaultCode = $true
+                }
+
                 $mallocFailedHookBody = Get-CFunctionBodyText -SourceText $sourceText -FunctionName 'vApplicationMallocFailedHook'
                 if ($mallocFailedHookBody -match '\bg_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;') {
                     $recordsMallocHookFreeHeap = $true
@@ -627,6 +637,14 @@ function Test-ExampleManifest {
 
             if (-not $recordsRuntimeMinimumHeap) {
                 Add-Failure "example '$name' runtime monitor must record xPortGetMinimumEverFreeHeapSize in g_freertosHeapMinimumEverFreeBytes"
+            }
+
+            if (-not $hasTaskCreateFaultCodeDefinition) {
+                Add-Failure "example '$name' must define FREERTOS_FAULT_TASK_CREATE"
+            }
+
+            if (-not $recordsTaskCreateFaultCode) {
+                Add-Failure "example '$name' must set g_freertosFaultCode to FREERTOS_FAULT_TASK_CREATE when task creation fails"
             }
 
             if (-not $hasStackOverflowHook) {
