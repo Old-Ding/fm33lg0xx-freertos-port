@@ -19,7 +19,8 @@
 7. 运行 `.\scripts\check-repo.ps1`，确认示例清单、共享 FreeRTOS 引用、第三方来源文件和禁止跟踪文件都符合仓库规则。
 8. 开发阶段可用 `.\scripts\build-keil.ps1 -ExampleName <name> -CleanAfterBuild` 快速验证单个示例。
 9. 提交前运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有 Keil 示例都是 `0 Error(s), 0 Warning(s)`。
-10. 更新 `docs/porting-notes.md` 或 README 中受影响的构建/调试说明。
+10. 如果脚本参数、失败条件或清理范围变化，同步更新 `docs/scripts.md`。
+11. 更新 `docs/porting-notes.md` 或 README 中受影响的构建/调试说明。
 
 ## Issue 和 PR
 
@@ -30,7 +31,7 @@
 
 ## 发布
 
-- 发布前按 `docs/release-process.md` 运行仓库自检、Keil 全量构建、空白检查和工作区检查。
+- 发布前按 `docs/release-process.md` 和 `docs/scripts.md` 运行仓库自检、Keil 全量构建、空白检查和工作区检查。
 - `CHANGELOG.md` 的 `Unreleased` 只能表示尚未发布的变化；打 tag 前必须移动到具体版本号和日期。
 - 硬件未完成验证的内容必须在 release notes 中标注为待验证，不能写成已验证。
 

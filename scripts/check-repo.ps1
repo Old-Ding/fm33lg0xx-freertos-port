@@ -357,6 +357,24 @@ function Test-NewExampleChecklistDocument {
         -Description 'README must link new example checklist'
 }
 
+function Test-ScriptsDocument {
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'build-keil\.ps1' `
+        -Description 'script document must describe Keil build script'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'check-repo\.ps1' `
+        -Description 'script document must describe repository check script'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern '-CleanAfterBuild' `
+        -Description 'script document must describe generated-output cleanup flow'
+
+    Test-FileContains -RelativePath 'README.md' `
+        -Pattern 'docs/scripts\.md' `
+        -Description 'README must link script document'
+}
+
 function Test-ValidationStatusDocument {
     $validationDocRelative = 'docs\validation-status.md'
 
@@ -409,6 +427,9 @@ Test-KnownLimitationsDocument
 
 Write-Host 'Checking new example checklist...'
 Test-NewExampleChecklistDocument
+
+Write-Host 'Checking script documentation...'
+Test-ScriptsDocument
 
 if ($Failures.Count -gt 0) {
     Write-Host "Repository check failed with $($Failures.Count) issue(s):"

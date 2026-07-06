@@ -21,6 +21,8 @@ git diff --check
 git status --short --ignored
 ```
 
+脚本参数、Keil 查找顺序、失败条件和清理范围见 [维护脚本](scripts.md)。
+
 通过标准：
 
 - 仓库自检通过。

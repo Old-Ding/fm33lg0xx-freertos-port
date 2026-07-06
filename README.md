@@ -33,6 +33,7 @@
 │   ├── new-example-checklist.md          # 新增示例流程检查表
 │   ├── porting-notes.md                  # FreeRTOS 移植说明
 │   ├── release-process.md                # 版本发布和验收流程
+│   ├── scripts.md                        # 本地维护脚本说明
 │   └── validation-status.md              # 当前示例验证状态矩阵
 ├── scripts/
 │   ├── build-keil.ps1                    # Keil 批量构建验证脚本
@@ -68,6 +69,8 @@ Keil GUI 构建：
 如果 `UV4.exe` 已在 `PATH` 中，或已通过 `KEIL_UV4` 环境变量配置，也可以省略 `-UV4Path`。脚本会全量 rebuild 当前维护的示例，解析 Keil 日志，并在出现 warning 或 error 时失败。
 
 脚本从 `examples/examples.json` 读取示例工程清单。后续新增 demo 时，把 Keil 工程路径、说明、验证状态和文档入口加入这个清单，提交前就能被统一构建和仓库自检覆盖。
+
+脚本职责、参数、失败条件和清理范围见 [维护脚本说明](docs/scripts.md)。
 
 仓库还提供不依赖 Keil 的结构自检，用于本地和 GitHub Actions 拦截厂商完整例程、Keil 生成物、坏掉的示例清单，并确认关键第三方许可证/来源文件仍在：
 
@@ -133,6 +136,7 @@ PowerShell 手工构建示例：
 - 新增 FreeRTOS API 时，同步检查 `FreeRTOSConfig.h` 和 Keil 工程中的内核源文件，例如信号量需要 `queue.c`。
 - 新增示例时同步更新 `examples/examples.json`，让构建脚本自动覆盖新示例。
 - 新增示例前按 [新增示例 Checklist](docs/new-example-checklist.md) 先确认数据流、职责边界、文档和验证项。
+- 本地检查和构建脚本的完整用法见 [维护脚本说明](docs/scripts.md)。
 - 开发阶段可用 `-ExampleName` 快速验证单个示例；提交前仍运行 `.\scripts\build-keil.ps1 -CleanAfterBuild`，确认所有示例是 `0 Error(s), 0 Warning(s)`。
 - 发布版本前按 [发布流程](docs/release-process.md) 更新 changelog、运行门禁并记录硬件验收状态。
 - 原创代码、文档和仓库元信息使用 MIT License；第三方代码保留原始许可证和文件头说明，来源见 `THIRD_PARTY_NOTICES.md`。

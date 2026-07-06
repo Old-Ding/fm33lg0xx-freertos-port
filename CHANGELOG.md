@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 新增 `docs/scripts.md`，集中说明仓库维护脚本的职责、参数、失败条件和清理范围。
 - 新增 `docs/new-example-checklist.md`，固定新增 FreeRTOS 示例的建模、工程、文档和验证步骤。
 - 修正仓库自检脚本的 UTF-8 文本读取和失败项输出，避免 Windows 默认编码影响中文文档检查。
 - 新增 `docs/known-limitations.md`，集中说明当前芯片、工具链、CI、硬件验证和 demo 能力边界。
