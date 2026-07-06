@@ -121,6 +121,7 @@ Watch 变量：
 | `g_freertosFaultCode == 5` | 任务创建失败，先看 heap Watch 变量，再检查任务栈和任务数量 |
 | `g_freertosFaultCode == 6` | FreeRTOS assert 失败，先看 `g_freertosAssertFile` 和 `g_freertosAssertLine` |
 | 停在 `assert_param` | 这是厂商 FL Driver 参数断言，不会写入 FreeRTOS fault Watch；先看 Keil Call Stack 和触发的外设初始化参数 |
+| 反复软复位且 Watch 来不及观察 | 先在 `HardFault_Handler` 下断点；当前 HardFault 路径直接 RMU 软复位，不会保留 FreeRTOS fault Watch |
 | PB12 无触发 | PB12 是否有稳定默认高电平、是否形成下降沿、`EXTI LINE7` 是否映射到 `PB12` |
 | 信号量 give fail 计数递增 | PB12 触发频率过高，先降低触发频率，再看 GPIO/ADC task 是否能及时消费事件 |
 | ADC 数值不变 | `PD1` 输入电压、`FL_ADC_EXTERNAL_CH1`、目标板 `VDDA` 和地线连接 |

@@ -67,6 +67,7 @@
 - 第三方许可证、FreeRTOS 文件、厂商 FL Driver 文件头和 CMSIS SPDX 标识必须保留；示例根目录从 `examples/examples.json` 推导。
 - `docs/validation-status.md` 必须在当前矩阵中逐示例记录 `examples/examples.json` 中的验证状态。
 - `docs/known-limitations.md` 和 `docs/hardware-validation.md` 必须说明 `USE_FULL_ASSERT` / `assert_param` 是厂商断言边界，不等同于 FreeRTOS `configASSERT`。
+- `docs/known-limitations.md` 和 `docs/hardware-validation.md` 必须说明当前 `HardFault_Handler` 直接 RMU 软复位，不保留 FreeRTOS fault Watch。
 - `CHANGELOG.md` 必须保留 `Unreleased` 区段和带日期的语义化版本记录。
 - GitHub PR 和 issue 模板必须保留仓库检查、示例清单、故障证据和硬件验收入口。
 - GitHub Actions 工作流必须保留 Windows 仓库自检和提交范围空白检查。

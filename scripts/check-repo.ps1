@@ -882,6 +882,18 @@ function Test-KnownLimitationsDocument {
         -Pattern 'assert_param' `
         -Description 'hardware validation guide must mention vendor assert_param triage'
 
+    Test-FileContains -RelativePath 'docs\known-limitations.md' `
+        -Pattern 'HardFault_Handler' `
+        -Description 'known limitations must document HardFault reset boundary'
+
+    Test-FileContains -RelativePath 'docs\known-limitations.md' `
+        -Pattern 'RMU' `
+        -Description 'known limitations must mention RMU reset for HardFault'
+
+    Test-FileContains -RelativePath 'docs\hardware-validation.md' `
+        -Pattern 'HardFault_Handler' `
+        -Description 'hardware validation guide must mention HardFault breakpoint triage'
+
     Test-FileContains -RelativePath 'README.md' `
         -Pattern 'docs/known-limitations\.md' `
         -Description 'README must link known limitations'
@@ -1019,6 +1031,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'assert_param' `
         -Description 'script document must describe vendor assert limitation checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'HardFault_Handler' `
+        -Description 'script document must describe HardFault limitation checks'
 
     Test-FileContains -RelativePath 'README.md' `
         -Pattern 'docs/scripts\.md' `

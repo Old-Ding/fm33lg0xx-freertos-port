@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 已知限制和硬件验收排障补充 `HardFault_Handler` 直接 RMU 软复位的边界，仓库自检同步防止该限制说明丢失。
 - 已知限制和硬件验收排障补充厂商 `USE_FULL_ASSERT` / `assert_param` 边界，说明它不等同于 FreeRTOS `configASSERT`，仓库自检同步防止该限制说明丢失。
 - `freertos_signal_adc_uart_mdk` README 补齐 `g_freertosFaultCode == 0` 正常态说明，仓库自检同步要求示例 README 保留该观测基线。
 - 架构文档和新增示例 checklist 的 fault code 分类补齐 FreeRTOS assert 失败，仓库自检同步防止文档模型漏掉该故障类型。
