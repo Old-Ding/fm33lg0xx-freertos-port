@@ -281,7 +281,9 @@ function Test-OwnedTextFileFormat {
         '^examples/examples\.json$',
         '^\.github/.*\.(md|yml|yaml)$',
         '^gpio_blink_mdk/README\.md$',
-        '^examples/[^/]+/README\.md$'
+        '^gpio_blink_mdk/(Src|Inc)/.*\.[ch]$',
+        '^examples/[^/]+/README\.md$',
+        '^examples/[^/]+/(Src|Inc)/.*\.[ch]$'
     )
 
     $isOwnedText = $false
