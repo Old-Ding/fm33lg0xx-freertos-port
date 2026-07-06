@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 新增 GitHub Actions 仓库自检，验证示例清单、共享 FreeRTOS 引用和禁止提交的生成物。
 - 新增 `docs/hardware-validation.md`，补充板级接线、运行验收、Watch 变量和故障定位步骤。
 - `scripts/build-keil.ps1` 支持 `-ListExamples` 和 `-ExampleName`，便于列出或单独构建示例。
 - 新增 `examples/examples.json`，让 Keil 构建脚本从示例清单读取工程列表。

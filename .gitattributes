@@ -5,6 +5,8 @@
 *.s text eol=crlf
 *.ld text eol=crlf
 *.json text eol=crlf
+*.yml text eol=crlf
+*.yaml text eol=crlf
 *.md text eol=crlf
 *.ps1 text eol=crlf
 *.txt text eol=crlf

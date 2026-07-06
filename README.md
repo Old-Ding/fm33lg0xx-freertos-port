@@ -63,6 +63,12 @@ Keil GUI 构建：
 
 脚本从 `examples/examples.json` 读取示例工程清单。后续新增 demo 时，把 Keil 工程路径加入这个清单，提交前就能被统一构建验证覆盖。
 
+仓库还提供不依赖 Keil 的结构自检，用于本地和 GitHub Actions 拦截厂商完整例程、Keil 生成物、坏掉的示例清单：
+
+```powershell
+.\scripts\check-repo.ps1
+```
+
 开发单个示例时可以只构建指定项：
 
 ```powershell
