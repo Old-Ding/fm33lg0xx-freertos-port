@@ -47,6 +47,7 @@
 - 已跟踪文件不得包含本地厂商完整 `例程/` 目录、Keil/JLink 生成物、归档包和临时文件。
 - 项目自有文档、脚本、清单和 GitHub 模板必须是 UTF-8 无 BOM，换行必须是 CRLF。
 - `examples/examples.json` 必须包含 `schemaVersion`、示例名称、说明、Keil 工程路径、验证状态和文档入口。
+- 每个示例的文档入口必须包含该示例自己的 README。
 - 每个示例工程必须引用根目录共享的 `FreeRTOS-Kernel-main`。
 - 启用计数信号量的示例工程必须引用 `queue.c`。
 - 第三方许可证、FreeRTOS 文件、厂商 FL Driver 文件头和 CMSIS SPDX 标识必须保留；示例根目录从 `examples/examples.json` 推导。

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 仓库自检要求每个示例在 `examples/examples.json` 中登记自己的 README，避免新增 demo 缺少独立说明。
 - 加固维护脚本的路径边界判断，避免相似目录名前缀被误判为仓库内路径。
 - 仓库自检的第三方来源检查改为从 `examples/examples.json` 推导示例根目录，避免新增 demo 后漏检厂商和 CMSIS 文件头。
 - 新增 `docs/hardware-validation-record.md`，固定硬件验收结果的最小证据和状态升级规则。

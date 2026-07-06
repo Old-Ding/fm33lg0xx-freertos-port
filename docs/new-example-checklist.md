@@ -42,6 +42,7 @@
   - `schemaVersion` 保持 `1`。
   - 路径使用仓库相对路径和正斜杠。
   - 填写 `name`、`description`、`project`、`target`、`validationStatus`、`documentation`。
+  - `documentation` 必须包含该示例自己的 `<示例目录>/README.md`。
 - 新增或更新示例 README，至少包含数据流、硬件连接、构建方式、预期现象和关键配置。
 - 更新 `docs/examples.md`、`docs/hardware-validation.md`、`docs/validation-status.md`。
 - 加入 `examples/examples.json` 后，`scripts/check-repo.ps1` 会把该示例纳入第三方来源文件头检查。

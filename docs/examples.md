@@ -21,6 +21,8 @@
 - `validationStatus`：`build-verified`、`hardware-verified` 或 `experimental`。
 - `documentation`：README、验收文档和验证状态文档入口，使用仓库相对路径和正斜杠。
 
+每个示例必须在 `documentation` 中列出自己的 `<示例目录>/README.md`，公共文档不能替代示例独立说明。
+
 该清单属于项目自有文本文件，必须保持 UTF-8 无 BOM 和 CRLF 换行。
 
 ## gpio_blink_mdk

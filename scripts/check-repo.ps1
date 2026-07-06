@@ -303,6 +303,12 @@ function Test-ExampleManifest {
 
         $projectDir = Split-Path -Parent $projectPath
         $exampleRoot = Split-Path -Parent $projectDir
+        $exampleRootRelative = $exampleRoot.Substring($RepoRoot.Length).TrimStart('\', '/') -replace '\\', '/'
+        $exampleReadmeRelative = "$exampleRootRelative/README.md"
+        if (@($entry.documentation) -notcontains $exampleReadmeRelative) {
+            Add-Failure "example '$name' documentation must include example README: $exampleReadmeRelative"
+        }
+
         $configPath = Join-Path -Path $exampleRoot -ChildPath 'Inc\FreeRTOSConfig.h'
 
         if (Test-Path -LiteralPath $configPath) {
