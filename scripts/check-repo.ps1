@@ -541,6 +541,11 @@ function Test-ExampleManifest {
             $assertHandlerDisablesInterrupts = $false
             $hasTaskCreateFaultCodeDefinition = $false
             $recordsTaskCreateFaultCode = $false
+            $recordsTaskCreateFreeHeap = $false
+            $recordsTaskCreateMinimumHeap = $false
+            $usesSyncObjectFaultCode = $false
+            $recordsSyncObjectHeap = $false
+            $recordsSchedulerHeap = $false
             $recordsMallocHookFreeHeap = $false
             $recordsMallocHookMinimumHeap = $false
             $recordsRuntimeFreeHeap = $false
@@ -595,6 +600,23 @@ function Test-ExampleManifest {
                     $recordsTaskCreateFaultCode = $true
                 }
 
+                if ($sourceText -match '\bg_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;\s*\r?\n\s*g_freertosHeapMinimumEverFreeBytes\s*=\s*xPortGetMinimumEverFreeHeapSize\s*\(\s*\)\s*;\s*\r?\n\s*g_freertosFaultCode\s*=\s*FREERTOS_FAULT_TASK_CREATE\s*;') {
+                    $recordsTaskCreateFreeHeap = $true
+                    $recordsTaskCreateMinimumHeap = $true
+                }
+
+                if ($sourceText -match '\bFREERTOS_FAULT_SYNC_OBJECT\b') {
+                    $usesSyncObjectFaultCode = $true
+                }
+
+                if ($sourceText -match '\bg_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;\s*\r?\n\s*g_freertosHeapMinimumEverFreeBytes\s*=\s*xPortGetMinimumEverFreeHeapSize\s*\(\s*\)\s*;\s*\r?\n\s*g_freertosFaultCode\s*=\s*FREERTOS_FAULT_SYNC_OBJECT\s*;') {
+                    $recordsSyncObjectHeap = $true
+                }
+
+                if ($sourceText -match '\bg_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;\s*\r?\n\s*g_freertosHeapMinimumEverFreeBytes\s*=\s*xPortGetMinimumEverFreeHeapSize\s*\(\s*\)\s*;\s*\r?\n\s*g_freertosFaultCode\s*=\s*FREERTOS_FAULT_SCHEDULER\s*;') {
+                    $recordsSchedulerHeap = $true
+                }
+
                 $mallocFailedHookBody = Get-CFunctionBodyText -SourceText $sourceText -FunctionName 'vApplicationMallocFailedHook'
                 if ($mallocFailedHookBody -match '\bg_freertosHeapFreeBytes\s*=\s*xPortGetFreeHeapSize\s*\(\s*\)\s*;') {
                     $recordsMallocHookFreeHeap = $true
@@ -645,6 +667,18 @@ function Test-ExampleManifest {
 
             if (-not $recordsTaskCreateFaultCode) {
                 Add-Failure "example '$name' must set g_freertosFaultCode to FREERTOS_FAULT_TASK_CREATE when task creation fails"
+            }
+
+            if ((-not $recordsTaskCreateFreeHeap) -or (-not $recordsTaskCreateMinimumHeap)) {
+                Add-Failure "example '$name' task creation failure path must record heap free and minimum-ever free bytes"
+            }
+
+            if ($usesSyncObjectFaultCode -and (-not $recordsSyncObjectHeap)) {
+                Add-Failure "example '$name' sync object creation failure path must record heap free and minimum-ever free bytes"
+            }
+
+            if (-not $recordsSchedulerHeap) {
+                Add-Failure "example '$name' scheduler failure path must record heap free and minimum-ever free bytes"
             }
 
             if (-not $hasStackOverflowHook) {

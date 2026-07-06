@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- `freertos_signal_adc_uart_mdk` 在同步对象创建失败、任务创建失败和调度器异常返回时记录 heap Watch 现场。
 - `gpio_blink_mdk` 区分任务创建失败和调度器启动失败，仓库自检同步要求示例保留任务创建失败 fault code。
 - 仓库自检补充严格 UTF-8 解码检查，避免项目自有文本仅通过 BOM/CRLF 检查但实际编码损坏。
 - 仓库自检把示例自有 `Src/Inc` C/H 文件纳入 UTF-8 无 BOM 和 CRLF 检查，避免新增代码出现编码或换行漂移。

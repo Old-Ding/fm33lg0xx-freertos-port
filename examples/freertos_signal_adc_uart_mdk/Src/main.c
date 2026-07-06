@@ -186,6 +186,8 @@ static BaseType_t CreateDemoSyncObjects(void)
 
     if((NULL == g_gpioSemaphore) || (NULL == g_adcSemaphore))
     {
+        g_freertosHeapFreeBytes = xPortGetFreeHeapSize();
+        g_freertosHeapMinimumEverFreeBytes = xPortGetMinimumEverFreeHeapSize();
         g_freertosFaultCode = FREERTOS_FAULT_SYNC_OBJECT;
         return pdFAIL;
     }
@@ -220,6 +222,8 @@ static BaseType_t CreateDemoTasks(void)
        (pdPASS != g_gpioTaskCreateStatus) ||
        (pdPASS != g_adcTaskCreateStatus))
     {
+        g_freertosHeapFreeBytes = xPortGetFreeHeapSize();
+        g_freertosHeapMinimumEverFreeBytes = xPortGetMinimumEverFreeHeapSize();
         g_freertosFaultCode = FREERTOS_FAULT_TASK_CREATE;
         return pdFAIL;
     }
@@ -300,6 +304,8 @@ int main(void)
 
     if(FREERTOS_FAULT_NONE == g_freertosFaultCode)
     {
+        g_freertosHeapFreeBytes = xPortGetFreeHeapSize();
+        g_freertosHeapMinimumEverFreeBytes = xPortGetMinimumEverFreeHeapSize();
         g_freertosFaultCode = FREERTOS_FAULT_SCHEDULER;
     }
 

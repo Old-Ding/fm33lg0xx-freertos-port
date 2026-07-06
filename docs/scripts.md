@@ -57,7 +57,7 @@
 - 每个示例必须保留 `Inc/FreeRTOSConfig.h`，并启用/实现 `configUSE_MALLOC_FAILED_HOOK` 和 `configCHECK_FOR_STACK_OVERFLOW` 对应 hook。
 - 每个示例必须保留 `configASSERT`，通过 `g_freertosAssertFile` 和 `g_freertosAssertLine` 记录断言失败位置，并在停机前关中断。
 - 每个示例必须在运行态监控路径和 malloc failed hook 中分别记录 `g_freertosHeapFreeBytes` 和 `g_freertosHeapMinimumEverFreeBytes`，用于运行中 heap 观察并保留失败现场。
-- 每个示例必须定义 `FREERTOS_FAULT_TASK_CREATE`，并在任务创建失败时写入 `g_freertosFaultCode`。
+- 每个示例必须定义 `FREERTOS_FAULT_TASK_CREATE`，并在任务创建失败、同步对象创建失败和调度器异常返回时记录 heap 现场后写入 `g_freertosFaultCode`。
 - 每个示例的栈溢出 hook 必须把 `xTask` 和 `pcTaskName` 记录到 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName`。
 - 启用计数信号量的示例工程必须引用 `queue.c`。
 - 示例自有源码使用 `uxTaskGetStackHighWaterMark()` 时，`FreeRTOSConfig.h` 必须启用 `INCLUDE_uxTaskGetStackHighWaterMark`。
