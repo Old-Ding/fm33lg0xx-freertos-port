@@ -301,6 +301,14 @@ function Test-OwnedTextFileFormat {
     $filePath = Resolve-RepoPath -RelativePath $Path
     $bytes = [System.IO.File]::ReadAllBytes($filePath)
 
+    # BOM 检查不能发现被错误代码页写坏的中文文档或源码，所以先做严格解码。
+    $strictUtf8 = [System.Text.UTF8Encoding]::new($false, $true)
+    try {
+        [void]$strictUtf8.GetString($bytes)
+    } catch {
+        Add-Failure "${Path}: project-owned text file must be valid UTF-8"
+    }
+
     if (($bytes.Length -ge 3) -and
         ($bytes[0] -eq 0xEF) -and
         ($bytes[1] -eq 0xBB) -and

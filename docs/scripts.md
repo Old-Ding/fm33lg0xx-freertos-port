@@ -47,7 +47,7 @@
 - 已跟踪文件不得包含本地厂商完整 `例程/` 目录、Keil/JLink 生成物、归档包和临时文件。
 - `.gitignore` 必须保留本地厂商完整 `例程/` 目录、Keil/JLink 生成物、归档包和临时文件的忽略规则。
 - `.gitattributes` 必须保留项目文本 CRLF 和二进制产物属性规则。
-- 项目自有文档、脚本、清单、GitHub 模板，以及示例 `Src/Inc` 下的自有 C/H 文件必须是 UTF-8 无 BOM，换行必须是 CRLF。
+- 项目自有文档、脚本、清单、GitHub 模板，以及示例 `Src/Inc` 下的自有 C/H 文件必须能按严格 UTF-8 解码、无 BOM，换行必须是 CRLF。
 - `examples/examples.json` 必须包含 `schemaVersion`、示例名称、说明、Keil 工程路径、Keil target、验证状态和文档入口。
 - `examples/examples.json` 中的 Keil 工程路径和文档入口必须指向已被 Git 跟踪的仓库文件。
 - `examples/examples.json` 中的 Keil target 必须存在于对应 `.uvprojx` 工程。
