@@ -687,6 +687,16 @@ function Test-ExampleManifest {
                 Add-Failure "example '$name' scheduler failure path must record heap free and minimum-ever free bytes"
             }
 
+            $exampleReadmePath = Join-Path -Path $exampleRoot -ChildPath 'README.md'
+            if (Test-Path -LiteralPath $exampleReadmePath) {
+                $exampleReadmeText = Get-RepoText -Path $exampleReadmePath
+                # 示例 README 是板级调试入口；source 写入 code 3 时，文档也要说明排查方向。
+                if ($recordsSchedulerHeap -and
+                    ($exampleReadmeText -notmatch 'g_freertosFaultCode\s*==\s*3')) {
+                    Add-Failure "example '$name' README must document g_freertosFaultCode == 3 scheduler failure triage"
+                }
+            }
+
             if (-not $hasStackOverflowHook) {
                 Add-Failure "example '$name' must implement vApplicationStackOverflowHook"
             }
@@ -943,6 +953,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'g_freertosHeapMinimumEverFreeBytes' `
         -Description 'script document must describe malloc failed heap watch variable checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'g_freertosFaultCode == 3' `
+        -Description 'script document must describe scheduler fault documentation checks'
 
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'xPortSysTickHandler' `

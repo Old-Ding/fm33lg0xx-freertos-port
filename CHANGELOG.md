@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 两个示例 README 和根 README 补齐 `g_freertosFaultCode == 3` 调度器故障说明，仓库自检同步防止示例 README 漏掉该排查入口。
 - `docs/examples.md` 补齐综合 demo 的 `g_freertosFaultCode` 观察变量，仓库自检同步防止示例索引漏掉 fault code。
 - 两个示例的 `configASSERT` 改为 `do { ... } while( 0 )` 包装，仓库自检同步防止裸 `if` 宏回退。
 - `freertos_signal_adc_uart_mdk` 在同步对象创建失败、任务创建失败和调度器异常返回时记录 heap Watch 现场。
