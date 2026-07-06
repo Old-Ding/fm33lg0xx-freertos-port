@@ -459,6 +459,17 @@ function Test-ExampleManifest {
                 Add-Failure "example '$name' must enable configCHECK_FOR_STACK_OVERFLOW level 2"
             }
 
+            $requiredHandlerMappings = @(
+                @{ Pattern = '#define\s+vPortSVCHandler\s+SVC_Handler'; Name = 'vPortSVCHandler' },
+                @{ Pattern = '#define\s+xPortPendSVHandler\s+PendSV_Handler'; Name = 'xPortPendSVHandler' },
+                @{ Pattern = '#define\s+xPortSysTickHandler\s+SysTick_Handler'; Name = 'xPortSysTickHandler' }
+            )
+            foreach ($mapping in $requiredHandlerMappings) {
+                if ($configText -notmatch $mapping.Pattern) {
+                    Add-Failure "example '$name' FreeRTOSConfig.h must map $($mapping.Name) to the startup handler"
+                }
+            }
+
             # 信号量依赖 queue.c；这里检查工程引用，避免新增 API 后只改配置不改 Keil 工程。
             if (($configText -match '#define\s+configUSE_COUNTING_SEMAPHORES\s+1') -and
                 ($projectText -notmatch 'queue\.c')) {
@@ -629,6 +640,10 @@ function Test-NewExampleChecklistDocument {
         -Description 'new example checklist must mention stack overflow hook'
 
     Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'xPortSysTickHandler' `
+        -Description 'new example checklist must mention FreeRTOS exception handler mapping'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
         -Pattern 'g_stackOverflowTaskName' `
         -Description 'new example checklist must mention stack overflow task name watch variable'
 
@@ -679,6 +694,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'configUSE_MALLOC_FAILED_HOOK' `
         -Description 'script document must describe FreeRTOS hook checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'xPortSysTickHandler' `
+        -Description 'script document must describe FreeRTOS exception handler mapping checks'
 
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'g_stackOverflowTaskName' `

@@ -21,6 +21,7 @@
 
 - 默认基于当前已工作的 `gpio_blink_mdk` 或已有 FreeRTOS 示例扩展，不从厂商 FreeRTOS 工程整包复制。
 - Keil 工程必须继续通过相对路径引用根目录 `FreeRTOS-Kernel-main`。
+- `FreeRTOSConfig.h` 必须把 `vPortSVCHandler`、`xPortPendSVHandler`、`xPortSysTickHandler` 映射到启动文件中的 `SVC_Handler`、`PendSV_Handler`、`SysTick_Handler`。
 - 新增 FreeRTOS API 时，同步处理 `FreeRTOSConfig.h` 和 Keil 工程源文件：
   - 信号量、队列、mutex 需要 `queue.c`。
   - 软件定时器需要 `timers.c` 和 timer task 配置。
