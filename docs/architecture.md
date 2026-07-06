@@ -104,6 +104,7 @@ PB12 falling edge
 - 同步对象压力计数，例如 `g_gpioSemaphoreGiveFailCount`、`g_adcSemaphoreGiveFailCount`，用于观察 ISR 事件被合并或计数信号量已满。
 - 最近一次关键数据，例如 `g_adcSampleMv`。
 - 集中 fault code，例如 malloc 失败、栈溢出、同步对象创建失败、任务创建失败和调度器异常返回。
+- 栈溢出现场，例如 `g_stackOverflowTaskHandle`、`g_stackOverflowTaskName`，用于定位触发 hook 的任务。
 
 这些变量是硬件验收和 issue 复现信息的一部分，不应因为“只用于调试”而随意删除。
 

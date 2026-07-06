@@ -54,6 +54,7 @@
 - 每个示例的文档入口必须包含该示例自己的 README。
 - 每个示例工程必须引用根目录共享的 `FreeRTOS-Kernel-main`。
 - 每个示例必须保留 `Inc/FreeRTOSConfig.h`，并启用/实现 `configUSE_MALLOC_FAILED_HOOK` 和 `configCHECK_FOR_STACK_OVERFLOW` 对应 hook。
+- 每个示例的栈溢出 hook 必须把 `xTask` 和 `pcTaskName` 记录到 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName`。
 - 启用计数信号量的示例工程必须引用 `queue.c`。
 - 示例自有源码使用 `uxTaskGetStackHighWaterMark()` 时，`FreeRTOSConfig.h` 必须启用 `INCLUDE_uxTaskGetStackHighWaterMark`。
 - 第三方许可证、FreeRTOS 文件、厂商 FL Driver 文件头和 CMSIS SPDX 标识必须保留；示例根目录从 `examples/examples.json` 推导。

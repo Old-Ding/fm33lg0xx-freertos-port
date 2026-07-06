@@ -476,6 +476,8 @@ function Test-ExampleManifest {
             $usesStackHighWaterMark = $false
             $hasMallocFailedHook = $false
             $hasStackOverflowHook = $false
+            $recordsStackOverflowTaskHandle = $false
+            $recordsStackOverflowTaskName = $false
             foreach ($sourceFile in $ownedSourceFiles) {
                 $sourceText = Get-RepoText -Path $sourceFile.FullName
                 if ($sourceText -match '\buxTaskGetStackHighWaterMark\b') {
@@ -488,6 +490,14 @@ function Test-ExampleManifest {
 
                 if ($sourceText -match '\bvApplicationStackOverflowHook\s*\([^)]*\)\s*\{') {
                     $hasStackOverflowHook = $true
+                }
+
+                if ($sourceText -match '\bg_stackOverflowTaskHandle\s*=\s*xTask\s*;') {
+                    $recordsStackOverflowTaskHandle = $true
+                }
+
+                if ($sourceText -match '\bg_stackOverflowTaskName\s*=\s*pcTaskName\s*;') {
+                    $recordsStackOverflowTaskName = $true
                 }
             }
 
@@ -503,6 +513,14 @@ function Test-ExampleManifest {
 
             if (-not $hasStackOverflowHook) {
                 Add-Failure "example '$name' must implement vApplicationStackOverflowHook"
+            }
+
+            if (-not $recordsStackOverflowTaskHandle) {
+                Add-Failure "example '$name' stack overflow hook must record xTask in g_stackOverflowTaskHandle"
+            }
+
+            if (-not $recordsStackOverflowTaskName) {
+                Add-Failure "example '$name' stack overflow hook must record pcTaskName in g_stackOverflowTaskName"
             }
         } else {
             Add-Failure "example '$name' is missing Inc/FreeRTOSConfig.h"
@@ -611,6 +629,10 @@ function Test-NewExampleChecklistDocument {
         -Description 'new example checklist must mention stack overflow hook'
 
     Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
+        -Pattern 'g_stackOverflowTaskName' `
+        -Description 'new example checklist must mention stack overflow task name watch variable'
+
+    Test-FileContains -RelativePath 'docs\new-example-checklist.md' `
         -Pattern 'portYIELD_FROM_ISR' `
         -Description 'new example checklist must document ISR yield pattern'
 
@@ -657,6 +679,10 @@ function Test-ScriptsDocument {
     Test-FileContains -RelativePath 'docs\scripts.md' `
         -Pattern 'configUSE_MALLOC_FAILED_HOOK' `
         -Description 'script document must describe FreeRTOS hook checks'
+
+    Test-FileContains -RelativePath 'docs\scripts.md' `
+        -Pattern 'g_stackOverflowTaskName' `
+        -Description 'script document must describe stack overflow watch variable checks'
 
     Test-FileContains -RelativePath 'README.md' `
         -Pattern 'docs/scripts\.md' `

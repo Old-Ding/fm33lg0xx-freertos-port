@@ -36,6 +36,7 @@ PowerShell：
 - `g_ledTaskLoopCount` 持续递增。
 - `g_ledTaskStackHighWaterMark` 记录 LED task 剩余栈水位。
 - `g_freertosFaultCode == 0`。
+- 如果 `g_freertosFaultCode == 2`，查看 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName` 定位溢出任务。
 
 ## 关键配置
 

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- 两个 FreeRTOS 示例新增栈溢出任务 handle/name Watch 变量，并加入仓库自检，用于定位触发 stack overflow hook 的任务。
 - 仓库自检新增 FreeRTOS malloc failed hook 和 stack overflow hook 配置/实现一致性检查。
 - 仓库自检新增 `uxTaskGetStackHighWaterMark()` 与 `FreeRTOSConfig.h` INCLUDE 开关一致性检查，并补充新增示例 checklist。
 - 两个 FreeRTOS 示例新增任务 stack high-water mark Watch 变量，用于在栈溢出前观察任务栈余量。

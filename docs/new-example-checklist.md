@@ -35,6 +35,7 @@
 
 - 每个任务创建结果要能通过 Watch 变量观察。
 - 每个任务建议保留 stack high-water mark Watch 变量，用于在溢出前评估栈余量。
+- 栈溢出 hook 要把触发任务写入 `g_stackOverflowTaskHandle` 和 `g_stackOverflowTaskName`，便于故障现场定位。
 - 关键运行路径至少保留一个递增计数，例如 task loop count、IRQ count、sample count。
 - fault code 要集中定义，能区分 malloc 失败、栈溢出、同步对象创建失败、任务创建失败和调度器异常返回。
 - UART printf 只能作为调试输出，不作为核心时序依赖。

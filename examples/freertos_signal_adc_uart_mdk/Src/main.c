@@ -72,6 +72,8 @@ volatile BaseType_t g_monitorTaskCreateStatus = pdFALSE;
 volatile BaseType_t g_gpioTaskCreateStatus = pdFALSE;
 volatile BaseType_t g_adcTaskCreateStatus = pdFALSE;
 volatile UBaseType_t g_monitorTaskStackHighWaterMark = 0U;
+volatile TaskHandle_t g_stackOverflowTaskHandle = NULL;
+char * volatile g_stackOverflowTaskName = NULL;
 
 SemaphoreHandle_t g_gpioSemaphore = NULL;
 SemaphoreHandle_t g_adcSemaphore = NULL;
@@ -230,9 +232,8 @@ void vApplicationMallocFailedHook(void)
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
 {
-    (void)xTask;
-    (void)pcTaskName;
-
+    g_stackOverflowTaskHandle = xTask;
+    g_stackOverflowTaskName = pcTaskName;
     g_freertosFaultCode = FREERTOS_FAULT_STACK;
     taskDISABLE_INTERRUPTS();
 

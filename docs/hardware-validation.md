@@ -111,7 +111,7 @@ Watch 变量：
 | Keil 构建失败 | `UV4.exe` 路径、DFP 设备包、target 是否为 `Example` |
 | LED 不闪 | 任务创建状态、`g_freertosFaultCode`、`SysTick_Handler` / `PendSV_Handler` / `SVC_Handler` 是否由 FreeRTOS port 接管 |
 | `g_freertosFaultCode == 1` | FreeRTOS heap 不足，检查 `configTOTAL_HEAP_SIZE` 和任务栈大小 |
-| `g_freertosFaultCode == 2` | 任务栈溢出，先看最近新增任务的 stack words |
+| `g_freertosFaultCode == 2` | 任务栈溢出，先看 `g_stackOverflowTaskName` / `g_stackOverflowTaskHandle` 和对应任务 stack words |
 | 任务栈水位接近 `0` | 对应任务栈余量不足，先确认是否新增调用链或 UART 输出，再调整 stack words |
 | `g_freertosFaultCode == 3` | 调度器启动失败或异常返回，检查 FreeRTOS port 和中断向量映射 |
 | `g_freertosFaultCode == 4` | 信号量创建失败，检查 `queue.c` 是否加入工程以及 heap 是否足够 |

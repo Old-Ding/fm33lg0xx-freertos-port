@@ -30,14 +30,14 @@
 - 目标：验证 FreeRTOS 在 FM33LG02X / Cortex-M0 / Keil ARMCC5 下可以接管 SysTick 并运行任务。
 - 核心行为：`LedBlinkTask` 周期喂狗、执行 SVD 掉电监测、翻转 PB4 LED。
 - FreeRTOS 源文件：`tasks.c`、`list.c`、`port.c`、`heap_4.c`。
-- 观察变量：`g_ledTaskCreateStatus`、`g_ledTaskLoopCount`、`g_ledTaskStackHighWaterMark`、`g_freertosFaultCode`。
+- 观察变量：`g_ledTaskCreateStatus`、`g_ledTaskLoopCount`、`g_ledTaskStackHighWaterMark`、`g_freertosFaultCode`、`g_stackOverflowTaskHandle`、`g_stackOverflowTaskName`。
 
 ## freertos_signal_adc_uart_mdk
 
 - 目标：在最小移植基线上演示任务间同步和 ISR 唤醒任务。
 - 核心行为：PB12 下降沿中断释放信号量，GPIO task 记录事件，ADC task 采样 `FL_ADC_EXTERNAL_CH1` 并通过 UART 输出采样值。
 - FreeRTOS 源文件：在最小集合基础上增加 `queue.c`。
-- 观察变量：`g_monitorTaskCreateStatus`、`g_gpioTaskCreateStatus`、`g_adcTaskCreateStatus`、`g_monitorTaskLoopCount`、`g_monitorTaskStackHighWaterMark`、`g_gpioTaskStackHighWaterMark`、`g_adcTaskStackHighWaterMark`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_gpioSemaphoreGiveFailCount`、`g_adcSemaphoreGiveFailCount`、`g_adcSampleMv`、`g_adcSampleCount`。
+- 观察变量：`g_monitorTaskCreateStatus`、`g_gpioTaskCreateStatus`、`g_adcTaskCreateStatus`、`g_monitorTaskLoopCount`、`g_monitorTaskStackHighWaterMark`、`g_gpioTaskStackHighWaterMark`、`g_adcTaskStackHighWaterMark`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_gpioSemaphoreGiveFailCount`、`g_adcSemaphoreGiveFailCount`、`g_adcSampleMv`、`g_adcSampleCount`、`g_stackOverflowTaskHandle`、`g_stackOverflowTaskName`。
 
 ## 验证顺序
 

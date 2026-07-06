@@ -89,6 +89,8 @@ g_ledTaskCreateStatus =
 g_ledTaskLoopCount =
 g_ledTaskStackHighWaterMark =
 g_freertosFaultCode =
+g_stackOverflowTaskHandle =
+g_stackOverflowTaskName =
 ```
 
 ## freertos_signal_adc_uart_mdk 现象
@@ -130,6 +132,8 @@ g_adcSampleMv =
 g_adcSampleCount =
 g_adcSemaphoreGiveFailCount =
 g_freertosFaultCode =
+g_stackOverflowTaskHandle =
+g_stackOverflowTaskName =
 ```
 
 ## 异常和处理

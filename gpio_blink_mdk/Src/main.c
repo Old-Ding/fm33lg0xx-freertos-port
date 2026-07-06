@@ -57,6 +57,8 @@ volatile uint32_t g_freertosFaultCode = FREERTOS_FAULT_NONE;
 volatile uint32_t g_ledTaskLoopCount = 0U;
 volatile BaseType_t g_ledTaskCreateStatus = pdFALSE;
 volatile UBaseType_t g_ledTaskStackHighWaterMark = 0U;
+volatile TaskHandle_t g_stackOverflowTaskHandle = NULL;
+char * volatile g_stackOverflowTaskName = NULL;
 
 static void SVD_BusyDelayUsNoSysTick(uint32_t u32Delay_us);
 static void LedBlinkTask(void *pvParameters);
@@ -169,9 +171,8 @@ void vApplicationMallocFailedHook(void)
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
 {
-    (void)xTask;
-    (void)pcTaskName;
-
+    g_stackOverflowTaskHandle = xTask;
+    g_stackOverflowTaskName = pcTaskName;
     g_freertosFaultCode = FREERTOS_FAULT_STACK;
     taskDISABLE_INTERRUPTS();
 
