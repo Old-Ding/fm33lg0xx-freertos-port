@@ -1,0 +1,24 @@
+# 示例说明
+
+本文记录仓库当前维护的 FM33LG0xx FreeRTOS 示例。厂商完整示例目录只作为本地参考，不作为本仓库的开源内容提交。
+
+## gpio_blink_mdk
+
+- 目标：验证 FreeRTOS 在 FM33LG02X / Cortex-M0 / Keil ARMCC5 下可以接管 SysTick 并运行任务。
+- 核心行为：`LedBlinkTask` 周期喂狗、执行 SVD 掉电监测、翻转 PB4 LED。
+- FreeRTOS 源文件：`tasks.c`、`list.c`、`port.c`、`heap_4.c`。
+- 观察变量：`g_ledTaskCreateStatus`、`g_ledTaskLoopCount`、`g_freertosFaultCode`。
+
+## freertos_signal_adc_uart_mdk
+
+- 目标：在最小移植基线上演示任务间同步和 ISR 唤醒任务。
+- 核心行为：PB12 下降沿中断释放信号量，GPIO task 记录事件，ADC task 采样 `FL_ADC_EXTERNAL_CH1` 并通过 UART 输出采样值。
+- FreeRTOS 源文件：在最小集合基础上增加 `queue.c`。
+- 观察变量：`g_monitorTaskCreateStatus`、`g_gpioTaskCreateStatus`、`g_adcTaskCreateStatus`、`g_monitorTaskLoopCount`、`g_gpioIrqCount`、`g_gpioTaskWakeCount`、`g_adcSampleMv`、`g_adcSampleCount`。
+
+## 验证顺序
+
+1. 先构建 `gpio_blink_mdk`，确认基础移植未被破坏。
+2. 再构建 `examples/freertos_signal_adc_uart_mdk`，确认新增信号量依赖的 `queue.c` 已加入工程。
+3. 硬件运行时先看 PB4 LED 是否周期翻转，再触发 PB12 下降沿观察 UART 输出和 ADC 变量。
+4. 如果任务未运行，先看任务创建状态和 `g_freertosFaultCode`，再查 `SysTick_Handler`、`PendSV_Handler`、`SVC_Handler` 是否由 FreeRTOS port 接管。

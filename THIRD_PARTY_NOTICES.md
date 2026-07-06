@@ -7,18 +7,18 @@
 - 路径：`FreeRTOS-Kernel-main/`
 - 来源：FreeRTOS Kernel 源码包。
 - 许可证：见 `FreeRTOS-Kernel-main/LICENSE.md`。
-- 当前使用文件：`tasks.c`、`list.c`、`portable/RVDS/ARM_CM0/port.c`、`portable/MemMang/heap_4.c`。
+- 当前使用文件：`tasks.c`、`list.c`、`queue.c`、`portable/RVDS/ARM_CM0/port.c`、`portable/MemMang/heap_4.c`。
 
 ## Fudan Micro FM33LG0xx SDK / FL Driver
 
-- 路径：`gpio_blink_mdk/Drivers/`、`gpio_blink_mdk/MF-config/`、部分 `gpio_blink_mdk/Src/` 和 `gpio_blink_mdk/Inc/` 文件。
+- 路径：`gpio_blink_mdk/Drivers/`、`gpio_blink_mdk/MF-config/`、`examples/freertos_signal_adc_uart_mdk/Drivers/`、`examples/freertos_signal_adc_uart_mdk/MF-config/`、部分示例 `Src/` 和 `Inc/` 文件。
 - 来源：复旦微 FM33LG0xx 示例工程与外设驱动。
 - 许可证：相关源文件头部包含 SHANGHAI FUDAN MICROELECTRONICS GROUP CO., LTD. 版权和再分发条款。
 - 维护要求：保留原文件头部版权和免责声明，不删除来源标识。
 
 ## Arm CMSIS
 
-- 路径：`gpio_blink_mdk/Drivers/CMSIS/`
+- 路径：`gpio_blink_mdk/Drivers/CMSIS/`、`examples/freertos_signal_adc_uart_mdk/Drivers/CMSIS/`
 - 来源：CMSIS Cortex-M 设备支持文件。
 - 许可证：相关源文件头部包含 Arm 版权和 BSD 风格再分发条款。
 

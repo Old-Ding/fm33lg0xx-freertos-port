@@ -1,28 +1,33 @@
-# FM33LG0xx FreeRTOS 移植
+# FM33LG0xx FreeRTOS Port and Examples
 
-本仓库用于维护复旦微 FM33LG0xx 系列芯片上的 FreeRTOS 移植示例。当前基线是 `gpio_blink_mdk`：在原 GPIO 闪灯工程上加入 FreeRTOS，让 LED 闪烁、看门狗喂狗和掉电监测运行在 FreeRTOS 任务中。
+本仓库用于维护复旦微 FM33LG0xx 系列芯片上的 FreeRTOS 移植和示例工程。当前策略是根目录统一维护一份 `FreeRTOS-Kernel-main`，各 Keil 示例通过相对路径引用内核源码，避免每个 demo 各复制一份 FreeRTOS。
 
 ## 当前状态
 
 - 目标芯片：`FM33LG02X`，内核为 `Cortex-M0`。
 - 工具链：Keil MDK / ARMCC5。
 - FreeRTOS port：`FreeRTOS-Kernel-main/portable/RVDS/ARM_CM0`。
-- 当前示例：`gpio_blink_mdk`，LED0 使用 `GPIOB PIN4`。
-- 当前验证：Keil 工程已加入 `tasks.c`、`list.c`、`port.c`、`heap_4.c`，`SVC/PendSV/SysTick` 由 FreeRTOS 接管。
+- 已验证基线：`gpio_blink_mdk`，用于验证 SysTick、任务调度、喂狗和 SVD 去抖处理。
+- 扩展示例：`examples/freertos_signal_adc_uart_mdk`，用于演示任务、信号量、GPIO ISR、ADC 采样和 UART 调试输出。
+
+## 示例列表
+
+| 示例 | 说明 | Keil 工程 |
+| --- | --- | --- |
+| `gpio_blink_mdk` | 最小 FreeRTOS 移植验证，LED 闪烁任务接管原主循环职责。 | `gpio_blink_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx` |
+| `examples/freertos_signal_adc_uart_mdk` | 综合 demo：monitor task、GPIO 中断、二值/计数信号量、ADC task、UART printf。 | `examples/freertos_signal_adc_uart_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx` |
 
 ## 目录结构
 
 ```text
 .
-├── FreeRTOS-Kernel-main/       # FreeRTOS Kernel 源码
-├── gpio_blink_mdk/             # FM33LG02X GPIO 闪灯移植示例
-│   ├── Drivers/                # 复旦微/CMSIS 设备与外设驱动
-│   ├── Inc/                    # 应用头文件与 FreeRTOSConfig.h
-│   ├── MF-config/              # 复旦微配置生成文件
-│   ├── MDK-ARM/                # Keil 工程文件
-│   └── Src/                    # 应用源文件
+├── FreeRTOS-Kernel-main/                 # FreeRTOS Kernel 源码
+├── gpio_blink_mdk/                       # 最小 GPIO 闪灯移植示例
+├── examples/
+│   └── freertos_signal_adc_uart_mdk/     # FreeRTOS 综合基础 demo
 ├── docs/
-│   └── porting-notes.md        # FreeRTOS 移植说明
+│   ├── examples.md                       # 示例硬件和验证说明
+│   └── porting-notes.md                  # FreeRTOS 移植说明
 ├── LICENSE
 ├── CONTRIBUTING.md
 ├── CHANGELOG.md
@@ -36,11 +41,11 @@
 1. Windows 11。
 2. Keil MDK 5.x，ARMCC5 可用。
 3. 已安装 `FMSH.FM33LG0XX_DFP.3.0.1` 设备包。
-4. `FreeRTOS-Kernel-main` 与 `gpio_blink_mdk` 保持当前相对位置，因为 Keil 工程使用相对路径引用 FreeRTOS。
+4. 保持仓库目录结构不变，因为 Keil 工程使用相对路径引用根目录 `FreeRTOS-Kernel-main`。
 
 Keil GUI 构建：
 
-1. 打开 `gpio_blink_mdk/MDK-ARM/FM33LG0XX_Tester.uvprojx`。
+1. 打开目标示例的 `MDK-ARM/FM33LG0XX_Tester.uvprojx`。
 2. 选择 target `Example`。
 3. 执行 Build。
 
@@ -48,21 +53,41 @@ PowerShell 命令行构建示例：
 
 ```powershell
 & '<Keil install path>\UV4\UV4.exe' -b '.\gpio_blink_mdk\MDK-ARM\FM33LG0XX_Tester.uvprojx' -t 'Example'
+& '<Keil install path>\UV4\UV4.exe' -b '.\examples\freertos_signal_adc_uart_mdk\MDK-ARM\FM33LG0XX_Tester.uvprojx' -t 'Example'
 ```
 
 请把 `<Keil install path>` 替换为本机 Keil MDK 安装目录。
 
+## 硬件引脚
+
+| 示例 | 功能 | 引脚/外设 |
+| --- | --- | --- |
+| `gpio_blink_mdk` | LED0 | `GPIOB PIN4` |
+| `freertos_signal_adc_uart_mdk` | LED0 monitor | `GPIOB PIN4` |
+| `freertos_signal_adc_uart_mdk` | GPIO 下降沿中断 | `GPIOB PIN12` / `EXTI LINE7` |
+| `freertos_signal_adc_uart_mdk` | ADC 采样 | `PD1` / `FL_ADC_EXTERNAL_CH1` |
+| `freertos_signal_adc_uart_mdk` | UART printf | `UART0`，`PA2/PA3`，115200，8E1，TX only |
+
 ## 调试观察点
 
-可以在 Keil Watch 中观察：
+`gpio_blink_mdk` 可在 Keil Watch 中观察：
 
 - `g_ledTaskCreateStatus`：`pdPASS` 表示 LED 任务创建成功。
 - `g_ledTaskLoopCount`：持续增加表示调度器、SysTick 和 `vTaskDelay()` 正常工作。
 - `g_freertosFaultCode`：`0` 为正常，`1` 为 malloc 失败，`2` 为任务栈溢出，`3` 为调度器启动失败或异常返回。
 
+`freertos_signal_adc_uart_mdk` 可观察：
+
+- `g_monitorTaskCreateStatus`、`g_gpioTaskCreateStatus`、`g_adcTaskCreateStatus`：任务创建结果。
+- `g_monitorTaskLoopCount`：monitor task 周期运行计数。
+- `g_gpioIrqCount`、`g_gpioTaskWakeCount`：GPIO ISR 触发和任务唤醒计数。
+- `g_adcSampleMv`、`g_adcSampleCount`：ADC 最近一次采样电压和采样次数。
+- `g_freertosFaultCode`：`4` 表示同步对象创建失败，`5` 表示任务创建失败。
+
 ## 维护规则
 
-- 不提交 `MDK-ARM/Objects`、`MDK-ARM/Listings`、`.uvoptx`、`.uvguix.*`、JLink 日志、`.axf/.hex/.map/.crf/.o/.d` 等生成产物。
+- 不提交 `例程/`、`MDK-ARM/Objects`、`MDK-ARM/Listings`、`.uvoptx`、`.uvguix.*`、JLink 日志、`.axf/.hex/.map/.crf/.o/.d` 等本地或生成产物。
 - 改 RTOS 移植逻辑前，先确认启动链路、中断入口、SysTick 归属和厂商延时函数调用点。
 - 调度器启动后，任务周期延时使用 `vTaskDelay()`；不要在任务里直接使用会重配 SysTick 的厂商 delay。
+- 新增 FreeRTOS API 时，同步检查 `FreeRTOSConfig.h` 和 Keil 工程中的内核源文件，例如信号量需要 `queue.c`。
 - 原创代码、文档和仓库元信息使用 MIT License；第三方代码保留原始许可证和文件头说明，来源见 `THIRD_PARTY_NOTICES.md`。

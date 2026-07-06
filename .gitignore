@@ -28,9 +28,11 @@
 *.htm
 
 # Local archives and temporary files
+/例程/
 *.zip
 *.7z
 *.rar
+*.pack
 *.log
 *.tmp
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 新增 `examples/freertos_signal_adc_uart_mdk`，演示 FreeRTOS 任务、信号量、GPIO ISR、ADC 和 UART。
+- 更新 README 和示例说明，明确仓库定位为 FM33LG0xx FreeRTOS port and examples。
 - 清理 Keil/JLink 生成产物和本机状态文件。
 - 将原中文示例目录整理为 `gpio_blink_mdk`。
 - 新增 README、贡献说明、变更日志、第三方来源说明和 Git 忽略规则。
